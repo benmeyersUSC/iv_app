@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<style>
+    /* General styling */
+    body {
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    /* Form styling */
+    form {
+        margin-bottom: 20px;
+    }
+    input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: transparent; /* Make background clear */
+}
+
+
+    input[type="submit"],
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #325d80; /* Blue color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    input[type="text"] {
+        width: 200px;
+    }
+
+    button[type="submit"] {
+        font-size: 16px;
+    }
+
+    /* Image styling */
+    img {
+        width: 477px;
+        height: auto;
+    }
+
+    /* Logout button styling */
+    .logout-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #325d80; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+    <h1>Let's get to research, {{ username }}!</h1>
+<!--    <p>Choose the stock you'd like to research!</p>-->
+    <p>Your current stock is: {{ticker_name}} ({{ticker}})</p>
+    <form action="/action/setticker" method="POST">
+        <input type="text" name="set_ticker" placeholder="SPY">
+        <input type="submit" value="Render">
+    </form>
+    <form action="/action/setticker" method="POST">
+        <input type="hidden" name="set_ticker" value={{ticker}}>
+        <button type="submit">Rerender {{ticker}}</button>
+    </form>
+    <h1>{{ticker_name}} ({{ticker}}) monthly price and forward volatility, GBM/Black-Scholes random prediction</h1>
+    <p>First is the past month of trading in {{ticker}} with 1-month-forward-looking Bollinger-esque standard deviation ranges given by {{ticker}}'s options.</p>
+    <p>Second is a 45 day prediction of where {{ticker}} could move in a Black-Scholes world...</p>
+
+    <img src="{{ url_for('static', filename='images/yyy.png') }}" alt="Example Image">
+    <img src="{{ url_for('static', filename='images/zzz.png') }}" alt="Example Image">
+
+    <p>Notice how the GBM prediction *mostly* stays within the standard deviation prescriptions... but not every time...the movement of this random stock prediction is precisely defined by those very lines.</p>
+    <p>The Black-Scholes formula for pricing and understanding options infamously models a stock's movement assuming constant volatility throughout a given period. In reality, this is far from the case.</p>
+
+
+<p>Learn more about the Black-Scholes Formula!</p>
+    <form action="/bsm" method="GET" target="_blank">
+            <input type="hidden" name="bsm">
+            <button type="submit">Black-Scholes Formula</button>
+        </form>
+
+    <form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Client">
+    </form>
+</body>
+</html>

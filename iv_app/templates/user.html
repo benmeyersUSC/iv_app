@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<style>
+    /* General styling */
+    body {
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        text-align: center; /* Center align the content */
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    /* Form styling */
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */
+        grid-gap: 20px; /* Set spacing between buttons */
+        margin: 0 auto; /* Center align the grid */
+        max-width: 900px; /* Limit grid width */
+    }
+
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #325d80; /* Blue color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #2a4c6d; /* Darker blue color on hover */
+    }
+
+    /* Logout button styling */
+    .logout-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #325d80; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    .formula-container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .formula-description {
+            text-align: left; /* Align bullet points to the left */
+            margin-bottom: 20px;
+        }
+</style>
+</head>
+<body>
+    <h1>Welcome, {{ username }}!</h1>
+    <div class="formula-container">
+
+        <div class="formula-description">
+                <h3>Choose from our growing list of bespoke tools to monitor the markets, learn about
+                option pricing, or research a specific stock and its option metrics!</h3>
+                <p>The following buttons will redirect you:</p>
+                <ul>
+                    <li><strong>Research Ticker</strong>: Type in any optionable ticker symbol and see how it has performed and where it could go this month</li>
+                    <li><strong>Black-Scholes Model</strong>: If you want to learn about the fundamental theory that inspires all derivatives pricing
+                    as well as informs the tools of this website</li>
+                    <li><strong>Earnings</strong>: Research the companies releasing earnings this week and what their option
+                    markets are prescribing about the next month</li>
+                    <li><strong>Top Open Interest</strong>: Research the
+                        companies with the highest open interest this week and what their option
+                    markets are prescribing about the next month</li>
+                    <li><strong>Magnificent Se7en</strong>: Research the Magnificent 7 (AAPL, MSFT, META, AMZN, NVDA, GOOG, TSLA)
+                    and what their option markets are prescribing about the next month</li>
+                </ul>
+            </div>
+    </div>
+
+
+    <div class="button-grid">
+        <form action="/ticker" method="GET" target="_blank">
+            <input type="hidden" name="bsm">
+            <button type="submit">Research Ticker</button>
+        </form>
+
+        <form action="/bsm" method="GET" target="_blank">
+            <input type="hidden" name="bsm">
+            <button type="submit">Black-Scholes Model</button>
+        </form>
+
+        <form action="/top/earnings" method="GET" target="_blank">
+            <input type="hidden" name="earnings">
+            <button type="submit">Earnings</button>
+        </form>
+
+        <form action="/top/oi" method="GET" target="_blank">
+            <input type="hidden" name="oi">
+            <button type="submit">Top Open Interest</button>
+        </form>
+
+        <form action="/top/mag7" method="GET" target="_blank">
+            <input type="hidden" name="mag7">
+            <button type="submit">Magnificent Se7en</button>
+        </form>
+
+        <form action="/top/indices" method="GET" target="_blank">
+            <input type="hidden" name="indices">
+            <button type="submit">Top Market Indices</button>
+        </form>
+    </div>
+
+    <p> </p>
+    <br>
+    <form action="/logout" method="POST">
+        <input type="submit" class="logout-btn" value="Log out">
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--<meta charset="UTF-8">-->
+<!--<title>Title</title>-->
+<!--<style>-->
+<!--    /* General styling */-->
+<!--    body {-->
+<!--        font-family: "Times New Roman", Times, serif;-->
+<!--        line-height: 1.6;-->
+<!--        margin: 0;-->
+<!--        padding: 20px;-->
+<!--    }-->
+
+<!--    h1 {-->
+<!--        font-size: 24px;-->
+<!--    }-->
+
+<!--    p {-->
+<!--        font-size: 16px;-->
+<!--    }-->
+
+<!--    /* Form styling */-->
+<!--    form {-->
+<!--        margin-bottom: 20px;-->
+<!--    }-->
+<!--    input[type="text"] {-->
+<!--    width: 200px;-->
+<!--    padding: 10px;-->
+<!--    border: 1px solid #ccc;-->
+<!--    border-radius: 5px;-->
+<!--    box-sizing: border-box;-->
+<!--    background-color: transparent; /* Make background clear */-->
+<!--}-->
+
+
+<!--    input[type="submit"],-->
+<!--    button[type="submit"] {-->
+<!--        font-size: 16px;-->
+<!--        padding: 10px 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        background-color: #325d80; /* Blue color */-->
+<!--        color: #fff; /* White text color */-->
+<!--        cursor: pointer;-->
+<!--    }-->
+
+<!--    input[type="text"] {-->
+<!--        width: 200px;-->
+<!--    }-->
+
+<!--    button[type="submit"] {-->
+<!--        font-size: 16px;-->
+<!--    }-->
+
+<!--    /* Image styling */-->
+<!--    img {-->
+<!--        width: 477px;-->
+<!--        height: auto;-->
+<!--    }-->
+
+<!--    /* Logout button styling */-->
+<!--    .logout-btn {-->
+<!--        font-size: 16px;-->
+<!--        padding: 10px 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        background-color: #325d80; /* Red color */-->
+<!--        color: #fff; /* White text color */-->
+<!--        cursor: pointer;-->
+<!--    }-->
+<!--</style>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Welcome, {{ username }}!</h1>-->
+
+<!--    <p>Research a specific ticker symbol!</p>-->
+<!--    <form action="/ticker" method="GET">-->
+<!--        <input type="hidden" name="bsm">-->
+<!--        <button type="submit">Research Ticker</button>-->
+<!--    </form>-->
+
+<!--    <p>Learn about the Black-Scholes Model!</p>-->
+<!--    <form action="/bsm" method="GET">-->
+<!--        <input type="hidden" name="bsm">-->
+<!--        <button type="submit">Black-Scholes Model</button>-->
+<!--    </form>-->
+
+<!--    <p>Check out this week's earnings!</p>-->
+<!--    <form action="/top/earnings" method="GET">-->
+<!--        <input type="hidden" name="earnings">-->
+<!--        <button type="submit">Earnings</button>-->
+<!--    </form>-->
+
+<!--    <p>Check out the underlyings with the highest Open Interest</p>-->
+<!--    <form action="/top/oi" method="GET">-->
+<!--        <input type="hidden" name="oi">-->
+<!--        <button type="submit">Top Open Interest</button>-->
+<!--    </form>-->
+
+<!--    <p>Check out the Magnificent 7!</p>-->
+<!--    <form action="/top/mag7" method="GET">-->
+<!--        <input type="hidden" name="mag7">-->
+<!--        <button type="submit">Magnificent 7!</button>-->
+<!--    </form>-->
+
+<!--    <p>Or you can log out</p>-->
+<!--    <form action="/logout" method="POST">-->
+<!--        <input type="submit" class="logout-btn" value="Log out">-->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->

@@ -1,0 +1,108 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <style>
+    body {
+        font-family: "Times New Roman", Times, serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+    }
+
+    h1, h2 {
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    form {
+        width: 300px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="username"],
+    input[type="password"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+    </head>
+    <body>
+        <h1>Hello, {{ username }}!</h1>
+        <p> {{ message }} </p>
+
+        <h2>Add a new user</h2>
+        <form action="/action/createuser" method="POST">
+            <input type="username" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <input type="submit" value="Create new user"></form>
+        </form>
+
+        <h2>User table</h2>
+        <p>To remove a user, select them and click the "Remove user" button.</p>
+        <form action="/action/removeuser" method="POST">
+            <table border = 0>
+                <th>Username</th>
+                {% for key, value in result.items() %}
+                <tr>
+                    <th style="text-align:left"><input type="radio" name="username" id={{key}} value={{key}}> {{key}} </input></th><td>{{value}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p><input type="submit" value="Remove user"></p>
+        </form>
+        <h2>Logout</h2>
+        <form action="/logout" method="POST">
+            <p>You can log out here: <input type="submit" value="Log out"></p>
+        </form>
+    </body>
+</html>

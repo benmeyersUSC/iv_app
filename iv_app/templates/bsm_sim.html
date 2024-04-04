@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Data Table</title>
+<style>
+    img {
+        width: 200px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: left;
+        margin-bottom: 20px;
+
+    }
+
+    .image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.image-container img {
+    width: 350px; /* Adjust the width as needed */
+    height: auto;
+    margin: 0 10px; /* Add margin for spacing between images */
+}
+
+    body {
+        font-family: "Times New Roman", Times, serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+    }
+
+    input[type="submit"],
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #325d80; /* Blue color */
+        color: white; /* White text color */
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .container {
+        margin: 20px auto;
+        width: 80%;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background-color: #f2f2f2;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #325d80;
+        color: white;
+    }
+</style>
+</head>
+
+<body>
+<h1>Seeing the Black-Scholes hedging strategy in action</h1>
+
+<h2>Black-Scholes Parameters</h2>
+
+<p><strong>Call option expiring in 12 weeks:</strong></p>
+
+<form action="/bsm/simx" method="POST" class="button-container">
+    <label for="iv">IV:</label>
+    <select name="iv" id="iv">
+        {% for i in range(5, 251, 5) %}
+            {% if i/100 == iv %}
+                <option value="{{ i/100 }}" selected>{{ i/100 }}</option>
+            {% else %}
+                <option value="{{ i/100 }}">{{ i/100 }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <label for="spot">Spot:</label>
+    <select name="spot" id="spot">
+        {% for i in range(25, 1001, 25) %}
+            {% if i == spot %}
+                <option value="{{ i }}" selected>{{ i }}</option>
+            {% else %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <label for="strike">Strike:</label>
+    <select name="strike" id="strike">
+        {% for i in range(25, 1001, 5) %}
+            {% if i == strike %}
+                <option value="{{ i }}" selected>{{ i }}</option>
+            {% else %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <label for="r">r:</label>
+    <select name="r" id="r">
+        {% for i in range(0, 51, 1) %}
+            {% if i/100 == r %}
+                <option value="{{ i/100 }}" selected>{{ i/100 }}</option>
+            {% else %}
+                <option value="{{ i/100 }}">{{ i/100 }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <button type="submit">Render with new chosen parameters!</button>
+</form>
+
+<p><strong>Volatility (sigma):</strong> {{ iv }},&emsp;
+   <strong>Spot (S):</strong> {{ spot }},&emsp;
+   <strong>Strike (K):</strong> {{ strike }},&emsp;
+   <strong>Rate (r):</strong> {{ r }}</p>
+
+<div class="button-container">
+
+    <form action="/bsm/simr" method="GET">
+        <input type="hidden" name="bsm_sim" >
+        <button type="submit">Rerender current params!</button>
+    </form>
+
+    <form action="/bsm/simw" method="GET">
+        <input type="hidden" name="period">
+        <button type="submit">Weekly</button>
+    </form>
+
+    <form action="/bsm/simd" method="GET">
+        <input type="hidden" name="period" >
+        <button type="submit">Daily</button>
+    </form>
+</div>
+
+<h2>Starting Black-Scholes price: ${{data['bs_price'][0]}}, total maintenance & setup cost @ EXP: ${{total}}</h2>
+            <p>--> diff: ${{data['bs-real']}},     {{data['bs-real_p']}}%</p>
+<h2>Simulating 100 runs with chosen parameters:</h2>
+    <p>DAILY: start = ${{ag[0][0]}} vs. total = ${{ag[0][1]}}  <br>--> diff % = {{ag[0][3]}}</p>
+    <p>WEEKLY: start = ${{ag[1][0]}} vs. total = ${{ag[1][1]}}  <br>--> diff % = {{ag[1][3]}}</p>
+
+
+<div class="image-container">
+    <img src="{{ url_for('static', filename='images/bsm_sim.png') }}" alt="Random Stock Sim">
+    <img src="{{ url_for('static', filename='images/bsm_sim_bs_price.png') }}" alt="Random BS Sim">
+    <img src="{{ url_for('static', filename='images/bsm_sim_delta.png') }}" alt="Random Delta Sim">
+</div>
+
+<div class="image-container">
+    <img src="{{ url_for('static', filename='images/bsm_sim_theta.png') }}" alt="Random Theta Sim">
+    <img src="{{ url_for('static', filename='images/bsm_sim_gamma.png') }}" alt="Random Gamma Sim">
+    <img src="{{ url_for('static', filename='images/bsm_sim_vega.png') }}" alt="Random Theta Sim">
+</div>
+
+<div class="image-container">
+    <img src="{{ url_for('static', filename='images/bsm_costs_d.png') }}" alt="Random Costs Sim">
+    <img src="{{ url_for('static', filename='images/bsm_costs_w.png') }}" alt="Random Costs Sim">
+</div>
+
+
+
+
+
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>Time to Expiry</th>
+                <th>Stock Price</th>
+                <th>Delta</th>
+                <th>B</th>
+                <th>Delta - B</th>
+                <th>Stock Costs</th>
+                <th>Bond Costs</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Populate the table rows dynamically -->
+            {% for i in data['til_exp'][::-1] %}
+            <tr>
+                <td>{{ data['til_exp'][i] }}</td>
+                <td>{{ data['stock_price'][i] }}</td>
+                <td>{{ data['delta'][i] }}</td>
+                <td>{{ data['b'][i] }}</td>
+                <td>{{ data['d-b'][i] }}</td>
+                <td>{{ data['stock_costs'][i] }}</td>
+                <td>{{ data['bond_costs'][i] }}</td>
+                <td>{{ data['total'][i] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Starting Black-Scholes price: ${{data['bs_price'][0]}}</h3>
+    <h3>Total cost to set up and maintain hedge: ${{total}}</h3>
+</div>
+
+<h2>Discussion & Disclaimers:</h2>
+<p>
+    These simulations are generated using approximate formulae to be as accurate as possible in creating Black-Scholes-esque
+    geometric Brownian Motion. While these stock paths look realistic enough, they should not be taken as factual or entirely
+    representative of the truth, because in the real market, price moves for one reason and one reason only: supply and demand. There
+    are no standard deviations or constant drift and volatility terms in the real market.
+</p>
+<p>
+    Regarding the execution of the Black-Scholes hedging strategy that defines the BS price, there is rounding and approximation
+    AND the biggest factor which is non-continuous trading. This model, this understanding of what an option's value should
+    be at any given time depend heavily on the assumptions of access to free (meaning no tax, fees, commission) and
+    continuous trading. Continuous trading will never be possible, and it'll certainly never come at 0 transaction costs,
+    even with commission-free trading. Another flaw that leaves the Black-Scholes stuck in a theoretical world is its
+    understanding of how stocks move. As seen in d1 and d2 (which are formulae to calculate the amount of deviation
+    from the mean that a stock, given its volatility, needs to move to surpass the strike price within the duration of the option),
+    the calculations we make at any time for Delta and B assume volatility never changes. They assume that a stock
+    behaves like a dense chemical particle with known characteristics that do not dynamically change.
+</p>
+<h3>So is any of this useful for real trading?</h3>
+<p>
+    While it is clear that going out to the market and selling a call based on a Black-Scholes calculated price
+    (and then either performing the hedge to the best of your abilities, or not) will not net you predictable profits,
+    understanding this formula for price, the intuitions behind it, and the loosely proven hedging strategy that backs up
+    the intuitions and theory will vastly aid one's ability to understand options markets. While trading firms are not
+    running data through Black-Scholes models, without understanding how the inputs of what an option should be worth
+    (S, K, r, sigma/volatility, time to exp) actually come together to calculate one number, they would have nowhere to start.
+    Yes, it is clear that more volatility should demand more premium, however knowing now that it is because it makes
+    hedging a call much more difficult and unpredictable is vital to any successful strategy.
+</p>
+
+
+
+<form action="/client" method="GET">
+    <input type="submit" class="logout-btn" value="Client">
+</form>
+
+<form action="/bsm" method="GET">
+    <input type="hidden" name="bsm">
+    <button type="submit">Black-Scholes Model</button>
+</form>
+
+</body>
+</html>
