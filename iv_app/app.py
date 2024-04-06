@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(12)
 
 with open('tickers_available', 'r') as fn:
-    tickers_set = set(fn.read().split('\n'))
+    tickers_set = set([tick for tick in fn.read().split('\n') if tick])
 
 # Define a route for the homepage
 @app.route('/')
@@ -167,9 +167,11 @@ def set_ticker():
     """
     if not ticker_check(request.form['set_ticker'].upper()):
         session['ticker'] = 'SPY'
+        print('ticker check failed')
         return redirect(url_for('ticker'))
     else:
         session['ticker'] = request.form['set_ticker'].upper()
+        print('ticker check succeed')
         print(session['ticker'])
         fcc.EarningStock(session['ticker']).graph_iv()
         fcc.EarningStock(session['ticker']).graphStPrices()
