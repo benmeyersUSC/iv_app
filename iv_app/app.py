@@ -50,6 +50,7 @@ def client():
 
 @app.route("/ticker")
 def ticker():
+    user_ticker = session.get('ticker', 'SPY')
     return render_template("ticker.html",
                            ticker=session['ticker'], ticker_name=fcc.EarningStock(session['ticker']).name)
 
@@ -165,6 +166,7 @@ def set_ticker():
                 re-renders user.html otherwise
     """
     if not ticker_check(request.form['set_ticker'].upper()):
+        session['ticker'] = 'SPY'
         return redirect(url_for('ticker'))
     else:
         session['ticker'] = request.form['set_ticker'].upper()
