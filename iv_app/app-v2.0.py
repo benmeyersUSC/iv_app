@@ -160,7 +160,7 @@ def top(criteria):
         return redirect(url_for('home'))
     else:
         if criteria == 'earnings':
-            stocks = ['PAYX', 'CAG', 'LW', 'TGT', 'ROST', 'CPB', 'KR', "AVGO", 'COST']
+            stocks = ['DAL', 'BLK', 'C', 'JPM', 'PGR', 'STT', 'WFC', 'FAST', 'KMX', 'STZ']
             StockSet(stocks, criteria)
             tail = "This Week's Top Earnings"
         elif criteria == 'oi':
