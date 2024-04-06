@@ -1,1 +1,4 @@
-*.png
+iv_app/static/images/*/**/*.png
+.DS_Store
+.idea/*
+*.pyc

@@ -87,8 +87,8 @@
     <p>First is the past month of trading in {{ticker}} with 1-month-forward-looking Bollinger-esque standard deviation ranges given by {{ticker}}'s options.</p>
     <p>Second is a 45 day prediction of where {{ticker}} could move in a Black-Scholes world...</p>
 
-    <img src="{{ url_for('static', filename='images/yyy.png') }}" alt="Example Image">
-    <img src="{{ url_for('static', filename='images/zzz.png') }}" alt="Example Image">
+    <img src="{{ url_for('static', filename='images/ticker_research/yyy.png') }}" alt="Example Image">
+    <img src="{{ url_for('static', filename='images/ticker_research/zzz.png') }}" alt="Example Image">
 
     <p>Notice how the GBM prediction *mostly* stays within the standard deviation prescriptions... but not every time...the movement of this random stock prediction is precisely defined by those very lines.</p>
     <p>The Black-Scholes formula for pricing and understanding options infamously models a stock's movement assuming constant volatility throughout a given period. In reality, this is far from the case.</p>

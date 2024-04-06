@@ -214,7 +214,7 @@ class EarningStock:
             plt.tight_layout()
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), 'static', 'images')
+        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'ticker_research')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
         file_path = os.path.join(save_dir, 'yyy.png')
 
@@ -289,7 +289,7 @@ class EarningStock:
         plt.tight_layout()
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), 'static', 'images')
+        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'ticker_research')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
         file_path = os.path.join(save_dir, 'zzz.png')
 
