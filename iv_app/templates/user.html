@@ -44,16 +44,6 @@
         background-color: #2a4c6d; /* Darker blue color on hover */
     }
 
-    /* Logout button styling */
-    .logout-btn {
-        font-size: 16px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #325d80; /* Red color */
-        color: #fff; /* White text color */
-        cursor: pointer;
-    }
 
     .formula-container {
             width: 80%;
@@ -71,7 +61,7 @@
 </style>
 </head>
 <body>
-    <h1>Welcome, {{ username }}!</h1>
+    <h1>Welcome!</h1>
     <div class="formula-container">
 
         <div class="formula-description">
@@ -128,9 +118,7 @@
 
     <p> </p>
     <br>
-    <form action="/logout" method="POST">
-        <input type="submit" class="logout-btn" value="Log out">
-    </form>
+
 </body>
 </html>
 
