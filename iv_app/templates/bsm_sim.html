@@ -88,7 +88,7 @@
 <form action="/bsm/simx" method="POST" class="button-container">
     <label for="iv">IV:</label>
     <select name="iv" id="iv">
-        {% for i in range(5, 251, 5) %}
+        {% for i in range(5, 151, 5) %}
             {% if i/100 == iv %}
                 <option value="{{ i/100 }}" selected>{{ i/100 }}</option>
             {% else %}
