@@ -85,7 +85,6 @@ class EarningStock:
             expirations = stock.options
             expiration_dates = [datetime.strptime(exp, '%Y-%m-%d') for exp in expirations]
             today = datetime.now().date()
-
             next_expiration = min(expiration_dates, key=lambda x: abs(x.date() - today))
             next_expiration = expiration_dates[3]
             options = stock.option_chain(next_expiration.strftime('%Y-%m-%d'))
@@ -100,7 +99,7 @@ class EarningStock:
             return implied_volatility
         except Exception as e:
             print("Error:", e)
-            return None
+            return 0
 
     def graph_iv(self):
         # print('ticker is', self.ticker)
