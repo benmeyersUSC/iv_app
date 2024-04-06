@@ -8,13 +8,12 @@ from iv_app.tools.graphing_stock import StockSet
 
 # globals (eek, I know) for today's date.....if any global is valid, its this
 today = str(datetime.today()).split()[0]
-# day = today[-2:]
-# today = today[:-2] + str(int(day)-1)
-# print(today)
 
 
 # Initialize the Flask application
 app = Flask(__name__)
+app.secret_key = os.urandom(12)
+
 with open('tickers_available', 'r') as fn:
     tickers_set = set(fn.read().split('\n'))
 
@@ -182,5 +181,4 @@ def ticker_check(ticker):
 
 # Run the Flask application
 if __name__ == '__main__':
-    app.secret_key = os.urandom(12)
     app.run(debug=True)
