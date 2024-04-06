@@ -63,6 +63,7 @@ def bsm_page():
 
 @app.route("/bsm/sim<x>", methods=["GET", "POST"])
 def bsm_sim(x=None):
+    session['period'] = 'weekly'
     if x == 'y':
         # y is first time arriving
         session['iv'] = .15
