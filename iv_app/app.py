@@ -44,6 +44,7 @@ def client():
                 renders admin.html if logged in as admin,
                 user.html otherwise
     """
+    session['ticker'] = 'SPY'
     return render_template("user.html")
 
 
