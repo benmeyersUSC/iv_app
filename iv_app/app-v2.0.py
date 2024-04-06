@@ -32,12 +32,12 @@ def home():
     # checking to see if logged_in is even in session dict yet (wasn't for the first time)
     if 'logged_in' not in session.keys():
         # send to login
-        return render_template("login.html", message='Please log in to continue')
+        return render_template("login.html", message='YOURE NOT WELCOME HERE')
     else:
         # if not logged in
         if not session["logged_in"]:
             # log em in
-            return render_template("login.html", message='Please log in to continue')
+            return render_template("login.html", message='LEAVE')
         else:
             # otherwise, send em to client
             session['ticker'] = 'SPY'
