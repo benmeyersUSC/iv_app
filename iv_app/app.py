@@ -52,7 +52,7 @@ def client():
 def ticker():
     user_ticker = session.get('ticker', 'SPY')
     return render_template("ticker.html",
-                           ticker=session['ticker'], ticker_name=fcc.EarningStock(session['ticker']).name)
+                           ticker=user_ticker, ticker_name=fcc.EarningStock(user_ticker).name)
 
 
 @app.route("/bsm")
