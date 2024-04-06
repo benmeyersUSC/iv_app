@@ -32,7 +32,7 @@ def home():
     # checking to see if logged_in is even in session dict yet (wasn't for the first time)
     if 'logged_in' not in session.keys():
         # send to login
-        return render_template("login.html", message='Please log in to continue')
+        return render_template("login.html", message='Please log in to continue!!!')
     else:
         # if not logged in
         if not session["logged_in"]:
@@ -43,6 +43,7 @@ def home():
             session['ticker'] = 'SPY'
             fcc.EarningStock(session['ticker']).graph_iv()
             fcc.EarningStock(session['ticker']).graphStPrices()
+
             return redirect(url_for("client"))
 
 
