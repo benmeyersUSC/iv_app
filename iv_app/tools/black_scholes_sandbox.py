@@ -16,30 +16,31 @@ def n_prime(x):
     return rat * et
 
 class black_scholes_sim:
-    def __init__(self, iv, spot, strike, r):
+    def __init__(self, iv, spot, strike, r, dte):
         self.iv = float(iv)
         self.spot = float(spot)
         self.strike = float(strike)
         self.r = float(r)
+        self.dte = int(float(dte))
 
 
         self.brownian_stock = self.brownianStock()
 
-        self.daily_delta_array = self.daily_dict(84)['delta']
+        self.daily_delta_array = self.daily_dict(self.dte)['delta']
         # self.weekly_delta_array = self.daily_dict(84)['delta']
 
-        self.bs_price_array = self.daily_dict(84)['bs_price']
+        self.bs_price_array = self.daily_dict(self.dte)['bs_price']
 
-        self.daily_theta_array = self.daily_dict(84)['theta_prem']
-        self.daily_gamma_array = self.daily_dict(84)['gamma']
-        self.daily_vega_array = self.daily_dict(84)['vega']
+        self.daily_theta_array = self.daily_dict(self.dte)['theta_prem']
+        self.daily_gamma_array = self.daily_dict(self.dte)['gamma']
+        self.daily_vega_array = self.daily_dict(self.dte)['vega']
         # self.daily_b_array = self.daily_dict(84)['b']
 
         # self.ag_sims_daily = self.ag_sims_daily()
         # self.ag_sims_weekly = self.ag_sims_weekly()
 
-        self.total_costs_over_time_d = self.daily_dict(84)['total']
-        self.total_costs_over_time_w = self.weekly_dict()['total']
+        self.total_costs_over_time_d = self.daily_dict(self.dte)['total']
+        self.total_costs_over_time_w = self.weekly_dict(self.dte)['total']
 
         self.graphOption_list = [
             self.brownian_stock, self.bs_price_array, self.daily_delta_array, self.daily_theta_array,
@@ -78,30 +79,14 @@ class black_scholes_sim:
         plt.show()
 
 
-
-
-
-    # def ag_sims_daily(self, x=100):
-    #     bs_price_start = self.bs_price_array[0]
-    #     bs_total_exp = [self.daily_dict(84)['total_cost']]
-    #     for run in range(x):
-    #         stock = self.brownianStock()
-    #         info_dict = self.daily_dict(84, stock)
-    #         bs_total_exp.append(info_dict['total_cost'])
-    #     avg_start = bs_price_start
-    #     avg_total = reduce(lambda x, y: x+y, bs_total_exp) / len(bs_total_exp)
-    #     abs_diff = abs(avg_start - avg_total)
-    #     abs_diff_p = abs_diff/avg_start
-    #     return avg_start, round(avg_total, 4), abs_diff, round(100*abs_diff_p, 3)
-
     def ag_sims_daily(self, x=100):
         bs_price_start = self.bs_price_array[0]
         bs_total_exp = np.empty(x + 1)
-        bs_total_exp[0] = self.daily_dict(84)['total_cost']
+        bs_total_exp[0] = self.daily_dict(self.dte)['total_cost']
 
         for run in range(1, x + 1):
             stock = self.brownianStock()
-            info_dict = self.daily_dict(84, stock)
+            info_dict = self.daily_dict(self.dte, stock)
             bs_total_exp[run] = info_dict['total_cost']
 
         avg_start = bs_price_start
@@ -111,26 +96,15 @@ class black_scholes_sim:
 
         return (avg_start, round(avg_total, 4), abs_diff, round(100 * abs_diff_p, 3))
 
-    # def ag_sims_weekly(self, x=100):
-    #     bs_price_start = self.bs_price_array[0]
-    #     bs_total_exp = [self.weekly_dict()['total_cost']]
-    #     for run in range(x):
-    #         stock = self.brownianStock()
-    #         info_dict = self.weekly_dict(stock)
-    #         bs_total_exp.append(info_dict['total_cost'])
-    #     avg_start = bs_price_start
-    #     avg_total = reduce(lambda x, y: x+y, bs_total_exp) / len(bs_total_exp)
-    #     abs_diff = abs(avg_start - avg_total)
-    #     abs_diff_p = abs_diff/avg_start
-    #     return avg_start, round(avg_total, 4), abs_diff, round(100*abs_diff_p, 3)
+
     def ag_sims_weekly(self, x=100):
         bs_price_start = self.bs_price_array[0]
         bs_total_exp = np.empty(x + 1)
-        bs_total_exp[0] = self.weekly_dict()['total_cost']
+        bs_total_exp[0] = self.weekly_dict(self.dte)['total_cost']
 
         for run in range(1, x + 1):
             stock = self.brownianStock()
-            info_dict = self.weekly_dict(stock)
+            info_dict = self.weekly_dict(self.dte, stock)
             bs_total_exp[run] = info_dict['total_cost']
 
         avg_start = bs_price_start
@@ -143,13 +117,12 @@ class black_scholes_sim:
 
 
 
-
     def brownianStock(self) -> list:
         """
         Description: creates a BLACK-SCHOLES based random daily stock path (list)
         :return: (list) of length dte (params[3]), each a new daily stock price
         """
-        days = int(84)
+        days = int(self.dte)
 
         x = np.random.normal(1, .5)  # this makes volatility normal distributed around 1
         # (should be .85 theoretically)
@@ -157,7 +130,7 @@ class black_scholes_sim:
         dailyVolatility = float(newVol / math.sqrt(365))
         dailyRiskFree = 1 + (float(self.r)-.01) / 365
         dailyPrices = [self.spot]
-        for x in range(days):
+        for x in range(days-1):
             x = np.random.normal(1, self.iv)  # this makes volatility normal distributed around 1
             # (should be .85 theoretically)
             newVol = (self.iv * x)
@@ -178,7 +151,7 @@ class black_scholes_sim:
             colorr = 'g'
 
         plt.plot(xes, self.brownian_stock, label=f'$S Price', color=color, marker='>', linestyle='-')
-        plt.plot(xes, [self.strike for _ in range(85)], label='Strike', color=colorr, linestyle='-', linewidth=5.4)
+        plt.plot(xes, [self.strike for _ in range(int(self.dte))], label='Strike', color=colorr, linestyle='-', linewidth=5.4)
 
 
 
@@ -455,6 +428,7 @@ class black_scholes_sim:
         return self.black_scholes_call(spot, dte)[2]
 
     def theta(self, spot, dte):
+        print('dte', dte)
         top_n = spot * n_prime(self.black_scholes_call(spot, dte)[3]) * self.iv
         bot = 2 * math.sqrt(dte/365)
         rk = self.r * self.strike * norm.cdf(-self.black_scholes_call(spot, dte)[4])
@@ -483,8 +457,8 @@ class black_scholes_sim:
 
         if not stock:
             stock = self.brownian_stock
-        info_dict = {'bs_price':[round(self.black_scholes_call(self.spot, 85)[0], 2)],
-                     'til_exp':[x for x in range(85)][::-1],
+        info_dict = {'bs_price':[round(self.black_scholes_call(self.spot, dte)[0], 2)],
+                     'til_exp':[x for x in range(int(dte))][::-1],
                                         #.5777        .5493
                      'stock_price':[], 'delta':[round(self.delta(self.spot, dte), 4)],
                      'b':[round(self.b(self.spot, dte), 4)],
@@ -499,14 +473,14 @@ class black_scholes_sim:
         for i in range(len(stock)):
             s = stock[i]
             k = self.strike
-            dte = 84 - i
+            dtee = dte - i
             info_dict['stock_price'].append(s)
-            info_dict['delta'].append(round(self.delta(s, dte), 4))
-            info_dict['b'].append(round(self.b(s, dte), 4))
-            info_dict['theta'].append(round(self.theta(s, dte)[0], 4))
-            info_dict['theta_prem'].append(round(self.theta(s, dte)[1], 4))
-            info_dict['gamma'].append(round(self.gamma(s, dte), 4))
-            info_dict['vega'].append(round(self.vega(s, dte), 4))
+            info_dict['delta'].append(round(self.delta(s, dtee), 4))
+            info_dict['b'].append(round(self.b(s, dtee), 4))
+            info_dict['theta'].append(round(self.theta(s, dtee)[0], 4))
+            info_dict['theta_prem'].append(round(self.theta(s, dtee)[1], 4))
+            info_dict['gamma'].append(round(self.gamma(s, dtee), 4))
+            info_dict['vega'].append(round(self.vega(s, dtee), 4))
             info_dict['d-b'].append(round(100 * (info_dict['delta'][-1] - info_dict['b'][-1]), 2))
 
             if i != 0:
@@ -515,14 +489,14 @@ class black_scholes_sim:
                 #     print('s', s, 'k', k)
                 #     print(info_dict['delta'])
 
-                if dte != 0:
+                if dtee != 0:
                     info_dict['stock_costs'].append(
                         round(((info_dict['delta'][-1] - info_dict['delta'][-2])) * s, 4)
                     )
                     info_dict['bond_costs'].append(
                         round(((info_dict['b'][-1] - info_dict['b'][-2])) * -k, 2)
                     )
-                    info_dict['bs_price'].append(round(self.black_scholes_call(s, dte)[0], 2))
+                    info_dict['bs_price'].append(round(self.black_scholes_call(s, dtee)[0], 2))
                 else:
                     info_dict['stock_costs'].append(
                         round(((info_dict['delta'][-2] - info_dict['delta'][-3])) * s, 4)
@@ -530,7 +504,7 @@ class black_scholes_sim:
                     info_dict['bond_costs'].append(
                         round(((info_dict['b'][-2] - info_dict['b'][-3])) * -k, 2)
                     )
-                    info_dict['bs_price'].append(round(self.black_scholes_call(s, dte)[0], 2))
+                    info_dict['bs_price'].append(round(self.black_scholes_call(s, dtee)[0], 2))
 
 
 
@@ -562,23 +536,24 @@ class black_scholes_sim:
 
 
 
-    def weekly_dict(self, stock=None):
+    def weekly_dict(self, dte, stock=None):
+
         if not stock:
             stock = self.brownian_stock
-        info_dict = {'bs_price':[round(self.black_scholes_call(self.spot, 85)[0], 2)],
-                     'til_exp':[12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-                     'stock_price':[], 'delta':[round(self.delta(self.spot, 85), 4)],
-                     'b':[round(self.b(self.spot, 85), 4)],
-                     'd-b':[round(100*(self.delta(self.spot, 85) - self.b(self.spot, 85)), 2)],
+        info_dict = {'bs_price':[round(self.black_scholes_call(self.spot, dte)[0], 2)],
+                     'til_exp':[i for i in range(int(dte)//7)][::-1],
+                     'stock_price':[], 'delta':[round(self.delta(self.spot, dte), 4)],
+                     'b':[round(self.b(self.spot, dte), 4)],
+                     'd-b':[round(100*(self.delta(self.spot, dte) - self.b(self.spot, dte)), 2)],
                      'stock_costs':[], 'bond_costs':[], 'total':[]}
         for i in range(len(stock)):
-            if i in [0, 7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84]:
+            if i in [0, 7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84, 91, 98, 105, 112, 119, 126, 133]:
                 s = stock[i]
                 k = self.strike
-                dte = 84 - i
+                dtee = dte - i
                 info_dict['stock_price'].append(s)
-                info_dict['delta'].append(round(self.delta(s, dte), 2))
-                info_dict['b'].append(round(self.b(s, dte), 2))
+                info_dict['delta'].append(round(self.delta(s, dtee), 2))
+                info_dict['b'].append(round(self.b(s, dtee), 2))
                 info_dict['d-b'].append(round(100*(info_dict['delta'][-1] - info_dict['b'][-1]), 2))
 
                 if i != 0:
@@ -586,14 +561,14 @@ class black_scholes_sim:
                     #     print('delta, delta -2', info_dict['delta'][-2], info_dict['delta'][-3])
                     #     print('s', s, 'k', k)
                     #     print(info_dict['delta'])
-                    if dte != 0:
+                    if dtee != 0:
                         info_dict['stock_costs'].append(
                             round(((info_dict['delta'][-1] - info_dict['delta'][-2])) * s, 2)
                         )
                         info_dict['bond_costs'].append(
                             round(((info_dict['b'][-1] - info_dict['b'][-2])) * -k, 2)
                         )
-                        info_dict['bs_price'].append(round(self.black_scholes_call(self.spot, dte)[0], 2))
+                        info_dict['bs_price'].append(round(self.black_scholes_call(self.spot, dtee)[0], 2))
                     else:
                         info_dict['stock_costs'].append(
                             round(((info_dict['delta'][-2] - info_dict['delta'][-3])) * s, 2)
@@ -601,7 +576,7 @@ class black_scholes_sim:
                         info_dict['bond_costs'].append(
                             round(((info_dict['b'][-2] - info_dict['b'][-3])) * -k, 2)
                         )
-                        info_dict['bs_price'].append(round(self.black_scholes_call(self.spot, dte)[0], 2))
+                        info_dict['bs_price'].append(round(self.black_scholes_call(self.spot, dtee)[0], 2))
                 else:
                     info_dict['stock_costs'].append(
                         round((info_dict['delta'][0]) * s, 2)

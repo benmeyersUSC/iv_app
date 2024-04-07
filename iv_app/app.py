@@ -61,8 +61,8 @@ def bsm_page():
     return render_template("bsm.html")
 
 
-@app.route("/bsm/sim/<iv>/<spot>/<strike>/<r>/<period>", methods=["GET", "POST"])
-def bsm_sim(iv=None, spot=None, strike=None, r=None, period=None):
+@app.route("/bsm/sim/<iv>/<spot>/<strike>/<r>/<dte>/<period>", methods=["GET", "POST"])
+def bsm_sim(iv=None, spot=None, strike=None, r=None, dte=None, period=None):
     if iv == None:
         iv = .15
     if spot == None:
@@ -71,6 +71,8 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, period=None):
         strike = 50
     if r == None:
         r = .05
+    if dte == None:
+        dte = 85
     if period == None:
         period = 'weekly'
 
@@ -78,28 +80,29 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, period=None):
     spot = float(spot) if is_float(spot) else 50.0
     strike = float(strike) if is_float(strike) else 50.0
     r = float(r) if is_float(r) else 0.05
+    dte = float(dte) if is_float(dte) else 85
     if 'weekly' in period:
         period = 'weekly'
     if 'daily' in period:
         period = 'daily'
 
-    go = BS.black_scholes_sim(iv, spot, strike, r)
+    go = BS.black_scholes_sim(iv, spot, strike, r, dte)
     go.graphemall()
-    sed = (iv, spot, strike, r)
+    sed = (iv, spot, strike, r, dte)
     if sed not in bsm_sim_ag_prices_d.keys():
         ag = [go.ag_sims_daily(), go.ag_sims_weekly()]
-        bsm_sim_ag_prices_d[(iv, spot, strike, r)] = ag[0]
-        bsm_sim_ag_prices_w[(iv, spot, strike, r)] = ag[1]
+        bsm_sim_ag_prices_d[sed] = ag[0]
+        bsm_sim_ag_prices_w[sed] = ag[1]
     else:
-        ag = [bsm_sim_ag_prices_d[(iv, spot, strike, r)], bsm_sim_ag_prices_w[(iv, spot, strike, r)]]
+        ag = [bsm_sim_ag_prices_d[sed], bsm_sim_ag_prices_w[sed]]
     if period == 'weekly':
-        data = go.weekly_dict()
+        data = go.weekly_dict(dte)
         total = data['total_cost']
     elif period == 'daily':
-        data = go.daily_dict(85)
+        data = go.daily_dict(dte)
         total = data['total_cost']
     return render_template("bsm_sim.html", data=data, total=total, iv=iv, spot=spot,
-                           strike=strike, r=r, period=period, ag=ag)
+                           strike=strike, r=r, dte=dte, period=period, ag=ag)
 
 
 
