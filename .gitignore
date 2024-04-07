@@ -3,3 +3,4 @@ iv_app/static/images/*/**/*.png
 .idea/
 *.pyc
 !iv_app/static/images/bsm_example/
+!iv_app/static/images/bsm_example/bsm_costs_d.png
