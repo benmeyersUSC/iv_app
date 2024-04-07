@@ -94,7 +94,7 @@ class black_scholes_sim:
     #     abs_diff_p = abs_diff/avg_start
     #     return avg_start, round(avg_total, 4), abs_diff, round(100*abs_diff_p, 3)
 
-    def ag_sims_daily(self, x=500):
+    def ag_sims_daily(self, x=100):
         bs_price_start = self.bs_price_array[0]
         bs_total_exp = np.empty(x + 1)
         bs_total_exp[0] = self.daily_dict(84)['total_cost']
@@ -123,7 +123,7 @@ class black_scholes_sim:
     #     abs_diff = abs(avg_start - avg_total)
     #     abs_diff_p = abs_diff/avg_start
     #     return avg_start, round(avg_total, 4), abs_diff, round(100*abs_diff_p, 3)
-    def ag_sims_weekly(self, x=500):
+    def ag_sims_weekly(self, x=100):
         bs_price_start = self.bs_price_array[0]
         bs_total_exp = np.empty(x + 1)
         bs_total_exp[0] = self.weekly_dict()['total_cost']
