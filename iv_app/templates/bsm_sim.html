@@ -90,7 +90,7 @@
 <form action="/bsm/sim/" method="POST" class="button-container" id="parameters-form">
     <label for="iv">IV:</label>
     <select name="iv" id="iv">
-        {% for i in range(5, 151, 5) %}
+        {% for i in range(5, 131, 5) %}
             {% if i/100 == iv %}
                 <option value="{{ i/100 }}" selected>{{ i/100 }}</option>
             {% else %}

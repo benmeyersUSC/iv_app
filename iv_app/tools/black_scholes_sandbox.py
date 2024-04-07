@@ -155,7 +155,7 @@ class black_scholes_sim:
         # (should be .85 theoretically)
         newVol = (self.iv * x)
         dailyVolatility = float(newVol / math.sqrt(365))
-        dailyRiskFree = 1 + float(self.r) / 365
+        dailyRiskFree = 1 + (float(self.r)-.01) / 365
         dailyPrices = [self.spot]
         for x in range(days):
             x = np.random.normal(1, self.iv)  # this makes volatility normal distributed around 1
