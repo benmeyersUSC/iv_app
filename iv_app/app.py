@@ -130,7 +130,6 @@ def top(criteria):
     #create general message with personalized tail
     message = f'Past Month Price, IV & Expected Move of {tail}'
 
-
     return render_template('top.html', image_files=image_files,
                            criteria=criteria, message=message, today=today)
 
@@ -149,13 +148,14 @@ def set_ticker():
                 re-renders user.html otherwise
     """
     if not ticker_check(request.form['set_ticker'].upper()):
-        return redirect(url_for('ticker'))
+        #return redirect(url_for('ticker', symbol='SPY'))
+        tick = 'SPY'
     else:
         tick = request.form['set_ticker'].upper()
-        fcc.EarningStock(tick).graph_iv()
-        fcc.EarningStock(tick).graphStPrices()
-        # then reload ticker
-        return redirect(url_for('ticker', symbol=tick))
+    fcc.EarningStock(tick).graph_iv()
+    fcc.EarningStock(tick).graphStPrices()
+    # then reload ticker
+    return redirect(url_for('ticker', symbol=tick))
 
 
 
