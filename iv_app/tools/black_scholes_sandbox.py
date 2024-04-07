@@ -166,7 +166,7 @@ class black_scholes_sim:
         # Save plot to a directory
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bsm_sim')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
-        file_path = os.path.join(save_dir, 'bsm_sim1.png')
+        file_path = os.path.join(save_dir, 'bsm_sim.png')
 
         # Save the plot
         plt.savefig(file_path)
@@ -201,7 +201,7 @@ class black_scholes_sim:
         # Save plot to a directory
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bsm_sim')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
-        file_path = os.path.join(save_dir, 'bsm_sim_delta1.png')
+        file_path = os.path.join(save_dir, 'bsm_sim_delta.png')
 
         # Save the plot
         plt.savefig(file_path)
@@ -334,7 +334,7 @@ class black_scholes_sim:
         # Save plot to a directory
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bsm_sim')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
-        file_path = os.path.join(save_dir, 'bsm_sim_bs_price1.png')
+        file_path = os.path.join(save_dir, 'bsm_sim_bs_price.png')
 
         # Save the plot
         plt.savefig(file_path)
@@ -388,7 +388,7 @@ class black_scholes_sim:
         # Save plot to a directory
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bsm_sim')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
-        file_path = os.path.join(save_dir, 'bsm_costs_w1.png')
+        file_path = os.path.join(save_dir, 'bsm_costs_w.png')
 
         # Save the plot
         plt.savefig(file_path)
