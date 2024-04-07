@@ -2,4 +2,5 @@ iv_app/static/images/*/**/*.png
 .DS_Store
 .idea/
 *.pyc
-!iv_app/static/images/bsm_example/
+!iv_app/static/images/bsm_example/*.png
+
