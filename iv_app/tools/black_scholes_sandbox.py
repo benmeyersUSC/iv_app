@@ -130,7 +130,7 @@ class black_scholes_sim:
         dailyVolatility = float(newVol / math.sqrt(365))
         dailyRiskFree = 1 + (float(self.r)-.01) / 365
         dailyPrices = [self.spot]
-        for x in range(days-1):
+        for x in range(days):
             x = np.random.normal(1, self.iv)  # this makes volatility normal distributed around 1
             # (should be .85 theoretically)
             newVol = (self.iv * x)
@@ -143,6 +143,7 @@ class black_scholes_sim:
     def graphStPrices(self):
         xes = range(len(self.brownian_stock))
 
+
         if self.brownian_stock[-1] > self.brownian_stock[0]:
             color = 'g'
             colorr = 'r'
@@ -151,7 +152,7 @@ class black_scholes_sim:
             colorr = 'g'
 
         plt.plot(xes, self.brownian_stock, label=f'$S Price', color=color, marker='>', linestyle='-')
-        plt.plot(xes, [self.strike for _ in range(int(self.dte))], label='Strike', color=colorr, linestyle='-', linewidth=5.4)
+        plt.plot(xes, [self.strike for _ in range(int(self.dte)+1)], label='Strike', color=colorr, linestyle='-', linewidth=5.4)
 
 
 
@@ -528,10 +529,10 @@ class black_scholes_sim:
             info_dict['bs-real_p'] = round(100*info_dict['bs-real'] / info_dict['bs_price'][0], 4)
         del info_dict['delta'][-1]
 
-        # if self.brownian_stock[-1] >= self.strike:
-        #     info_dict['delta'][-1] = 1.0
-        # else:
-        #     info_dict['delta'][-1] = 0.0
+        if self.brownian_stock[-1] >= self.strike:
+            info_dict['delta'][-1] = 1.0
+        else:
+            info_dict['delta'][-1] = 0.0
         return info_dict
 
 
@@ -592,10 +593,11 @@ class black_scholes_sim:
                 info_dict['bs-real'] = round(abs(info_dict['bs_price'][0] - info_dict['total_cost']), 3)
                 info_dict['bs-real_p'] = round(100*info_dict['bs-real'] / info_dict['bs_price'][0], 4)
         del info_dict['delta'][-1]
-        # if self.brownian_stock[-1] >= self.strike:
-        #     info_dict['delta'][-1] = 1.0
-        # else:
-        #     info_dict['delta'][-1] = 0.0
+        if self.brownian_stock[-1] >= self.strike:
+            info_dict['delta'][-1] = 1.0
+        else:
+            info_dict['delta'][-1] = 0.0
+
         return info_dict
 
 
