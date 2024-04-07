@@ -428,7 +428,7 @@ class black_scholes_sim:
         return self.black_scholes_call(spot, dte)[2]
 
     def theta(self, spot, dte):
-        print('dte', dte)
+        # print('dte', dte)
         top_n = spot * n_prime(self.black_scholes_call(spot, dte)[3]) * self.iv
         bot = 2 * math.sqrt(dte/365)
         rk = self.r * self.strike * norm.cdf(-self.black_scholes_call(spot, dte)[4])

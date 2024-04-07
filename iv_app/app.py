@@ -64,23 +64,23 @@ def bsm_page():
 @app.route("/bsm/sim/<iv>/<spot>/<strike>/<r>/<dte>/<period>", methods=["GET", "POST"])
 def bsm_sim(iv=None, spot=None, strike=None, r=None, dte=None, period=None):
     if iv == None:
-        iv = .15
+        iv = .2
     if spot == None:
-        spot = 50
+        spot = 100
     if strike == None:
-        strike = 50
+        strike = 100
     if r == None:
         r = .05
     if dte == None:
-        dte = 85
+        dte = 50
     if period == None:
         period = 'weekly'
 
-    iv = float(iv) if is_float(iv) else 0.15
-    spot = float(spot) if is_float(spot) else 50.0
-    strike = float(strike) if is_float(strike) else 50.0
+    iv = float(iv) if is_float(iv) else 0.2
+    spot = float(spot) if is_float(spot) else 100.0
+    strike = float(strike) if is_float(strike) else 100.0
     r = float(r) if is_float(r) else 0.05
-    dte = float(dte) if is_float(dte) else 85
+    dte = float(dte) if is_float(dte) else 50
     if 'weekly' in period:
         period = 'weekly'
     if 'daily' in period:

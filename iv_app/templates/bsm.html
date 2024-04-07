@@ -125,25 +125,28 @@
             <img src="{{ url_for('static', filename='images/bsm_d2.png') }}" alt="BSM Image">
         </div>
 
-        <p>The Black-Scholes formula calculates the fair value of the option based on these inputs. It provides insights into the relationship between the option's price and various factors such as time to expiry, volatility, and interest rates.
-            While the derivations of d1 and d2 are bulky and require deeper explanation, the intuition behind the main function that uses them can be nicely understood even with just an understanding of what d1 and d2 are functionally.
-            </p><p>Also, 'N(x)' is a function that denotes the cumulative standard normal distribution of x. 'What is the probability of our random variable, x, being above 0'?
+        <p>The Black-Scholes formula calculates the fair value of the option based on these inputs. It provides insights
+            into the relationship between the option's price and various factors such as time to expiry, volatility, and interest rates.
+            While the derivations of d1 and d2 are bulky and require deeper explanation, the intuition behind the main
+            function that uses them can be nicely understood even with just an understanding of what d1 and d2 are functionally.
+            </p><p>Also, 'N(x)' is a function that denotes the cumulative standard normal distribution of x. 'What is
+        the probability of our random variable, x, being above 0'?
 
             </p>
         <h3>What is d1? </h3>
-        <p>d1 is essentially the amount of standard deviations the strike price is from the the current price of S,
+        <p>d1 is essentially the amount of <i>standard deviations</i> the stock price S is from the strike K,
             standardized and calculated in terms of our input parameters (time, volatility, risk-free rate).
             Since N is the cumulative STANDARD NORMAL distribution curve, it takes in an x that represents an amount of
-            standard deviations and tells you how likely that point is to be reached. Thus, N(d1) is SOMETHING like the
-            probability of 'reaching d1' in terms of standard deviations. Something like the probability that S gets above K by expiry...
-            In the Black-Scholes formula, N(d1) is used as the DELTA of an option...
+            standard deviations and tells you how likely that point is to 'land' above 0. Thus, N(d1) is <i>something like</i> the
+            probability of 'reaching d1' in terms of standard deviations. <i>Something like</i> the probability that S is above K by expiry...
+            In the Black-Scholes formula, N(d1) is used as the DELTA of an option...<br><br>
 
             Delta is most purely defined as the first derivative of the option with respect to the price of the underlying
             stock. When the stock, S, rises by $1, K's call option rises by $N(d1).
-
-            However it is apparent that DELTA also acts as a proxy for probability of S expiring above K...What is d2?
+<br><br>
+            However, it is apparent that DELTA also acts as a proxy for probability of S expiring above K...What is d2?
             Simply put, it's d1 but 'discounted' by the stock's volatility over its life. In the Black-Scholes
-            world, all stocks should have the same expected mean returns (the risk-free rate) regardless of volatility.
+            world, all stocks should have the same <i>expected</i> mean returns (the risk-free rate) regardless of volatility.
             Also, holding DELTA * S at all times means that your net DELTA is 0 (you have 0 exposure to movements in the stock
             because you own shares to offset the delta of the short option), thus you face no risk, and must demand the risk-free
             rate as your return. But where will we get the money to do always hold DELTA * S?
@@ -179,27 +182,41 @@
 
         <h3> But are they the same?</h3>
         <p>
-            If N(d1) = DELTA and N(d2) = B are both 'something like' the probability of S expiring > K, but B does not
+            If N(d1) = DELTA and N(d2) = B are both <i>something like</i> the probability of S expiring > K, but B does not
             take volatility into account, then it makes sense that the magnitude of DELTA should be slightly larger.
             More volatility = more randomness and movement = more chance for S to surpass K.
         </p>
-        <h3>That said, how can we use our probability calculations to find the price of C?</h3>
+        <h3>That said, how can we use these insightful probability calculations to find the price of C?</h3>
 
         <p> Using the theory of arbitrage, two assets should have the exact same price if they have all the same
             cashflows/costs throughout their life and at expiration (if any). We know that Call options give the owner
             the right to buy 100 shares of S at K if S > K @ exp, so we know that C should rise when S rises, fall when it falls,
-            but within the allowance of the time remaining, the volatility, and the interest rate.
+            but within the allowance of the time remaining, volatility, and the interest rate.
             Since the Black-Scholes formula is designed for a European Option (which can only be executed after expiration),
-            we don't have to worry about the cashflows/intrinsic value during the life of the option, we just have to prepare for expiration.
-            Let us think about a portfolio that buys a call C with strike K and sell a put P with the same strike. At expiration, if
-            S > K, we get to buy S at K, then profit the difference... if S < K, C is worthless, but our -P position
+            we don't have to worry too much about the cashflows/intrinsic value during the life of the option, we just have to prepare for expiration.
+            (Of course to properly 'prepare for expiration', you'll have to adjust throughout the option's life....so how do we
+            mock the 0 cost-to-hold of option contracts?)
+
+            Let us think about a portfolio that buys a call C with strike K and sell a put P with the same strike K.
+            At expiration, if
+            S > K, our call entitles us to buy S at K, then profit the difference... if S < K, C is worthless, but our -P position
             forces us to buy 100 shares at K, and we will lose the difference.
-            To mimic this portfolio, suppose we buy 100 shares of S, then sell a 0 RISK, 0 COUPON bond that matures to K.
-            At expiration, if S > K, our profit is S - K, just as before. If S < K, our profit is K - S, just as before.
+
+            To mimic this portfolio, suppose we buy 100 shares of S, then sell a 0 RISK (interest rate is r, the risk-free rate),
+            0 COUPON bond that matures to K.
+            At expiration, if S > K, we profit on our shares but must pay back the bond at K, so
+            our profit is S - K, just as before.
+            If S < K, again we return the cash worth K, and sell our shares at S, which in this case is lower than K, so
+            our profit is K - S, just as before.
             Thus, this portfolio at expiration mimics the exact cashflow conditions of the option portfolio.
-            If we go out there at buy C, sell P, buy S, sell the bond that matures to K, then what sort of returns should we
-            expect?...Well since this is a risk-free portfolio (buying one thing and selling the identical thing), we should earn
-            the risk-free rate of interest. This is a key element of the Black-Scholes formula.
+            If we go long one side of this parity (buy C and sell K, or buy S and sell bond at K), and sell the other,
+            what will happen?
+            That is, if we go out there at buy C, sell P, buy S, sell the bond that matures to K, then what sort of returns should we
+            expect?...Since this is a risk-free portfolio (buying one asset and selling the theoretically equivalent asset), we should earn
+            the risk-free rate of interest. This is a key element of the Black-Scholes formula called Put-Call parity.
+            This relationship between the Call, Put, Stock, and interest rate r (which informs the bond's price) allows one to calculate
+            the fourth given any of these three terms. And it should make sense that a Call and a Put at the same strike
+            should always have related values (if inverse).
             </p>
         <div class="delta-b">
     <div class="image-container">
@@ -213,10 +230,10 @@
             For them to truly be equal under arbitrage law, the cashflows during and at the end of the life of these portfolios need to be equal.
             We need a hedging strategy that satisfies the expiry conditions, and fully funds itself throughout the life of the option.
             <br><br>
-            Well, broad strokes, it makes sense that if S is knowably likely to expire above K, then we need to steer
+            Broad strokes, it makes sense that if S is knowably/quantifiably likely to expire above K, then we need to steer
             our portfolio in the direction of mimicking S - K at expiration (C's payoff if S > K). Vise versa, if S seems
             unlikely to exceed K, then at expiration, we are not on the hook for anything as the owner of C has no right
-            to buy anything from us. FIRMLY: if we think S will expire > K, we need 100 shares of S and a 100 short bond
+            to buy anything from us. Importantly, if we think S will expire > K, we need 100 shares of S and a 100 short bond
             that matures to K that we pay back. Otherwise, nothing.
             If we had a crystal ball, we'd know where S is going to expire, and be able to perfectly match the payoff conditions
             by buying S and selling a bond to K, or not. However, we do not know what the future holds, so we rely on the
@@ -226,13 +243,13 @@
             that gave hints to the future and could tell us DELTA (the proxy for probability of S expiring > K),
             then at any moment, we'd want to hold DELTA shares of S and sell a similar 'weighting' of a bond maturing to K.
             <br><br>
-            If we could get a certain probability (which is a theoretical oxymoron) for S expiring > K, and we could only set up the portfolio and wait until expiry,
-            over time, we'd do relatively well preparing for the expiration conditions. Some cases, we'd spend too much,
+            If we could get a certain probability (which is an overt oxymoron) for S expiring > K, and we could only sell C,
+            set up the portfolio and wait until expiry,
+            over time, we'd do ok at preparing for the expiration conditions. Some cases, we'd spend too much,
             other cases we'd make extra money.
-            Better than buying 100 shares and selling a full bond to K.
-            We'd most likely always be off at expiration, and would either incur costs or net profits to correct ourselves after the fact.
+            Better than buying 100 shares and selling a full bond to K, or doing nothing. But, this is not reliable for accurately pricing C.
             <br><br>
-            However, if we could always be correcting the amounts of S and -K we have corresponding to crystal-ball DELTA,
+            However, if we could <i>always</i> be correcting the amounts of S and -K we have corresponding to crystal-ball DELTA,
             then as we approach expiration, DELTA would approach and expire to either 1 or 0. Well, what if we calculate DELTA with d1
             every possible second and trade accordingly? How would we do? We'd definitely be fine at expiration, but would we
             incur costs along the way?
@@ -241,7 +258,7 @@
         <p>
             Let's assume delta/D (which is a proxy for probability of expiring in the money, as in probability that we'll
             need to hedge at all) is .3 or 30. Firstly, this means that when S goes up $1, C goes up $0.30 (this is DELTA's definition).
-            So, after selling C and wanting to hedge with shares, if we have D*S, then as S goes up $1 and we lose $0.30 from
+            So, after selling C and wanting to hedge with shares, if we have D*S, then as S goes up $1, and we lose $0.30 from
             the short C, we match those losses with our gains from our 30 shares of S. This is an important starting
             point, but it is important to note how far we are from our answer yet.
             What happens to D now that S has risen by 1? Well with a higher S, the probability that S reaches and
@@ -263,10 +280,7 @@
             This moment is like the crystal-ball D increasing, thus telling us it's more likely for S to expire > K,
             telling us we need more S and more short bond K (because we need 100*S - K at exp).
             <br><br>
-<!--            So we need to buy a little more S and sell a (basically, since B is slightly smaller than D) identical amount more of the bond, such that the expected-->
-<!--            value of our S - K portfolio is correct. Buying more stock will cost S*(DELTA2-DELTA1) and selling more bond will bring-->
-<!--            in around K*(B2-B1). Are these values the same? Does the bond fund the stock?-->
-<!--            <br><br>-->
+
             Think about this: if we could set up an algorithm to manage this portfolio whenever S * (D2-D1) >= 0.01
             and -K * (B2-B1) >= 0.01 (ie, whenever DELTA and B change AT ALL), then the costs would
             absolutely always balance. Stock goes up a little, we need to buy more shares, but we get to sell more bond.
@@ -277,10 +291,15 @@
             Huh???
         </p>
         <h3>Total cost = setup cost = Black-Scholes price?</h3>
-        <p>The key to the Black-Scholes theory (it is theoretical, and not possible to replicate, as you will soon see) is the ability to continuously buy and sell stock and bonds with no fees or tax.
-             Theoretically, if we set this portfolio up to always have balanced returns from D*S and -B*K and can continuously update it, then by definition, each re-balance will cost 0 net.
-        The cost of stock is financed by short bonds. We buy more stock, we get to sell more bond. We sell off some stock, we spend money to buy back bond.
-            That's our whole goal, and assuming we can do it allows the beauty to shine through. If we have this ideal portfolio and the access to perfect and continuous hedging, then the only cost we'd ever incur is the cost to actually set up the hedge. The more frequent the hedging, the more accurate the D's and B's,
+        <p>The key to the Black-Scholes theory (it is theoretical, and not possible to replicate, as you will soon see)
+            is the ability to continuously buy and sell stock and bonds with no fees or tax.
+             Theoretically, if we set this portfolio up to always have balanced returns from D*S and -B*K and can continuously
+            update it, then by definition, each re-balance will cost 0 net.
+        The cost of stock is financed by short bonds. We buy more stock, we get to sell more bond. We sell off some stock,
+            we spend money to buy back bond.
+            That's our whole goal, and assuming we can do it allows the beauty to shine through. If we have this ideal
+            portfolio and the access to perfect and continuous hedging, then the only cost we'd ever incur is the cost to
+            actually set up the hedge. The more frequent the hedging, the more accurate the D's and B's,
             and the more likely each cost is to perfectly cancel the other out.
 
             </p>
@@ -302,7 +321,24 @@
         <img src="{{ url_for('static', filename='images/bsm_example/bsm_sim_delta.png') }}" alt="Sim Delta" class='b_image'>
     </div>
 </div>
+        <p>
+            Notice how the costs throughout the life of this option, if we delta-hedge once per week, are large
+            and sporadic, certainly not 'net-zero' as the formula aims for them to be. This can be explained mathematically,
+            however it intuitively makes sense as well. Previously we discussed setting up a hedge just once, then holding
+            until expiration; it's clear that even though delta's formula is precise, and even if real stocks moved with
+            constant volatility and brownian motion as the formula treats them, we would still not be successful. If delta
+            was 30 at the beginning of our trade, however accurate that calculation may be, we still cannot expect
+            successful. Either S will expire above or below K, and our 30 shares and around 30% of K sold short as a bond
+            would lose money. If you delta-hedge more often, however, each delta you calculate and balance with only
+            aims to predict and cover your exposure until the next delta-hedge. As you can see below, when we hedge the exact
+            same random stock instance every day, each individual net cost is well under $0.10. Delta is the instantaneous
+            rate of change of C with respect to changes in S, so A) as time rolls on (even if S doesn't move), delta will change,
+            and B) if S starts getting away from S at the last delta-hedge delta will of course change as well. It is the
+            goal of the hedging portfolio to always hold 0 directional risk at the current moment. The more frequently you
+            can rebalance, the smaller any jolt in any direction, the closer changes in Delta and B will be, and thus the lower
+            our net hedging costs will be!
 
+        </p>
 
         <div class="delta-b">
     <div class="image-container">
@@ -312,34 +348,47 @@
 
 
         <h3>Delta Hedging is all about balance</h3>
-        <p>It is like balancing on a scale, one foot on each side: the more frequent you adjust the force you are exerting, the more consistently stable your balance is, and the smaller each individual readjustment is.
-            If you were only allowed to move your feet every 1 second, you'd have large swings from side to side, never quite straddling the middle eleagantly...however if you continuously apply and shift pressure across your feet, balancing becomes much easy and our overall volatility of balance is lower. More, smaller adjustments
-            lead to smoother balance and less 'jolting' side to side. Those jolts, those readjustments are identical to the hedge trades we incur over the life of the option.
+        <p>Imagine standing on a scale or a seesaw, one foot on each side: the more frequent you adjust the force you are exerting,
+            the more consistently stable your balance is, and the smaller each individual readjustment is.
+            If you were only allowed to move your feet every 1 second, you'd have large swings from side to side, never
+            quite straddling the middle elegantly...however if you continuously apply and shift pressure across your
+            feet, balancing becomes much easy and our overall volatility of balance is lower. More, smaller adjustments
+            lead to smoother balance and less 'jolting' side to side. Those jolts, those readjustments are identical
+            to the hedge trades we incur over the life of the option.
         </p>
         <h3>Arbitrage theory to bring it all home</h3>
-        <p>Wait a second, why is the sum of the costs to set up and maintain a hedging portfolio the price of the option, C?
+        <p> Wait a second, why is the sum of the costs to set up and maintain a hedging portfolio the price of the option, C?
             Using the theory of arbitrage, if two assets/portfolios have the same costs throughout their entire life
             and the same payoffs at expiration, then they're identical and should be priced equally. Our idea portfolio
             has been shown to perfectly mimic the payoffs at expiration, and assuming we can continuously trade,
             our portfolio's lifetime cashflows will equal those of C, which are 0 due to its European nature.
-
-            ....Even juicier: assuming we if the price of C was ever priced greater
+            <br><br>
+            Practically, if there is demand for Call options and one wants to meet that demand and sell Calls,
+            calculating the cost to hedge a short Call with 0 risk would inform the seller on how much to charge at the
+            date of sale of C. Casinos calculate the probabilities and risk profiles involved with offering a given bet
+            such that they can, <i>with no risk</i>, price that bet at <i>their</i> price. If one wants access to the power
+            of a Call option, someone has to sell it and assume the risks, so we must play at their price.
+<br><br>
+            ....Even juicier: if the price of C was ever priced greater
             than the cost to set up the self-financing hedging portfolio (that we can perfectly and continuously hedge
-            after setup for FREE), then one could sell C then go set up the portfolio for cheaper, then hedge his position
+            after setup for FREE), that is if C was ever > the Black-Scholes price of C, then one could sell C then go
+            set up the portfolio for cheaper, then hedge their position
         for free until expiration, they would be locking in a risk-free profit.
             Also for the financially savvy, it may be clear now that selling C and buying that portfolio for a net cost
-            of 0 must demand the risk-free rate, r, as its return.
+            of 0 must demand the risk-free rate, r, as its return, just as with Put-Call parity.
         </p>
 
     </div>
     <p>See the Black-Scholes Hedging Strategy in Action!</p>
-     <form action="/bsm/sim/.15/50/50/.05/85/weekly" method="GET">
+     <form action="/bsm/sim/.2/100/100/.05/50/weekly" method="GET">
         <input type="submit" class="logout-btn" value="Simulate Black-Scholes">
     </form>
 
     <form action="/client" method="GET">
         <input type="submit" class="logout-btn" value="Client">
     </form>
+
+
 
 </body>
 </html>
