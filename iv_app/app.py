@@ -60,7 +60,6 @@ def bsm_page():
     return render_template("bsm.html")
 
 
-
 @app.route("/bsm/sim/<iv>/<spot>/<strike>/<r>/<period>", methods=["GET", "POST"])
 def bsm_sim(iv=None, spot=None, strike=None, r=None, period=None):
     if iv == None:
