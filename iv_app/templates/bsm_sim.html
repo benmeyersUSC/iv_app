@@ -83,9 +83,11 @@
 
 <h2>Black-Scholes Parameters</h2>
 
-<p><strong>Call option expiring in 12 weeks:</strong></p>
+<p><strong>Call option expiring in 12 weeks {{period}}:</strong></p>
 
-<form action="/bsm/simx" method="POST" class="button-container">
+
+
+<form action="/bsm/sim/" method="POST" class="button-container" id="parameters-form">
     <label for="iv">IV:</label>
     <select name="iv" id="iv">
         {% for i in range(5, 151, 5) %}
@@ -133,6 +135,67 @@
     <button type="submit">Render with new chosen parameters!</button>
 </form>
 
+<script>
+    document.getElementById('parameters-form').addEventListener('submit', function() {
+        var form = this;
+        var ivValue = document.getElementById('iv').value;
+        var spotValue = document.getElementById('spot').value;
+        var strikeValue = document.getElementById('strike').value;
+        var rValue = document.getElementById('r').value;
+        var periodValue = "{{ period }}";
+
+        form.action = "/bsm/sim/" + ivValue + "/" + spotValue + "/" + strikeValue + "/" + rValue + "/" + periodValue;
+    });
+</script>
+
+<!--<form action="/bsm/simx" method="POST" class="button-container">-->
+<!--    <label for="iv">IV:</label>-->
+<!--    <select name="iv" id="iv">-->
+<!--        {% for i in range(5, 151, 5) %}-->
+<!--            {% if i/100 == iv %}-->
+<!--                <option value="{{ i/100 }}" selected>{{ i/100 }}</option>-->
+<!--            {% else %}-->
+<!--                <option value="{{ i/100 }}">{{ i/100 }}</option>-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+<!--    </select>-->
+
+<!--    <label for="spot">Spot:</label>-->
+<!--    <select name="spot" id="spot">-->
+<!--        {% for i in range(25, 1001, 25) %}-->
+<!--            {% if i == spot %}-->
+<!--                <option value="{{ i }}" selected>{{ i }}</option>-->
+<!--            {% else %}-->
+<!--                <option value="{{ i }}">{{ i }}</option>-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+<!--    </select>-->
+
+<!--    <label for="strike">Strike:</label>-->
+<!--    <select name="strike" id="strike">-->
+<!--        {% for i in range(25, 1001, 5) %}-->
+<!--            {% if i == strike %}-->
+<!--                <option value="{{ i }}" selected>{{ i }}</option>-->
+<!--            {% else %}-->
+<!--                <option value="{{ i }}">{{ i }}</option>-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+<!--    </select>-->
+
+<!--    <label for="r">r:</label>-->
+<!--    <select name="r" id="r">-->
+<!--        {% for i in range(0, 51, 1) %}-->
+<!--            {% if i/100 == r %}-->
+<!--                <option value="{{ i/100 }}" selected>{{ i/100 }}</option>-->
+<!--            {% else %}-->
+<!--                <option value="{{ i/100 }}">{{ i/100 }}</option>-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+<!--    </select>-->
+
+<!--    <button type="submit">Render with new chosen parameters!</button>-->
+<!--</form>-->
+
 <p><strong>Volatility (sigma):</strong> {{ iv }},&emsp;
    <strong>Spot (S):</strong> {{ spot }},&emsp;
    <strong>Strike (K):</strong> {{ strike }},&emsp;
@@ -140,17 +203,17 @@
 
 <div class="button-container">
 
-    <form action="/bsm/simr" method="GET">
+    <form action="/bsm/sim/{{iv}}/{{spot}}/{{strike}}/{{r}}/{{period}}" method="GET">
         <input type="hidden" name="bsm_sim" >
         <button type="submit">Rerender current params!</button>
     </form>
 
-    <form action="/bsm/simw" method="GET">
+    <form action="/bsm/sim/{{iv}}/{{spot}}/{{strike}}/{{r}}/weekly" method="GET">
         <input type="hidden" name="period">
         <button type="submit">Weekly</button>
     </form>
 
-    <form action="/bsm/simd" method="GET">
+    <form action="/bsm/sim/{{iv}}/{{spot}}/{{strike}}/{{r}}/daily" method="GET">
         <input type="hidden" name="period" >
         <button type="submit">Daily</button>
     </form>

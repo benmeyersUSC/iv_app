@@ -429,7 +429,6 @@ class black_scholes_sim:
     def black_scholes_call(self, S, dte):
         if dte > 0:
             K = self.strike
-            print(K)
             r = self.r
             sigma = self.iv
             T = dte / 365

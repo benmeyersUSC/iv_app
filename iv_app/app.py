@@ -61,54 +61,28 @@ def bsm_page():
 
 
 
-@app.route("/bsm/sim<x>", methods=["GET", "POST"])
-def bsm_sim(x=None):
-    session['period'] = 'weekly'
-    if x == 'y':
-        # y is first time arriving
-        session['iv'] = .15
-        session['spot'] = 50
-        session['strike'] = 50
-        session['r'] = .05
-        session['period'] = 'weekly'
-        iv = session['iv']
-        spot = session['spot']
-        strike = session['strike']
-        r = session['r']
-        period = session['period']
+@app.route("/bsm/sim/<iv>/<spot>/<strike>/<r>/<period>", methods=["GET", "POST"])
+def bsm_sim(iv=None, spot=None, strike=None, r=None, period=None):
+    if iv == None:
+        iv = .15
+    if spot == None:
+        spot = 50
+    if strike == None:
+        strike = 50
+    if r == None:
+        r = .05
+    if period == None:
+        period = 'weekly'
 
-        go = BS.black_scholes_sim(iv, spot, strike, r)
-        go.graphemall()
-        # go.graphOption()
-        ag = [go.ag_sims_daily, go.ag_sims_weekly]
-        if period == 'weekly':
-            data = go.weekly_dict()
-            total = data['total_cost']
-        elif period == 'daily':
-            data = go.daily_dict(85)
-            total = data['total_cost']
-        return render_template("bsm_sim.html", data=data, total=total, iv=iv, spot=spot,
-                               strike=strike, r=r, ag=ag)
-    if x == 'x':
-        # x new shitttt
-        session['iv'] = float(request.form.get('iv'))
-        session['spot'] = float(request.form.get('spot'))
-        session['strike'] = float(request.form.get('strike'))
-        session['r'] = float(request.form.get('r'))
-    if 'w' == x:
-        # w is changing to weekly
-        session['period'] = 'weekly'
-    if 'd' == x:
-        # d is changing to daily
-        session['period'] = 'daily'
+    iv = float(iv) if is_float(iv) else 0.15
+    spot = float(spot) if is_float(spot) else 50.0
+    strike = float(strike) if is_float(strike) else 50.0
+    r = float(r) if is_float(r) else 0.05
+    if 'weekly' in period:
+        period = 'weekly'
+    if 'daily' in period:
+        period = 'daily'
 
-    #otherwise itll be simr, which just rerenders
-
-    iv = session['iv']
-    spot = session['spot']
-    strike = session['strike']
-    r = session['r']
-    period = session['period']
     go = BS.black_scholes_sim(iv, spot, strike, r)
     go.graphemall()
     ag = [go.ag_sims_daily, go.ag_sims_weekly]
@@ -119,7 +93,9 @@ def bsm_sim(x=None):
         data = go.daily_dict(85)
         total = data['total_cost']
     return render_template("bsm_sim.html", data=data, total=total, iv=iv, spot=spot,
-                           strike=strike, r=r, ag=ag)
+                           strike=strike, r=r, period=period, ag=ag)
+
+
 
 @app.route('/top/<criteria>')
 def top(criteria):
@@ -183,6 +159,13 @@ def set_ticker():
 
 def ticker_check(ticker):
     return ticker in tickers_set
+
+def is_float(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 
 # Run the Flask application
