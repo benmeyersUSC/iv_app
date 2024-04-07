@@ -16,6 +16,9 @@ app.secret_key = os.urandom(12)
 
 with open('tickers_available', 'r') as fn:
     tickers_set = set([tick for tick in fn.read().split('\n') if tick])
+bsm_sim_ag_prices_d = {}
+bsm_sim_ag_prices_w = {}
+
 
 # Define a route for the homepage
 @app.route('/')
@@ -48,11 +51,9 @@ def client():
     return render_template("user.html")
 
 
-@app.route("/ticker")
-def ticker():
-    user_ticker = session.get('ticker', 'SPY')
-    return render_template("ticker.html",
-                           ticker=user_ticker, ticker_name=fcc.EarningStock(user_ticker).name)
+@app.route("/ticker/<symbol>")
+def ticker(symbol='SPY'):
+    return render_template("ticker.html", ticker=symbol, ticker_name=fcc.EarningStock(symbol).name)
 
 
 @app.route("/bsm")
@@ -84,7 +85,13 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, period=None):
 
     go = BS.black_scholes_sim(iv, spot, strike, r)
     go.graphemall()
-    ag = [go.ag_sims_daily, go.ag_sims_weekly]
+    sed = (iv, spot, strike, r)
+    if sed not in bsm_sim_ag_prices_d.keys():
+        ag = [go.ag_sims_daily(), go.ag_sims_weekly()]
+        bsm_sim_ag_prices_d[(iv, spot, strike, r)] = ag[0]
+        bsm_sim_ag_prices_w[(iv, spot, strike, r)] = ag[1]
+    else:
+        ag = [bsm_sim_ag_prices_d[(iv, spot, strike, r)], bsm_sim_ag_prices_w[(iv, spot, strike, r)]]
     if period == 'weekly':
         data = go.weekly_dict()
         total = data['total_cost']
@@ -142,17 +149,13 @@ def set_ticker():
                 re-renders user.html otherwise
     """
     if not ticker_check(request.form['set_ticker'].upper()):
-        session['ticker'] = 'SPY'
-        print('ticker check failed')
         return redirect(url_for('ticker'))
     else:
-        session['ticker'] = request.form['set_ticker'].upper()
-        print('ticker check succeed')
-        print(session['ticker'])
-        fcc.EarningStock(session['ticker']).graph_iv()
-        fcc.EarningStock(session['ticker']).graphStPrices()
+        tick = request.form['set_ticker'].upper()
+        fcc.EarningStock(tick).graph_iv()
+        fcc.EarningStock(tick).graphStPrices()
         # then reload ticker
-        return redirect(url_for('ticker'))
+        return redirect(url_for('ticker', symbol=tick))
 
 
 

@@ -75,14 +75,27 @@
     <h1>Let's get to research, buddy!</h1>
 <!--    <p>Choose the stock you'd like to research!</p>-->
     <p>Your current stock is: {{ticker_name}} ({{ticker}})</p>
+
+
+
+
+
+
     <form action="/action/setticker" method="POST">
         <input type="text" name="set_ticker" placeholder="SPY">
         <input type="submit" value="Render">
     </form>
+
+
     <form action="/action/setticker" method="POST">
         <input type="hidden" name="set_ticker" value={{ticker}}>
         <button type="submit">Rerender {{ticker}}</button>
     </form>
+
+
+
+
+
     <h1>{{ticker_name}} ({{ticker}}) monthly price and forward volatility, GBM/Black-Scholes random prediction</h1>
     <p>First is the past month of trading in {{ticker}} with 1-month-forward-looking Bollinger-esque standard deviation ranges given by {{ticker}}'s options.</p>
     <p>Second is a 45 day prediction of where {{ticker}} could move in a Black-Scholes world...</p>
