@@ -5,16 +5,25 @@ Click this [link](https://iv-app-1408b00f8e09.herokuapp.com/)!
 
 __Pages:__
 
-- __Home__ page gives the user a dashboard of choices to explore
+- [__Home__](https://iv-app-1408b00f8e09.herokuapp.com/) page gives the user a dashboard of choices to explore
+
   
-- __Research Ticker__
-- *Tabspace*this page allows the user to input any optionable underlying symbol to get a quick picture of recent price action as well as the current IV metrics that can inform its near future
+  
+- [__Research Ticker__](https://iv-app-1408b00f8e09.herokuapp.com/ticker/SPY)
+  
+  - this page allows the user to input any optionable underlying symbol to get a quick picture of recent price action as well as the current IV metrics that can inform its near future
 
-- __Black Scholes Model__
-- *Tabspace*the first click takes you to a static page that walks through the Black Scholes Formula and hedging strategy
-- *Tabspace*from this page, the user can then simulate the Black Scholes hedging strategy with their own parameters, as many times as they want!
 
-- __Stock Group Info__
-- *Tabspace*the final several tabs on the home page allow the user to look at different 'watchlists' or portfolios of underlyings
-- *Tabspace*This week's earnings names, the current top open interest underlyings, the Mag 7, and the market's top indices
+
+- [__Black Scholes Model__](https://iv-app-1408b00f8e09.herokuapp.com/bsm)
+  
+  - the first click takes you to a static page that walks through the Black Scholes Formula and hedging strategy
+  - from this page, the user can then [simulate](https://iv-app-1408b00f8e09.herokuapp.com/bsm/sim/.2/100/100/.05/50/weekly) the Black Scholes hedging strategy with their own parameters, as many times as they want!
+
+
+
+- [__Stock Group Info__](https://iv-app-1408b00f8e09.herokuapp.com/top/earnings)
+  
+  - the final several tabs on the home page allow the user to look at different 'watchlists' or portfolios of underlyings
+  - This week's earnings names, the current top open interest underlyings, the Mag 7, and the market's top indices
 
