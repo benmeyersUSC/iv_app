@@ -8,13 +8,13 @@ __Pages:__
 - __Home__ page gives the user a dashboard of choices to explore
   
 - __Research Ticker__
--     this page allows the user to input any optionable underlying symbol to get a quick picture of recent price action as well as the current IV metrics that can inform its near future
+- *Tabspace*this page allows the user to input any optionable underlying symbol to get a quick picture of recent price action as well as the current IV metrics that can inform its near future
 
 - __Black Scholes Model__
--     the first click takes you to a static page that walks through the Black Scholes Formula and hedging strategy
--     from this page, the user can then simulate the Black Scholes hedging strategy with their own parameters, as many times as they want!
+- *Tabspace*the first click takes you to a static page that walks through the Black Scholes Formula and hedging strategy
+- *Tabspace*from this page, the user can then simulate the Black Scholes hedging strategy with their own parameters, as many times as they want!
 
 - __Stock Group Info__
--     the final several tabs on the home page allow the user to look at different 'watchlists' or portfolios of underlyings
--     This week's earnings names, the current top open interest underlyings, the Mag 7, and the market's top indices
+- *Tabspace*the final several tabs on the home page allow the user to look at different 'watchlists' or portfolios of underlyings
+- *Tabspace*This week's earnings names, the current top open interest underlyings, the Mag 7, and the market's top indices
 
