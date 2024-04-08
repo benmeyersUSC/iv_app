@@ -526,7 +526,8 @@ class black_scholes_sim:
 
             info_dict['total_cost'] = round(reduce(lambda x,y: x+y, info_dict['total']), 2)
             info_dict['bs-real'] = round(abs(info_dict['bs_price'][0] - info_dict['total_cost']), 3)
-            info_dict['bs-real_p'] = round(100*info_dict['bs-real'] / info_dict['bs_price'][0], 4)
+            if info_dict['bs_price'][0] > 0.01:
+                info_dict['bs-real_p'] = round(100*info_dict['bs-real'] / info_dict['bs_price'][0], 4)
         del info_dict['delta'][-1]
 
         if self.brownian_stock[-1] >= self.strike:
@@ -591,7 +592,8 @@ class black_scholes_sim:
 
                 info_dict['total_cost'] = round(reduce(lambda x,y: x+y, info_dict['total']), 2)
                 info_dict['bs-real'] = round(abs(info_dict['bs_price'][0] - info_dict['total_cost']), 3)
-                info_dict['bs-real_p'] = round(100*info_dict['bs-real'] / info_dict['bs_price'][0], 4)
+                if info_dict['bs_price'][0] > 0.01:
+                    info_dict['bs-real_p'] = round(100*info_dict['bs-real'] / info_dict['bs_price'][0], 4)
         del info_dict['delta'][-1]
         if self.brownian_stock[-1] >= self.strike:
             info_dict['delta'][-1] = 1.0
