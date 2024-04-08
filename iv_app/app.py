@@ -80,7 +80,7 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, dte=None, period=None):
     spot = float(spot) if is_float(spot) and float(spot) <= 1000 else 100.0
     strike = float(strike) if is_float(strike) and float(strike) <= 1000 else 100.0
     r = float(r) if is_float(r) and float(r) <= .5 else 0.05
-    dte = float(dte) if is_float(dte) and float(dte) <= 123 else 50
+    dte = float(dte) if is_float(dte) and float(dte) <= 120 else 50
     if 'weekly' in period:
         period = 'weekly'
     if 'daily' in period:
