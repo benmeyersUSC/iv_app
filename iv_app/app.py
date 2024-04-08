@@ -114,7 +114,7 @@ def top(criteria):
         StockSet(stocks, criteria)
         tail = "This Week's Top Earnings"
     elif criteria == 'oi':
-        stocks = ['RDDT', 'SMCI', 'COIN', "SPY", 'QQQ']
+        stocks = ['AAPL', 'NVDA', 'COIN', "SPY", 'QQQ', 'TSLA', 'AMZN', 'EEM', 'HYG']
         StockSet(stocks, criteria)
         tail = "Top Open Interest Underlyings"
     elif criteria == 'mag7':
