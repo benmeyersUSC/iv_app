@@ -89,12 +89,13 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, dte=None, period=None):
     go = BS.black_scholes_sim(iv, spot, strike, r, dte)
     go.graphemall()
     sed = (iv, spot, strike, r, dte)
-    if sed not in bsm_sim_ag_prices_d.keys():
-        ag = [go.ag_sims_daily(), go.ag_sims_weekly()]
-        bsm_sim_ag_prices_d[sed] = ag[0]
-        bsm_sim_ag_prices_w[sed] = ag[1]
-    else:
-        ag = [bsm_sim_ag_prices_d[sed], bsm_sim_ag_prices_w[sed]]
+    # if sed not in bsm_sim_ag_prices_d.keys():
+    #     ag = [go.ag_sims_daily(), go.ag_sims_weekly()]
+    #     bsm_sim_ag_prices_d[sed] = ag[0]
+    #     bsm_sim_ag_prices_w[sed] = ag[1]
+    # else:
+    #     ag = [bsm_sim_ag_prices_d[sed], bsm_sim_ag_prices_w[sed]]
+    ag = [0, 0, 0, 0]
     if period == 'weekly':
         data = go.weekly_dict(dte)
         total = data['total_cost']
