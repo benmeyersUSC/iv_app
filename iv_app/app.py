@@ -29,9 +29,10 @@ def home():
     :return: renders login.html if not logged in,
                 redirects to client otherwise.
     """
-    session['ticker'] = 'SPY'
-    fcc.EarningStock(session['ticker']).graph_iv()
-    fcc.EarningStock(session['ticker']).graphStPrices()
+    g = fcc.EarningStock('SPY')
+    g.graph_iv()
+    g.graphStPrices()
+    g.graph_ticker_options()
     return redirect(url_for("client"))
 
 
@@ -47,7 +48,6 @@ def client():
                 renders admin.html if logged in as admin,
                 user.html otherwise
     """
-    session['ticker'] = 'SPY'
     return render_template("user.html")
 
 
@@ -155,8 +155,10 @@ def set_ticker():
         tick = 'SPY'
     else:
         tick = request.form['set_ticker'].upper()
-    fcc.EarningStock(tick).graph_iv()
-    fcc.EarningStock(tick).graphStPrices()
+    g = fcc.EarningStock(tick)
+    g.graph_iv()
+    g.graphStPrices()
+    g.graph_ticker_options()
     # then reload ticker
     return redirect(url_for('ticker', symbol=tick))
 

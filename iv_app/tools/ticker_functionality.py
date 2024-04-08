@@ -6,6 +6,9 @@ import os
 import math
 import pandas as pd
 
+from iv_app.tools.black_scholes_sandbox import norm_cdf
+
+
 class EarningStock:
     def __init__(self, ticker):
         self.ticker = ticker.strip().upper()
@@ -62,6 +65,7 @@ class EarningStock:
         self.today = self.today[:-2] + str(int(day)-1)
 
         self.brownianStock = self.brownianStock()
+        self.ticker_options = self.ticker_options()
 
 
 
@@ -248,7 +252,6 @@ class EarningStock:
     def brownianStock(self):
         """
         Description: creates a BLACK-SCHOLES based random daily stock path (list)
-        :param params: the output list from user input....only uses all but 0 and 2 (type and strike) all (floats)
         :return: (list) of length dte (params[3]), each a new daily stock price
         """
         days = int(45)
@@ -319,6 +322,88 @@ class EarningStock:
 
         # Close the plot to release memory
         plt.close()
+
+    def black_scholes_call(self, S, strike, dte):
+        if dte > 0:
+            K = strike
+            r = 0.05
+            sigma = self.iv
+            T = dte / 365
+            d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+            d2 = d1 - sigma * math.sqrt(T)
+            call_price = S * norm_cdf(d1) - K * math.exp(-r * T) * norm_cdf(d2)
+            return call_price
+        else:
+            if S > strike:
+                return (S - strike)
+            else:
+                return 0
+
+    def black_scholes_put(self, S, strike, dte):
+        if dte > 0:
+            K = strike
+            r = 0.05
+            sigma = self.iv
+            T = dte / 365
+            d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
+            d2 = d1 - sigma * math.sqrt(T)
+            put_price = K * math.exp(-r * T) * norm_cdf(-d2) - S * norm_cdf(-d1)
+            return put_price
+        else:
+            if S < strike:
+                return strike - S
+            else:
+                return 0
+
+    def ticker_options(self):
+        ticker_option_prices = {'+1':[], '+2':[], '-1':[], '-2':[]}
+        stock = self.brownianStock
+        dte = 45
+        for i in range(len(stock)):
+            ticker_option_prices['+1'].append(self.black_scholes_call(stock[i], self.one_sd_up, dte))
+            ticker_option_prices['+2'].append(self.black_scholes_call(stock[i], self.two_sd_up, dte))
+            ticker_option_prices['-1'].append(self.black_scholes_put(stock[i], self.one_sd_down, dte))
+            ticker_option_prices['-2'].append(self.black_scholes_put(stock[i], self.two_sd_down, dte))
+            dte -= 1
+        return ticker_option_prices
+
+    def graph_ticker_options(self):
+        xes = range(len(self.ticker_options['+1']))
+
+
+
+        # plt.plot(xes, self.brownianStock, label=f'${self.ticker} Price', color=color, marker='>', linestyle='-')
+
+        plt.plot(xes, self.ticker_options['+2'], label=f'${self.ticker} 2 sd Call', color='r', marker='>', linestyle='-')
+        plt.plot(xes, self.ticker_options['+1'], label=f'${self.ticker} 1 sd Call', color='b', marker='>', linestyle='-')
+        plt.plot(xes, self.ticker_options['-1'], label=f'${self.ticker} 1 sd Put', color='g', marker='>', linestyle='-')
+        plt.plot(xes, self.ticker_options['-2'], label=f'${self.ticker} 2 sd Put', color='y', marker='>', linestyle='-')
+
+        plt.xlabel('Days From Now')
+        plt.ylabel(f'Options on Hypothetical {self.ticker} Price')
+        plt.title(
+            f'{self.name} (${self.ticker})\nGBM/Black-Scholes Random Options Prices\nIVx: % {self.iv * 100:.2f}, +/- '
+            f'${self.implied_45_move:.2f}')
+
+        plt.grid(True)
+
+        plt.legend(loc='upper left', fontsize='small')
+
+        plt.tight_layout()
+
+        # Save plot to a directory
+        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'ticker_research')
+        os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
+        file_path = os.path.join(save_dir, 'ticker_options.png')
+
+        # Save the plot
+        plt.savefig(file_path)
+
+        # Close the plot to release memory
+        plt.close()
+
+
+
 
 def main():
     EarningStock('AMZN')
