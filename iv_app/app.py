@@ -123,7 +123,7 @@ def top(criteria):
         tail = "the Magnificent 7"
     else:
         criteria = 'indices'
-        stocks = ['SPY', 'QQQ', 'IWM', 'DIA', 'GLD']
+        stocks = ['SPY', 'QQQ', 'IWM', 'DIA', 'TLT', 'GLD']
         StockSet(stocks, criteria)
         tail = "the Top Market Indices"
 
