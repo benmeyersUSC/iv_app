@@ -8,8 +8,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Black-Scholes Formula</title>
-    <style>
-        .diagram-caption {
+
+
+     <style>
+
+         .diagram-caption {
             max-width: 75%;
             text-align: center;
             align-items: center; /* Align vertically */
@@ -17,29 +20,12 @@
 
         }
 
-
-    .delta-b {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.image-container {
-    text-align: center; /* Center-align the image */
-    margin: 0 10px; /* Adjust the margin to provide spacing between the images */
-}
-
-.image-container img {
-    max-height: 327px;
-}
-
-
         body {
             font-family: "Times New Roman", Times, serif;
             margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text */
         }
 
         h1 {
@@ -56,19 +42,14 @@
         .formula-container {
             width: 80%;
             margin: 0 auto;
-            background-color: #fff;
+            background-color: #000000;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #ffffff; /* Text color for formula container */
         }
 
-        .formula-description {
-            margin-bottom: 20px;
-        }
-
-
-    /*    }*/
-.formula-diagram,
+        .formula-diagram,
 .formula-diagram1 {
     background-color: #222222;
     padding: 10px; /* Adjust padding to make it smaller */
@@ -80,25 +61,50 @@
     max-height: 70px; /* Adjust max-height to make it smaller vertically */
 }
 
-.formula-diagram img,
+
+        .formula-diagram img,
 .formula-diagram1 img {
     height: 50px;
     max-width: 70%;
 
 }
+
         .logout-btn {
             font-size: 16px;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            background-color: #325d80;
-            color: #fff;
+            background-color: #008000; /* Red button background */
+            color: #ffffff; /* Button text color */
             cursor: pointer;
         }
-    </style>
+
+        .logout-btn:hover {
+            background-color: #ff0000; /* Dark green hover */
+        }
+
+        /* Add more styles if needed */
+
+            .delta-b {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    text-align: center; /* Center-align the image */
+    margin: 0 10px; /* Adjust the margin to provide spacing between the images */
+}
+
+.image-container img {
+    max-height: 327px;
+}
 
 
     </style>
+
+
 </head>
 <body>
     <h1>Understanding the Black-Scholes Formula</h1>

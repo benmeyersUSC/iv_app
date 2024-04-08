@@ -7,75 +7,125 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stock Data Table</title>
 <style>
-    img {
-        width: 200px;
-        height: auto;
-        margin-right: 10px;
+
+     select {
+        padding: 10px;
+        border: 1px solid #404040;
+        border-radius: 5px;
+        background-color: #404040; /* Light gray background */
+        color: #ffffff; /* Dark gray text color */
+        appearance: none; /* Disable default browser styles */
+        -webkit-appearance: none; /* For older versions of webkit-based browsers */
     }
 
-    .button-container {
-        display: flex;
-        justify-content: left;
-        margin-bottom: 20px;
-
+    /* Style the arrow indicator for the select dropdown */
+    select::-ms-expand {
+        display: none; /* Hide the default arrow indicator in Internet Explorer */
     }
 
-    .image-container {
+    /* Apply styles to the dropdown options */
+    option {
+        background-color: #404040; /* White background */
+        color: #ffffff; /* Dark gray text color */
+    }
+
+
+
+
+
+
+    /* CSS for images */
+img {
+    width: 200px;
+    height: auto;
+    margin-right: 10px;
+}
+
+/* CSS for button container */
+.button-container {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 20px;
+}
+
+/* CSS for image container */
+.image-container {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
 }
 
+/* Adjust image width and add margin */
 .image-container img {
-    width: 350px; /* Adjust the width as needed */
+    width: 350px;
     height: auto;
-    margin: 0 10px; /* Add margin for spacing between images */
+    margin: 0 10px;
 }
 
-    body {
-        font-family: "Times New Roman", Times, serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f5f5f5;
-    }
+/* Body styling */
+body {
+    font-family: "Times New Roman", Times, serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #000000; /* Black background */
+    color: #ffffff; /* White text */
+}
 
-    input[type="submit"],
-    button[type="submit"] {
-        font-size: 16px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #325d80; /* Blue color */
-        color: white; /* White text color */
-        cursor: pointer;
-        margin-right: 10px;
-    }
+/* Button styling */
+input[type="submit"],
+button[type="submit"] {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #008000; /* Red color */
+    color: white; /* White text color */
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s; /* Smooth transition */
+}
 
-    .container {
-        margin: 20px auto;
-        width: 80%;
-    }
+/* Button hover effect */
+input[type="submit"]:hover,
+button[type="submit"]:hover {
+    background-color: #ff0000; /* Green color on hover */
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+/* Container styling */
+.container {
+    margin: 20px auto;
+    width: 80%;
+}
 
-    thead {
-        background-color: #f2f2f2;
-    }
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    th, td {
-        padding: 8px;
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-    }
+/* Table header styling */
+thead {
+    background-color: #f2f2f2;
+}
 
-    th {
-        background-color: #325d80;
-        color: white;
-    }
+/* Table header text styling */
+th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Table header text color */
+th {
+    background-color: #404040; /* Dark gray background */
+    color: white; /* White text color */
+}
+
 </style>
+
+
+
+
 </head>
 
 <body>
