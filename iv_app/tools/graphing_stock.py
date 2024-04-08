@@ -2,6 +2,8 @@ import yfinance as yf
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import os
+import pandas as pd
+
 
 
 class StockSet:
@@ -145,6 +147,17 @@ class GraphStock:
         prices = prices[:-16]
         prices = prices + [self.price, None, None, None, None, None, None, None, None, None, None, None, None, None,
                            None, None]
+        today = datetime.now().date()
+        days_ago = today - timedelta(days=54)
+
+        dates = pd.date_range(start=days_ago, periods=40, freq='B')
+
+        dates_list = [date.strftime('%Y-%m-%d') for date in dates]
+        display_dates = [dates_list[0], dates_list[18], today]
+
+        # Calculate the corresponding indices
+        display_indices = [0, 19, 36]
+
 
         # plot stock price
         plt.plot(prices, label=f'${self.ticker}: ${self.price:.2f}', color=color, marker='>', linestyle='-')
@@ -167,7 +180,8 @@ class GraphStock:
         plt.plot(down2, label=f'2 StDev down: ${self.two_sd_down:.2f}', color='r', linewidth=2.7)
 
         #remove x axis
-        plt.xticks([])
+        plt.xticks(display_indices, display_dates, rotation=45)
+
         # FIGURE OUT HOW TO GET THE X AXIS RIGHT
 
         plt.ylabel(f'{self.name} Price')
@@ -175,7 +189,10 @@ class GraphStock:
                   f'${self.implied_month_move:.2f}')
         plt.grid(True)
 
-        plt.legend()  # Show legend
+        if prices[-18] >= prices[0]:
+            plt.legend(loc='upper left', fontsize='small')
+        else:
+            plt.legend(loc='lower left', fontsize='small')
         plt.tight_layout() # clean space
 
         # Save plot to a directory

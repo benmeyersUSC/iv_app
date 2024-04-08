@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import os
 import math
+import pandas as pd
 
 class EarningStock:
     def __init__(self, ticker):
@@ -103,6 +104,18 @@ class EarningStock:
 
     def graph_iv(self):
         # print('ticker is', self.ticker)
+        today = datetime.now().date()
+        days_ago = today - timedelta(days=54)
+
+        dates = pd.date_range(start=days_ago, periods=40, freq='B')
+
+        dates_list = [date.strftime('%Y-%m-%d') for date in dates]
+        display_dates = [dates_list[0], dates_list[18], today]
+
+        # Calculate the corresponding indices
+        display_indices = [0, 19, 36]
+
+
         if self.ticker != 'SPY':
             prices = self.past_36+[self.price, self.price, self.price, self.price, self.price, self.price, self.price,
                                    self.price, self.price, self.price, self.price, self.price, self.price, self.price,
@@ -132,6 +145,10 @@ class EarningStock:
             prices = prices + [self.price, None, None, None, None, None, None, None, None, None, None, None, None, None,
                                None, None]
 
+
+
+
+
             plt.plot(prices, label=f'${self.ticker}: ${self.price:.2f}', color=color, marker='>', linestyle='-')
 
             #adjust stdev lines to make clean
@@ -146,14 +163,16 @@ class EarningStock:
             plt.plot(down, label=f'1 StDev down: ${self.one_sd_down:.2f}', color='r', linewidth=5.4)
             plt.plot(down2, label=f'2 StDev down: ${self.two_sd_down:.2f}', color='r', linewidth=2.7)
 
-
-            plt.xticks([])
+            plt.xticks(display_indices, display_dates, rotation=45)
             plt.ylabel('Price')
             plt.title(f'{self.name} (${self.ticker})\nNext Month Volatility\nIVx: % {self.iv*100:.2f}, +/- '
                       f'${self.implied_month_move:.2f}')
             plt.grid(True)
 
-            plt.legend()  # Show legend
+            if prices[-18] >= prices[0]:
+                plt.legend(loc='upper left', fontsize='small')
+            else:
+                plt.legend(loc='lower left', fontsize='small')
             plt.tight_layout()
         else:
             prices = self.past_36 + [self.price, self.price, self.price, self.price, self.price, self.price, self.price,
@@ -203,13 +222,16 @@ class EarningStock:
             plt.plot(down, label=f'1 StDev down: ${self.one_sd_down:.2f}', color='r', linewidth=5.4)
             plt.plot(down2, label=f'2 StDev down: ${self.two_sd_down:.2f}', color='r', linewidth=2.7)
 
-            plt.xticks([])
+            plt.xticks(display_indices, display_dates, rotation=45)
             plt.ylabel('Price')
             plt.title(f'{self.name} (${self.ticker})\nNext Month Volatility\nIVx: % {self.iv * 100:.2f}, +/- '
                       f'${self.implied_month_move:.2f}')
             plt.grid(True)
 
-            plt.legend()  # Show legend
+            if prices[-18] >= prices[0]:
+                plt.legend(loc='upper left', fontsize='small')
+            else:
+                plt.legend(loc='lower left', fontsize='small')
             plt.tight_layout()
 
         # Save plot to a directory
