@@ -96,9 +96,9 @@
 
 
 
-    <h1>{{ticker_name}} ({{ticker}}) monthly price and forward volatility, GBM/Black-Scholes random prediction</h1>
-    <p>First is the past month of trading in {{ticker}} with 1-month-forward-looking Bollinger-esque standard deviation ranges given by {{ticker}}'s options.</p>
-    <p>Second is a 45 day prediction of where {{ticker}} could move in a Black-Scholes world...</p>
+    <h1>{{ticker_name}} ({{ticker}}) 2 month price and forward volatility, GBM/Black-Scholes random prediction</h1>
+    <p>First is the past 2 months of trading in {{ticker}} with 45-day-forward-looking Bollinger-esque standard deviation ranges given by {{ticker}}'s options/Implied Volatility.</p>
+    <p>Second is a 45-day prediction of where {{ticker}} could move in a Black-Scholes world...</p>
 
     <img src="{{ url_for('static', filename='images/ticker_research/yyy.png') }}" alt="Example Image">
     <img src="{{ url_for('static', filename='images/ticker_research/zzz.png') }}" alt="Example Image">
