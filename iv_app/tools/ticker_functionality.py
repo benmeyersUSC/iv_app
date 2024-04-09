@@ -374,9 +374,9 @@ class EarningStock:
 
         # plt.plot(xes, self.brownianStock, label=f'${self.ticker} Price', color=color, marker='>', linestyle='-')
 
-        plt.plot(xes, self.ticker_options['+2'], label=f'${self.ticker} 2 sd Call', color='r', marker='>', linestyle='-')
-        plt.plot(xes, self.ticker_options['+1'], label=f'${self.ticker} 1 sd Call', color='b', marker='>', linestyle='-')
-        plt.plot(xes, self.ticker_options['-1'], label=f'${self.ticker} 1 sd Put', color='g', marker='>', linestyle='-')
+        plt.plot(xes, self.ticker_options['+2'], label=f'${self.ticker} 2 sd Call', color='b', marker='>', linestyle='-')
+        plt.plot(xes, self.ticker_options['+1'], label=f'${self.ticker} 1 sd Call', color='g', marker='>', linestyle='-')
+        plt.plot(xes, self.ticker_options['-1'], label=f'${self.ticker} 1 sd Put', color='r', marker='>', linestyle='-')
         plt.plot(xes, self.ticker_options['-2'], label=f'${self.ticker} 2 sd Put', color='y', marker='>', linestyle='-')
 
         plt.xlabel('Days From Now')
