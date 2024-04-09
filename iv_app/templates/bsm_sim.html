@@ -162,7 +162,7 @@ th {
 
     <label for="strike">Strike:</label>
     <select name="strike" id="strike">
-        {% for i in range(25, 1001, 5) %}
+        {% for i in range(25, 1001, 25) %}
             {% if i == strike %}
                 <option value="{{ i }}" selected>{{ i }}</option>
             {% else %}
