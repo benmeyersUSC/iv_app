@@ -404,7 +404,7 @@ class black_scholes_sim:
         if dte > 0:
             K = self.strike
             r = self.r
-            sigma = self.iv
+            sigma = self.iv if self.iv > 0 else 0.01
             T = dte / 365
             # K*= math.e ** -(r*T)
             # print(K)

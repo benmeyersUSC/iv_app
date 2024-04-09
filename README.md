@@ -25,5 +25,5 @@ __Pages:__
 - [__Stock Group Info__](https://iv-app-1408b00f8e09.herokuapp.com/top/earnings)
   
   - the final several tabs on the home page allow the user to look at different 'watchlists' or portfolios of underlyings
-  - This week's [earnings](https://iv-app-1408b00f8e09.herokuapp.com/top/earnings) names, the current [top open interest](https://iv-app-1408b00f8e09.herokuapp.com/top/oi) underlyings, the [Mag 7](https://iv-app-1408b00f8e09.herokuapp.com/top/mag7), and the market's [top indices](https://iv-app-1408b00f8e09.herokuapp.com/top/indices)
+  - This week's [earnings](https://iv-app-1408b00f8e09.herokuapp.com/top/earnings) names, the current [top open interest](https://iv-app-1408b00f8e09.herokuapp.com/top/oi) underlyings, the [Mag 7](https://iv-app-1408b00f8e09.herokuapp.com/top/mag7), the market's [top indices](https://iv-app-1408b00f8e09.herokuapp.com/top/indices), and the current top tickers on [r/WallStreetBets](https://iv-app-1408b00f8e09.herokuapp.com/top/reddit)
 

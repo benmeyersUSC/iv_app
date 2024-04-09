@@ -135,6 +135,10 @@ def top(criteria):
         stocks = ['AAPL', 'MSFT', 'META', 'AMZN', 'NVDA', "GOOG", 'TSLA']
         StockSet(stocks, criteria)
         tail = "the Magnificent 7"
+    elif criteria == 'reddit':
+        stocks = ['TSLA', 'TLRY', 'SPY', 'NVDA', 'DXYZ', 'ALCC']
+        StockSet(stocks, criteria)
+        tail = "the Magnificent 7"
     else:
         criteria = 'indices'
         stocks = ['SPY', 'QQQ', 'IWM', 'DIA', 'TLT', 'GLD']
@@ -176,6 +180,12 @@ def set_ticker():
     g.graph_ticker_options()
     # then reload ticker
     return redirect(url_for('ticker', symbol=tick))
+
+@app.route("/ticker/redirect", methods=["POST", "GET"])
+def ticker_redirect():
+    ticker = request.form['newtick']
+    return redirect(url_for("ticker", symbol=ticker))
+
 
 
 

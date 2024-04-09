@@ -327,7 +327,7 @@ class EarningStock:
         if dte > 0:
             K = strike
             r = 0.05
-            sigma = self.iv
+            sigma = self.iv if self.iv > 0 else 0.01
             T = dte / 365
             d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
             d2 = d1 - sigma * math.sqrt(T)
@@ -343,7 +343,7 @@ class EarningStock:
         if dte > 0:
             K = strike
             r = 0.05
-            sigma = self.iv
+            sigma = self.iv if self.iv > 0 else 0.01
             T = dte / 365
             d1 = (math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * math.sqrt(T))
             d2 = d1 - sigma * math.sqrt(T)

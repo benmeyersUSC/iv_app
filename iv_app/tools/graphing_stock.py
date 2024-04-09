@@ -111,7 +111,7 @@ class GraphStock:
             return implied_volatility
         except Exception as e:
             print("Error:", e)
-            return None
+            return 0
 
     def graph(self):
 
