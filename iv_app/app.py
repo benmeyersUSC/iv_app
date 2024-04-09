@@ -105,6 +105,17 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, dte=None, period=None):
     return render_template("bsm_sim.html", data=data, total=total, iv=iv, spot=spot,
                            strike=strike, r=r, dte=dte, period=period, ag=ag)
 
+@app.route("/bsm/newparams", methods=["POST"])
+def bsm_new_params():
+    iv = request.form['iv']
+    spot = request.form['spot']
+    strike = request.form['strike']
+    r = request.form['r']
+    dte = request.form['dte']
+    return redirect(url_for("bsm_sim", iv=f'{iv}', spot=f'{spot}', strike=f'{strike}', r=f'{r}',
+                            dte=f'{dte}', period='weekly'))
+
+
 
 
 @app.route('/top/<criteria>')

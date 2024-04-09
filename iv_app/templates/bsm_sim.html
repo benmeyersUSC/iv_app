@@ -137,7 +137,7 @@ th {
 
 
 
-<form action="/bsm/sim/" method="POST" class="button-container" id="parameters-form">
+<form action="/bsm/newparams" method="POST" class="button-container" id="parameters-form">
     <label for="iv">IV:</label>
     <select name="iv" id="iv">
         {% for i in range(5, 131, 5) %}
@@ -194,27 +194,8 @@ th {
     </select>
 
 
-
-
     <button type="submit">Render with new chosen parameters!</button>
 </form>
-
-<script>
-    document.getElementById('parameters-form').addEventListener('submit', function() {
-        var form = this;
-        var ivValue = document.getElementById('iv').value;
-        var spotValue = document.getElementById('spot').value;
-        var strikeValue = document.getElementById('strike').value;
-        var rValue = document.getElementById('r').value;
-        var dteValue = document.getElementById('dte').value;
-        var periodValue = "{{ period }}";
-
-        form.action = "/bsm/sim/" + ivValue + "/" + spotValue + "/" + strikeValue + "/" + rValue + "/" + dteValue +
-            "/" + periodValue;});
-</script>
-
-
-
 
 
 <p><strong>Volatility (sigma):</strong> {{ iv }},&emsp;
