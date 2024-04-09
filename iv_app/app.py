@@ -53,6 +53,9 @@ def client():
 
 @app.route("/ticker/<symbol>")
 def ticker(symbol='SPY'):
+    fcc.EarningStock(symbol).graph_iv()
+    fcc.EarningStock(symbol).graphStPrices()
+    fcc.EarningStock(symbol).graph_ticker_options()
     return render_template("ticker.html", ticker=symbol, ticker_name=fcc.EarningStock(symbol).name)
 
 
