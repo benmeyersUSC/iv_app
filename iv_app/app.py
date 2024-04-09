@@ -83,8 +83,11 @@ def bsm_sim(iv=None, spot=None, strike=None, r=None, dte=None, period=None):
     dte = float(dte) if is_float(dte) and float(dte) <= 120 else 50
     if 'weekly' in period:
         period = 'weekly'
-    if 'daily' in period:
+    elif 'daily' in period:
         period = 'daily'
+    else:
+        period = 'weekly'
+
 
     go = BS.black_scholes_sim(iv, spot, strike, r, dte)
     go.graphemall()
