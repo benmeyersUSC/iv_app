@@ -59,16 +59,22 @@
     <div class="image-container">
             <div class="image">
                 <h2>Price</h2>
+                <p>Historical SPY prices</p>
+                <p>VIX, trailing 20-day Volatility</p>
                 <img src="{{ url_for('static', filename='images/spy_vix_stuff/yearly_charts/' + year + 'prices.png') }}" alt="{{ image }}"
                 class="same-size">
             </div>
         <div class="image">
                 <h2>Volatility Over/Under-statement</h2>
+                <p>Rolling realized 20-day volatility / VIX prescription 20 days ago</p>
+            <p>% of periods where VIX overestimated volatility vs. underestimated</p>
                 <img src="{{ url_for('static', filename='images/spy_vix_stuff/yearly_charts/' + year + 'volatility.png') }}" alt="{{ image }}"
                 class="same-size">
             </div>
-
     </div>
+
+
+
 </body>
 
     <form action="/ticker/SPY" method="GET">
