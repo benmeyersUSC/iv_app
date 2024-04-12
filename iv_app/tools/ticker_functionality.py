@@ -241,7 +241,7 @@ class EarningStock:
         # Save plot to a directory
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'ticker_research')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
-        file_path = os.path.join(save_dir, 'yyy.png')
+        file_path = os.path.join(save_dir, 'new_ticker.png')
 
         # Save the plot
         plt.savefig(file_path)
@@ -315,7 +315,7 @@ class EarningStock:
         # Save plot to a directory
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'ticker_research')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
-        file_path = os.path.join(save_dir, 'zzz.png')
+        file_path = os.path.join(save_dir, 'new_random_stock.png')
 
         # Save the plot
         plt.savefig(file_path)

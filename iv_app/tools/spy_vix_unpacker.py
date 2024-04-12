@@ -110,7 +110,7 @@ class spy_vix_frame():
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}prices.png')
 
-
+        plt.close()
         # plt.show()
 
     def graph_year_iv_disc(self, start='2007', years=None):
@@ -164,6 +164,7 @@ class spy_vix_frame():
         plt.tight_layout()
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}volatility.png')
+        plt.close()
         # plt.show()
 
 
