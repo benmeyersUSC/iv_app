@@ -4,6 +4,7 @@ import iv_app.tools.ticker_functionality as fcc
 from datetime import datetime
 from iv_app.tools import black_scholes_sandbox as BS
 from iv_app.tools.graphing_stock import StockSet
+from iv_app.tools import spy_vix_unpacker as spv
 
 
 # globals (eek, I know) for today's date.....if any global is valid, its this
@@ -189,7 +190,29 @@ def ticker_redirect():
     ticker = request.form['newtick']
     return redirect(url_for("ticker", symbol=ticker))
 
+@app.route("/spyvixhome", methods=["POST", "GET"])
+def spyvixhome():
+    return render_template('spy_vix_home.html')
 
+@app.route("/spyvix/<year>", methods=["POST", "GET"])
+def spyvix(year):
+    return render_template('spy_vix_year.html', year=year)
+
+@app.route("/spyvix/range<years>/<year>", methods=["POST", "GET"])
+def spyvixrange(years, year):
+    years = int(years)
+    if int(year) + years > 2024:
+        years = 2024 - int(year)
+    load = spv.spy_vix_frame()
+    load.graph_year_spy_vix(start=year, years=years)
+    load.graph_year_iv_disc(start=year, years=years)
+    return render_template('spy_vix_year.html', year=f'{year}-{int(year)+years}')
+
+@app.route("/spyvix/custom", methods=["POST", "GET"])
+def spyvixcustom():
+    years = request.form['years']
+    year = request.form['start']
+    return redirect(url_for('spyvixrange', years=years, year=year))
 
 
 def ticker_check(ticker):

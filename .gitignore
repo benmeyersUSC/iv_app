@@ -3,3 +3,5 @@ iv_app/static/images/*/**/*.png
 .idea/
 *.pyc
 !iv_app/static/images/bsm_example/*.png
+!iv_app/static/images/spy_vix_stuff/yearly_charts/*.png
+iv_app/static/images/spy_vix_stuff/yearly_charts/*-*.png

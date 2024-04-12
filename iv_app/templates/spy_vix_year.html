@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPY-VIX {{year}}</title>
+
+      <style>
+        .date {
+            text-align: center;
+        }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #000; /* Black background */
+            color: #fff; /* White text color */
+        }
+        .logout-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #008000; /* Red color */
+            color: #fff; /* White text color */
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #ff0000; /* Dark green color on hover */
+        }
+        h1 {
+            text-align: center;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .image {
+            text-align: center;
+        }
+        .image img {
+            max-width: 700px; /* Adjust as needed */
+            height: auto;
+        }
+
+        .same-size {
+    width: 700px; /* Set the width as needed */
+    height: 500px; /* Set the height as needed */
+}
+    </style>
+
+
+</head>
+<body>
+    <h1>SPY-VIX {{year}}</h1>
+    <div class="image-container">
+            <div class="image">
+                <h2>Price</h2>
+                <img src="{{ url_for('static', filename='images/spy_vix_stuff/yearly_charts/' + year + 'prices.png') }}" alt="{{ image }}"
+                class="same-size">
+            </div>
+        <div class="image">
+                <h2>Volatility Over/Under-statement</h2>
+                <img src="{{ url_for('static', filename='images/spy_vix_stuff/yearly_charts/' + year + 'volatility.png') }}" alt="{{ image }}"
+                class="same-size">
+            </div>
+
+    </div>
+</body>
+
+    <form action="/ticker/SPY" method="GET">
+            <input type="submit" class="logout-btn" value="Research Current SPY">
+        </form>
+
+    <form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+    </form>
+</html>
+
