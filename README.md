@@ -15,10 +15,17 @@ __Pages:__
 
 
 
-- [__Black Scholes Model__](https://iv-app-1408b00f8e09.herokuapp.com/bsm)
+- [__Black Scholes Model__](https://iv-app-1408b00f8e09.herokuapp.com/bsm)...[Simulate](https://iv-app-1408b00f8e09.herokuapp.com/bsm/sim/.2/100/100/.05/50/weekly)
   
   - the first click takes you to a static page that walks through the Black Scholes Formula and hedging strategy
   - from this page, the user can then [simulate](https://iv-app-1408b00f8e09.herokuapp.com/bsm/sim/.2/100/100/.05/50/weekly) the Black Scholes hedging strategy with their own parameters, as many times as they want!
+
+
+- [__SPY-VIX Analysis__](https://iv-app-1408b00f8e09.herokuapp.com/spyvixhome)
+  
+  - Research SPY and VIX historical prices by year (or custom range)
+  - Measure historical volatility vs. implied volatility given by VIX
+
 
 
 

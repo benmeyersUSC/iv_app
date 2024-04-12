@@ -128,7 +128,7 @@ def bsm_new_params():
 @app.route('/top/<criteria>')
 def top(criteria):
     if criteria == 'earnings':
-        stocks = ['DAL', 'BLK', 'C', 'JPM', 'PGR', 'STT', 'WFC', 'FAST', 'KMX', 'STZ']
+        stocks = ["GS", "BAC", "MS", "JNJ", "UAL", "CCI", "NFLX", 'BLK', "AXP", "PG"]
         StockSet(stocks, criteria)
         tail = "This Week's Top Earnings"
     elif criteria == 'oi':
@@ -140,7 +140,7 @@ def top(criteria):
         StockSet(stocks, criteria)
         tail = "the Magnificent 7"
     elif criteria == 'reddit':
-        stocks = ['TSLA', 'TLRY', 'SPY', 'NVDA', 'DXYZ', 'ALCC']
+        stocks = ['AAPL', 'UNH', 'SPY', 'NVDA', 'INTC', 'WEST']
         StockSet(stocks, criteria)
         tail = "the Magnificent 7"
     else:
