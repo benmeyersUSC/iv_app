@@ -42,6 +42,10 @@ class black_scholes_sim:
         self.total_costs_over_time_d = self.daily_dict(self.dte)['total']
         self.total_costs_over_time_w = self.weekly_dict(self.dte)['total']
 
+        self.net_hedge_cost_d = self.daily_dict(self.dte)['total_cost']
+        self.net_hedge_cost_w = self.weekly_dict(self.dte)['total_cost']
+
+
         self.graphOption_list = [
             self.brownian_stock, self.bs_price_array, self.daily_delta_array, self.daily_theta_array,
             self.daily_vega_array, self.daily_gamma_array
@@ -352,7 +356,7 @@ class black_scholes_sim:
 
         plt.xlabel('Days')
         plt.ylabel('Rebalancing Costs')
-        plt.title(f'Rebalacing Costs (Daily)\nVolatility: % {self.iv * 100:.2f}')
+        plt.title(f'Hedging Costs (Daily)   -   total: {self.net_hedge_cost_d}\nVolatility: % {self.iv * 100:.2f}')
 
         plt.grid(True)
 
@@ -380,7 +384,7 @@ class black_scholes_sim:
 
         plt.xlabel('Weeks')
         plt.ylabel('Rebalancing Costs')
-        plt.title(f'Rebalacing Costs (Weekly)\nVolatility: % {self.iv * 100:.2f}')
+        plt.title(f'Hedging Costs (Weekly)   -   total: {self.net_hedge_cost_w}\nVolatility: % {self.iv * 100:.2f}')
 
         plt.grid(True)
 

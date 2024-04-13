@@ -104,14 +104,14 @@
            <div class="logout-btn-container">
 
 <form action="/spyvix/custom" method="POST">
-    <label for="start">Select a year:</label>
+    <label for="start">Start year:</label>
     <select name="start" id="start">
         {% for y in range(2007, 2024) %}
             <option value="{{ y }}">{{ y }}</option>
         {% endfor %}
     </select>
 
-    <label for="years">Select a range:</label>
+    <label for="years">Range (years):</label>
     <select name="years" id="years">
         {% for r in range(17, 0, -1) %}
             <option value="{{ r }}">{{ r }}</option>
