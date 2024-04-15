@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yield Curve {{year}}</title>
+
+    <style>
+    /* General styling */
+    body {
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        text-align: center; /* Center align the content */
+        background-color: #000; /* Set background color to black */
+        color: #fff; /* Set text color to white */
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    /* Form styling */
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */
+        grid-gap: 20px; /* Set spacing between buttons */
+        margin: 0 auto; /* Center align the grid */
+        max-width: 900px; /* Limit grid width */
+    }
+
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #ff0000; /* Green color on hover */
+    }
+
+
+
+    .formula-container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #404040;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .formula-description {
+            text-align: left; /* Align bullet points to the left */
+            margin-bottom: 20px;
+        }
+
+        .logout-btn-container {
+    text-align: center;
+}
+
+        img{
+            width: 750px;
+            height: auto;
+        }
+
+
+        .logout-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #008000; /* Green color */
+    color: #fff; /* White text color */
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #ff0000; /* Light green color on hover */
+}
+
+</style>
+
+
+</head>
+<body>
+
+<h1>Yield Curve {{year}}</h1>
+
+
+    <img src="{{ url_for('static', filename='images/yield_curve/recent.png') }}" alt="Example Image">
+
+
+
+<form action="/yieldcurve/set" method="POST">
+    <label for="year">Year</label>
+    <select name="year" id="year">
+        {% for y in range(1990, 2024) %}
+            {% if y == 2024 %}
+                <option value="{{ y }}" selected>{{ y }}</option> <!-- Default year -->
+            {% else %}
+                <option value="{{ y }}">{{ y }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <label for="period">Period (Monthly, Quarterly)</label>
+    <select name="period" id="period">
+        <option value="monthly">Monthly</option>
+        <option value="quarterly" selected>Quarterly</option> <!-- Default period -->
+    </select>
+
+    <br><br> <!-- Add line breaks for better visual separation -->
+
+    <input type="submit" class="logout-btn" value="Research selected year!">
+</form>
+<form action="/yieldcurve/2024/m" method="GET">
+        <input type="submit" class="logout-btn" value="Research current Yield Curve">
+</form>
+
+
+    <br>
+
+
+<form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+</form>
+
+</body>
+</html>

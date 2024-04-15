@@ -5,6 +5,7 @@ from datetime import datetime
 from iv_app.tools import black_scholes_sandbox as BS
 from iv_app.tools.graphing_stock import StockSet
 from iv_app.tools import spy_vix_unpacker as spv
+from iv_app.tools import yield_csv as yld
 
 
 # globals (eek, I know) for today's date.....if any global is valid, its this
@@ -140,9 +141,13 @@ def top(criteria):
         StockSet(stocks, criteria)
         tail = "the Magnificent 7"
     elif criteria == 'reddit':
-        stocks = ['AAPL', 'UNH', 'SPY', 'NVDA', 'INTC', 'WEST']
+        stocks = ['AAPL', 'DJT', 'SPY', 'NVDA', 'INTC', 'USO', 'SWAN']
         StockSet(stocks, criteria)
-        tail = "the Magnificent 7"
+        tail = "r/WallStBets most mentioned stocks"
+    elif criteria == 'macro':
+        stocks = ['GLD', 'USO', 'UNG', 'SLV', 'DBA', 'TLT', 'IEF', 'SHY', 'BND', 'VTI', 'BITO']
+        StockSet(stocks, criteria)
+        tail = "major commodity/macroeconomic indices"
     else:
         criteria = 'indices'
         stocks = ['SPY', 'QQQ', 'IWM', 'DIA', 'TLT', 'GLD']
@@ -213,6 +218,27 @@ def spyvixcustom():
     years = request.form['years']
     year = request.form['start']
     return redirect(url_for('spyvixrange', years=years, year=year))
+
+@app.route("/yieldcurve/<year>/<period>", methods=["POST", "GET"])
+def yieldcurve(year, period):
+    year = year
+    if period.upper() == 'MONTHLY':
+        period = 'm'
+        yld.YieldCurve().graph_curve_monthly(year)
+    elif period.upper() == 'QUARTERLY':
+        period = 'q'
+        yld.YieldCurve().graph_curve_qtly(year)
+
+    if year == '2024':
+        yld.YieldCurve().graph_now()
+
+    return render_template('yield_curve.html', year=year, period=period)
+
+@app.route("/yieldcurve/set", methods=["POST", "GET"])
+def setyieldcurve():
+    year = request.form['year']
+    period = request.form['period']
+    return redirect(url_for('yieldcurve', year=year, period=period))
 
 
 def ticker_check(ticker):

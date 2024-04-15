@@ -83,6 +83,7 @@
                     the price of an option, input your own parameters and run simulations</li>
                     <li><strong>SPY-VIX Historical Research</strong>: Research the history of SPY and VIX price movements,
                     and the over/understatement of volatility year by year</li>
+                    <li><strong>Treasury Yield Curve Historical Research</strong>: Research the history of the yield curve</li>
                     <li><strong>Earnings</strong>: Research the companies releasing earnings this week and what their option
                     markets are prescribing about the next month</li>
                     <li><strong>Top Open Interest</strong>: Research the
@@ -92,6 +93,8 @@
                     and what their option markets are prescribing about the next month</li>
                     <li><strong>Top Market Indices</strong>: Research the Indices that define the market (SPY, QQQ, DIA, IWM, GLD, TLT)
                     and what their option markets are prescribing about the next month</li>
+                    <li><strong>Top Commodity/Macroeconomic Indices</strong>: Research the Indices that track major commodities
+                    and macroeconomic indicators</li>
                     <li><strong>Top Tickers on WallStreetBets</strong>: Research the stocks trending on r/WallStreetBets
                     and what their option markets are prescribing about the next month</li>
 
@@ -121,6 +124,11 @@
         <button type="submit">Research SPY and VIX stats</button>
     </form>
 
+        <form action="/yieldcurve/2024/m" method="GET">
+        <input type="hidden" name="yieldcurve">
+        <button type="submit">Research the Yield Curve</button>
+    </form>
+
 
         <form action="/top/earnings" method="GET">
             <input type="hidden" name="earnings">
@@ -139,7 +147,12 @@
 
         <form action="/top/indices" method="GET">
             <input type="hidden" name="indices">
-            <button type="submit">Top Market Indices</button>
+            <button type="submit">Market Indices</button>
+        </form>
+
+        <form action="/top/macro" method="GET">
+            <input type="hidden" name="macro">
+            <button type="submit">Macro Indices</button>
         </form>
 
         <form action="/top/reddit" method="GET">
