@@ -48,19 +48,34 @@
     }
 
 
-    .formula-container {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #404040;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    /*.formula-container {*/
+    /*        width: 80%;*/
+    /*        margin: 0 auto;*/
+    /*        background-color: #404040;*/
+    /*        padding: 20px;*/
+    /*        border-radius: 5px;*/
+    /*        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    /*    }*/
 
-        .formula-description {
-            text-align: left; /* Align bullet points to the left */
-            margin-bottom: 20px;
-        }
+    /*    .formula-description {*/
+    /*        text-align: left; !* Align bullet points to the left *!*/
+    /*        margin-bottom: 20px;*/
+    /*    }*/
+    .formula-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #404040;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: smaller; /* or specify a specific size like '10px' */
+}
+
+.formula-description {
+    text-align: left; /* Align bullet points to the left */
+    margin-bottom: 20px;
+    font-size: smaller; /* or specify a specific size like '10px' */
+}
 </style>
 
 
@@ -76,25 +91,25 @@
                 option pricing, or research a specific stock and its option metrics!</h3>
                 <p>The following buttons will redirect you:</p>
                 <ul>
-                    <li><strong>Research Ticker</strong>: Type in any optionable ticker symbol and see how it has performed and where it could go this month</li>
+                    <li><strong>Research Ticker</strong>: Type in any optionable ticker symbol and see how it has performed and where it could go this month</li><br>
                     <li><strong>Black-Scholes Model</strong>: If you want to learn about the fundamental theory that inspires all derivatives pricing
-                    as well as informs the tools of this website</li>
+                    as well as informs the tools of this website</li><br>
                     <li><strong>Black-Scholes Simulator</strong>: Simulate the Black-Scholes hedging strategy that defines
-                    the price of an option, input your own parameters and run simulations</li>
+                    the price of an option, input your own parameters and run simulations</li><br>
                     <li><strong>SPY-VIX Historical Research</strong>: Research the history of SPY and VIX price movements,
-                    and the over/understatement of volatility year by year</li>
-                    <li><strong>Treasury Yield Curve Historical Research</strong>: Research the history of the yield curve</li>
+                    and the over/understatement of volatility year by year</li><br>
+                    <li><strong>Treasury Yield Curve Historical Research</strong>: Research the history of the yield curve</li><br>
                     <li><strong>Earnings</strong>: Research the companies releasing earnings this week and what their option
-                    markets are prescribing about the next month</li>
+                    markets are prescribing about the next month</li><br>
                     <li><strong>Top Open Interest</strong>: Research the
                         companies with the highest open interest this week and what their option
-                    markets are prescribing about the next month</li>
+                    markets are prescribing about the next month</li><br>
                     <li><strong>Magnificent Se7en</strong>: Research the Magnificent 7 (AAPL, MSFT, META, AMZN, NVDA, GOOG, TSLA)
-                    and what their option markets are prescribing about the next month</li>
+                    and what their option markets are prescribing about the next month</li><br>
                     <li><strong>Top Market Indices</strong>: Research the Indices that define the market (SPY, QQQ, DIA, IWM, GLD, TLT)
-                    and what their option markets are prescribing about the next month</li>
+                    and what their option markets are prescribing about the next month</li><br>
                     <li><strong>Top Commodity/Macroeconomic Indices</strong>: Research the Indices that track major commodities
-                    and macroeconomic indicators</li>
+                    and macroeconomic indicators</li><br>
                     <li><strong>Top Tickers on WallStreetBets</strong>: Research the stocks trending on r/WallStreetBets
                     and what their option markets are prescribing about the next month</li>
 
@@ -102,7 +117,7 @@
             </div>
     </div>
 
-
+<p>Main Pages:</p>
     <div class="button-grid">
         <form action="/ticker/SPY" method="GET">
             <input type="hidden" name="bsm">
@@ -129,6 +144,10 @@
         <button type="submit">Research the Yield Curve</button>
     </form>
 
+        </div>
+    <br><br>
+    <p>Categories for Underlying Symbol Research:</p><br>
+    <div class="button-grid">
 
         <form action="/top/earnings" method="GET">
             <input type="hidden" name="earnings">

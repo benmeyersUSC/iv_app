@@ -80,7 +80,7 @@ class YieldCurve:
         ax.set(title=f"{self.long_month_list[row_values[1]-1]} 2024", ylabel='Yield %')
 
         for x, y in zip(self.maturities, row_values[3:]):
-            ax.annotate(f'{x}', xy=(x, y), xytext=(x, y), fontsize=8)
+            ax.annotate(f'{x}', xy=(x, y), xytext=(x, y), fontsize=12)
 
         plt.tight_layout()
 
@@ -118,7 +118,7 @@ class YieldCurve:
             axs[row,col].set(title=f"{month} {year}", ylabel='Yield %')
 
             for x, y in zip(self.maturities, row_values[3:]):
-                axs[row, col].annotate(f'{x}', xy=(x, y), xytext=(x, y), fontsize=8)
+                axs[row, col].annotate(f'{x}', xy=(x, y), xytext=(x, y), fontsize=12)
 
         plt.tight_layout()
 
@@ -161,7 +161,7 @@ class YieldCurve:
             axs[row,col].set(title=f"{month} {year}", ylabel='Yield %')
 
             for x, y in zip(self.maturities, row_values[3:]):
-                axs[row, col].annotate(f'{x}', xy=(x, y), xytext=(x, y), fontsize=8)
+                axs[row, col].annotate(f'{x}', xy=(x, y), xytext=(x, y), fontsize=12)
 
         plt.tight_layout()
 
