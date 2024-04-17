@@ -1,6 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 
 class spy_vix_frame():
     def __init__(self):
@@ -41,12 +44,70 @@ class spy_vix_frame():
         self.df.to_csv('csv_files/cleaned_spy_vix.csv', index=False)  # Export to CSV
         self.df_grouped_by_yr = self.df.groupby('year')
 
+
+
+
         self.is_understated = list(np.where(self.df['vol_diff_p'] > 0, True, False))
         self.understated = sum(self.is_understated)
         self.overstated = len(self.is_understated) - self.understated
 
         self.understated_p = self.understated / len(self.is_understated)
         self.overstated_p = self.overstated / len(self.is_understated)
+
+    def knn_vix_bins(self, start='2007', years=None):
+        if not years:
+            years = 2024 - int(start)
+
+
+        merged_df = self.get_years_group(start, years)[0]
+
+
+        bins = [0, 10, 15, 20, 35, float('inf')]  # Bins: [0-10), [10-20), [20-35), [35-inf)
+
+        # Labels for the bins
+        labels = [0, 1, 2, 3, 4]
+
+        # Create a new column with the bin labels based on VIX readings
+        merged_df['vix_bin'] = pd.cut(merged_df['vix'], bins=bins, labels=labels, right=False)
+
+        features = merged_df[["spy", "sp20vol"]].values
+        target = merged_df['vix_bin'].values
+
+
+        X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.25, random_state=0)
+
+        knn = KNeighborsClassifier(n_neighbors=5)
+        knn.fit(X_train, y_train)
+
+        y_pred = knn.predict(X_test)
+
+        return knn.score(X_test, y_test)
+
+    def knn_vix_understatement(self, start='2007', years=None):
+        if not years:
+            years = 2024 - int(start)
+
+        merged_df = self.get_years_group(start, years)[0]
+
+        merged_df['spy_20_ma'] = merged_df['spy'].rolling(window=50).mean()
+
+        merged_df['vix_discrep'] = merged_df['vol_diff_p'] > 0
+
+        merged_df['spy_v_ma'] = merged_df['spy'] / merged_df['spy_20_ma']
+
+        merged_df.dropna(inplace=True)
+
+        features = merged_df[["spy", "vix", "spy_v_ma"]].values
+        target = merged_df['vix_discrep'].values
+
+        X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=0)
+
+        knn = KNeighborsClassifier(n_neighbors=5)
+        knn.fit(X_train, y_train)
+
+        y_pred = knn.predict(X_test)
+
+        return knn.score(X_test, y_test)
 
 
 
@@ -170,8 +231,9 @@ class spy_vix_frame():
 
 def main():
     g = spy_vix_frame()
-    g.graph_year_spy_vix()
-    g.graph_year_iv_disc()
+    # g.graph_year_spy_vix()
+    # g.graph_year_iv_disc()
+    # g.knn_vix()
 if __name__ == '__main__':
     main()
 

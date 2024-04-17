@@ -135,15 +135,50 @@
             into the relationship between the option's price and various factors such as time to expiry, volatility, and interest rates.
             While the derivations of d1 and d2 are bulky and require deeper explanation, the intuition behind the main
             function that uses them can be nicely understood even with just an understanding of what d1 and d2 are functionally.
-            </p><p>Also, 'N(x)' is a function that denotes the cumulative standard normal distribution of x. 'What is
-        the probability of our random variable, x, being above 0'?
+
+        <h3>Basic Relationship in the Equation</h3>
+        <p>
+            Before seeing how this equation could represent the fair value of a European stock option, it is helpful to review
+            the fair value of a Forward contract. An option is basically a binary Forward/Futures contract that only triggers if the stock gets above the strike.
+            If we think about a Forward, however, where the purchase of S is required regardless of the price of S at delivery, then at any time we can model the contract's fair value.
+            The profit of the long position in a Forward, F, on stock S at time T (delivery) = St - F, where F is the fixed-since-inception
+            delivery price. Since the long side is buying S at F at T, regardless of any factors, they'll profit the difference
+            if S > F, and they'll overpay to buy S at F if S < K, losing money. Thus, regardless of any factors, the profit of the long side of the
+            contract at T = S - F. So at any time, since we know this transaction must happen and we know when, we can discount cashflows
+            to get the current 'value' of the contract. Suppose there is a contract with a year until T. Today, the
+            value of that contract is equal to the current price of S (discounted by dividends to today, but let's assume no dividends) minus
+            the present value of the F. To mimic this payoff at expiration, we can simply go long S and sell a zero-coupon, risk-free bond maturing to F at T. At delivery,
+            our long position will equal S(T) - F, because we will own S, while having to repay F. Thus the value of a forward contract today =
+            S - F(e ^ -r(t)).
+        </p>
+        <h2>Example</h2>
+        <p>
+            Suppose we want to value a forward contract, Cf, with delivery in one year and a risk-free rate of 0.05. Suppose S currently trades
+            at $100. The PRICE of the forward contract when it is struck should equal S, appreciated by the risk-free rate over its period. So with a year and
+            a risk-free rate of 0.05, the PRICE would = $105.13....
+            <br><br>
+            Thus, the current 'value' of the Cf = S - 105.13 (e ^ -r(1 yr)) = 100 - 100 = 0!
+            <br> This makes sense, because if there were any instant value to the contract as it is created, the short side would never enter the trade.
+            <br><br>
+            Suppose now that 6 months go by, and S = $107.50....Cf now = 107.50 - 105.13(e ^ -r (0.5 yr)) = $4.97 !
+            <br><br>
+            Buying a forward contract is essentially betting that S rises faster than the risk-free rate.
+        </p>
+
+
+        </p><p>
 
             </p>
         <h3>What is d1? </h3>
         <p>d1 is essentially the amount of <i>standard deviations</i> the stock price S is from the strike K,
             standardized and calculated in terms of our input parameters (time, volatility, risk-free rate).
             Since N is the cumulative STANDARD NORMAL distribution curve, it takes in an x that represents an amount of
-            standard deviations and tells you how likely that point is to 'land' above 0. Thus, N(d1) is <i>something like</i> the
+            standard deviations and tells you how likely that point is to 'land' above 0.
+
+<!--            'N(x)' is a function that denotes the cumulative standard normal distribution of x. 'What is-->
+<!--        the probability of our random variable, x, being above 0'?-->
+
+            Thus, N(d1) is <i>something like</i> the
             probability of 'reaching d1' in terms of standard deviations. <i>Something like</i> the probability that S is above K by expiry...
             In the Black-Scholes formula, N(d1) is used as the DELTA of an option...<br><br>
 
