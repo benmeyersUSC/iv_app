@@ -204,7 +204,8 @@ def spyvix(year):
     load = spv.spy_vix_frame()
     pred = round(load.knn_vix_bins(start=year, years=1) * 100, 2)
     pred2 = round(load.knn_vix_understatement(start=year, years=1) * 100, 2)
-    return render_template('spy_vix_year.html', year=year, pred=pred, pred2=pred2)
+    pred3 = round(load.vix_reg(start=year, years=1) * 100, 2)
+    return render_template('spy_vix_year.html', year=year, pred=pred, pred2=pred2, pred3=pred3)
 
 @app.route("/spyvix/range<years>/<year>", methods=["POST", "GET"])
 def spyvixrange(years, year):
@@ -216,7 +217,9 @@ def spyvixrange(years, year):
     load.graph_year_iv_disc(start=year, years=years)
     pred = round(load.knn_vix_bins(start=year, years=years)*100, 2)
     pred2 = round(load.knn_vix_understatement(start=year, years=years) * 100, 2)
-    return render_template('spy_vix_year.html', year=f'{year}-{int(year)+years}', pred=pred, pred2=pred2)
+    pred3 = round(load.vix_reg(start=year, years=years) * 100, 2)
+    return render_template('spy_vix_year.html', year=f'{year}-{int(year)+years}', pred=pred, pred2=pred2,
+                           pred3=pred3)
 
 @app.route("/spyvix/custom", methods=["POST", "GET"])
 def spyvixcustom():

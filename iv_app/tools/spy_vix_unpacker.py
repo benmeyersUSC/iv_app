@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 
 class spy_vix_frame():
     def __init__(self):
@@ -39,6 +39,11 @@ class spy_vix_frame():
         df['imp_v_hist'] = df["last_20_move"].sub(df['next_20_move'].shift(20))
         # percentage
         df['vol_diff_p'] = df['imp_v_hist'].div(df['next_20_move'].shift(20)).mul(100)
+
+        df['spy_50_ma'] = df['spy'].rolling(window=50).mean()
+        df['spy_v_ma'] = df['spy'] / df['spy_50_ma']
+
+
 
         self.df = df[df['month_day'] != '02-29']  # drop leap years
         self.df.to_csv('csv_files/cleaned_spy_vix.csv', index=False)  # Export to CSV
@@ -83,17 +88,39 @@ class spy_vix_frame():
 
         return knn.score(X_test, y_test)
 
+    def vix_reg(self, start='2007', years=None):
+        # returns the average absolute percent difference between predicted VIX and real VIX numbers
+        if not years:
+            years = 2024 - int(start)
+
+        merged_df = self.get_years_group(start, years)[0]
+
+        merged_df.dropna(inplace=True)
+
+        features = merged_df[["spy", "sp20vol", "spy_v_ma"]].values
+        target = merged_df['vix'].values
+
+        X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.25, random_state=0)
+
+        knn = KNeighborsRegressor(n_neighbors=3)
+        knn.fit(X_train, y_train)
+
+        simple_test = knn.predict([[453.24, .4950, .68]])
+
+        y_pred = knn.predict(X_test)
+        avg = []
+        for i in range(len(y_pred)):
+            avg.append(abs(y_pred[i]-y_test[i]) / y_test[i])
+        return sum(avg)/len(avg)
+
     def knn_vix_understatement(self, start='2007', years=None):
         if not years:
             years = 2024 - int(start)
 
         merged_df = self.get_years_group(start, years)[0]
 
-        merged_df['spy_20_ma'] = merged_df['spy'].rolling(window=50).mean()
-
         merged_df['vix_discrep'] = merged_df['vol_diff_p'] > 0
 
-        merged_df['spy_v_ma'] = merged_df['spy'] / merged_df['spy_20_ma']
 
         merged_df.dropna(inplace=True)
 
