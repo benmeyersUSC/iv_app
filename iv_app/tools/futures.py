@@ -44,10 +44,15 @@ class BondFuturePosition(BondFuture):
         self.dtd = int(dtd)
         self.notional = round(self.notional_per_future * self.quantity, 4)
 
-future = BondFuture('ZN', '107-280')
-fut = BondFuture('ZT', '101-188')
+def main():
 
-long_zn = BondFuturePosition(future, 6, 45)
-short_zt = BondFuturePosition(fut, 3, 45)
+    future = BondFuture('ZN', '107-280')
+    fut = BondFuture('ZT', '101-188')
 
-print(long_zn.notional, short_zt.notional)
+    long_zn = BondFuturePosition(future, 6, 45)
+    short_zt = BondFuturePosition(fut, 3, 45)
+
+    print(long_zn.notional, short_zt.notional)
+
+if __name__ == '__main__':
+    main()
