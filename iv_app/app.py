@@ -6,6 +6,7 @@ from iv_app.tools import black_scholes_sandbox as BS
 from iv_app.tools.graphing_stock import StockSet
 from iv_app.tools import spy_vix_unpacker as spv
 from iv_app.tools import yield_csv as yld
+from iv_app.tools import Bond as bnd
 
 
 # globals (eek, I know) for today's date.....if any global is valid, its this
@@ -247,6 +248,22 @@ def setyieldcurve():
     year = request.form['year']
     period = request.form['period']
     return redirect(url_for('yieldcurve', year=year, period=period))
+
+
+@app.route("/bond_trading/run/<bond>", methods=["POST", "GET"])
+def bond_trading(bond):
+    bnd.BondTrading(bond)
+
+
+@app.route("/bond_trading/home", methods=["POST", "GET"])
+def bond_trading_home():
+    par = float(request.form['par'])
+    cr = float(request.form['coupon_rate'])
+    maturity = float(request.form['maturity_period'])
+    price = float(request.form['price'])
+    bond = bnd.Bond(par, cr, maturity, price)
+    return redirect(url_for('bond_trading', bond=bond))
+
 
 
 def ticker_check(ticker):

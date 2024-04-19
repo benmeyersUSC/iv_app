@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ticker}}</title>
+
+
+    <style>
+    /* General styling */
+    body {
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #000; /* Black background */
+        color: #fff; /* White text color */
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    /* Form styling */
+    form {
+        margin-bottom: 20px;
+    }
+    input[type="text"] {
+        width: 200px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        background-color: transparent; /* Make background clear */
+        color: #fff; /* White text color */
+    }
+
+    input[type="submit"],
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover,
+button[type="submit"]:hover,
+.logout-btn:hover {
+    background-color: #ff0000; /* Darker blue color on hover */
+}
+
+    input[type="text"] {
+        width: 200px;
+    }
+
+    button[type="submit"] {
+        font-size: 16px;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #ff0000; /* Dark green color on hover */
+    }
+
+    /* Image styling */
+    img {
+        width: 477px;
+        height: auto;
+    }
+
+    /* Logout button styling */
+    .logout-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #325d80; /* Blue color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+</style>
+
+
+
+</head>
+<body>
+    <h1>{{title}}</h1>
+<!--    <p>Choose the stock you'd like to research!</p>-->
+    <p>{{trade_message}}</p>
+
+
+
+
+
+
+    <form action="/action/setticker" method="POST">
+        <input type="text" name="set_ticker" placeholder=0>
+        <input type="submit" value="Trade!">
+    </form>
+
+
+
+
+
+
+
+
+    <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">
+
+
+
+    <form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+    </form>
+</body>
+</html>
