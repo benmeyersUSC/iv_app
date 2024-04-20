@@ -252,8 +252,8 @@ def setyieldcurve():
 
 
 
-@app.route("/bondtrading/switch", methods=["POST", "GET"])
-def bond_trading_switch():
+@app.route("/bondtrading/switch/<amt>", methods=["POST", "GET"])
+def bond_trading_switch(amt):
 
     if 'ind' in session:
         session['ind'] += 1
@@ -275,8 +275,13 @@ def bond_trading_switch():
     game = bnd.BondTrading(bond)
     game.from_dict(game_json)
 
-    trade = request.form['trade']
-    # print(f"trade: {trade}, @ {game.bond.price}, position: {game.position}")
+    if amt == 'x':
+        trade = request.form['trade']
+    elif amt == 'clear':
+        trade = str(game.position * -1)
+    else:
+        trade = amt
+
 
     game.get_ready_for_next_period(trade)
     # print('after switch', game.bond.price)
@@ -333,17 +338,6 @@ def bond_trading_year():
     game = bnd.BondTrading(bond)
     game.from_dict(game_json)
 
-    # if len(game.transactions.keys()) < 1:
-        # if 'ind' in session:
-        #     session['ind'] = 0
-        # else:
-        #     session['ind'] = 0
-        # if 'game' in session:
-        #     del session['game']
-        # if 'trade' in session:
-        #     del session['trade']
-        # old_params = f'{game_data['par']}-{game_data['cr']}-{game_data['years']}-{game_data['price']}'
-        # return redirect(url_for('bond_trading_first', rerenderings='100-.05-5-100'))
     game.graph_bond_price()
 
     # game.display_round(session['ind'])
@@ -365,13 +359,14 @@ def bond_trading_year():
     with open(file_path, 'w') as json_file:
         json_file.write(json_string)
 
-
-
     if game.years >= 0:
+        if game.position >= 0:
+            close_color = '#ff0000'
+        else:
+            close_color = '#008000'
         return render_template('bond_trading.html',
                            trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm),
-                               transactions=game.transactions)
-
+                               transactions=game.transactions, close_color=close_color)
     else:
         del session['ind']
         # del session['game']

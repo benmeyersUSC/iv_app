@@ -161,6 +161,8 @@
 
 
     <style>
+
+
 /* General styling */
 body {
     font-family: "Times New Roman", Times, serif;
@@ -247,6 +249,10 @@ table th {
 .container > table {
     flex: 0 0 48%; /* Adjust width of the image and table */
 }
+
+
+
+
 </style>
 
 
@@ -265,10 +271,29 @@ table th {
         Bond Volatility: <strong>{{trade_message[7]}}%</strong>, Yield Volatility: <strong>{{trade_message[8]}}%</strong></p>
 
 
-    <form action="/bondtrading/switch" method="POST">
+    <form action="/bondtrading/switch/x" method="POST">
         <input type="text" name="trade" placeholder=0>
         <input type="submit" value="Trade!">
     </form>
+
+     <form action="/bondtrading/switch/100" method="POST">
+        <input type="hidden" name="trade" placeholder=100>
+        <input type="submit" value="Buy 100!">
+    </form>
+
+     <form class = 'sell' action="/bondtrading/switch/-100" method="POST">
+        <input type="hidden" name="trade" placeholder=-100>
+        <input type="submit" value="Sell 100!">
+    </form>
+
+     <form class = 'close_pos' action="/bondtrading/switch/clear" method="POST">
+        <input type="hidden" name="trade" placeholder={{trade_message[0]}}>
+        <input type="submit" value="Close Position!">
+    </form>
+
+
+
+
 
     <div class="container">
         <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">
