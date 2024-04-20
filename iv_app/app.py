@@ -311,6 +311,9 @@ def bond_trading_switch():
 
 @app.route("/bondtrading", methods=["POST", "GET"])
 def bond_trading_year():
+    if 'START_par' in session:
+        print('\n\n\nsession', session['START_par'])
+
 
     # if 'game' not in session:
     #     return redirect(url_for('bond_trading_home'))
@@ -386,8 +389,6 @@ def bond_trading_year():
 
 @app.route("/bondtrading/first/<rerenderings>", methods=["POST", "GET"])
 def bond_trading_first(rerenderings=None):
-
-
     if 'ind' in session:
         del session['ind']
     if 'game' in session:
@@ -472,7 +473,8 @@ def clear_trading():
 
 @app.route("/bondtrading/restart", methods=["POST", "GET"])
 def bond_trading_restart():
-
+    if 'START_par' in session:
+        print('SESSIONNNNN', session['START_par'])
     old_params = f'{session['START_par']}-{session['START_cr']}-{session['START_maturity']}-{session['START_price']}'
     return redirect(url_for('bond_trading_first', rerenderings=old_params))
 
