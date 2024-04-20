@@ -7,6 +7,7 @@ from iv_app.tools.graphing_stock import StockSet
 from iv_app.tools import spy_vix_unpacker as spv
 from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
+import json
 
 
 # globals (eek, I know) for today's date.....if any global is valid, its this
@@ -250,19 +251,217 @@ def setyieldcurve():
     return redirect(url_for('yieldcurve', year=year, period=period))
 
 
-@app.route("/bond_trading/run/<bond>", methods=["POST", "GET"])
-def bond_trading(bond):
-    bnd.BondTrading(bond)
+
+@app.route("/bondtrading/switch", methods=["POST", "GET"])
+def bond_trading_switch():
+    session['ind'] += 1
+    # Retrieve the serialized game object from session
+    game_json = session.get('game', None)
+
+    game_data = json.loads(game_json)
+    bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
+    game = bnd.BondTrading(bond)
+    game.from_dict(game_data)
 
 
-@app.route("/bond_trading/home", methods=["POST", "GET"])
-def bond_trading_home():
-    par = float(request.form['par'])
-    cr = float(request.form['coupon_rate'])
-    maturity = float(request.form['maturity_period'])
-    price = float(request.form['price'])
+
+    trade = request.form['trade']
+    # print(f"trade: {trade}, @ {game.bond.price}, position: {game.position}")
+
+    game.get_ready_for_next_period(trade)
+
+    # print(f">>> position: {game.position}")
+    if game.years != 0:
+        game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
+        game.transactions['t' + str(len(game.transactions.keys()))] = ( 'interest',
+                                                                        game.position,
+                                                                        game.bond.par * game.bond.cr,
+                                                                        1000 * game.position * game.bond.par * game.bond.cr)
+
+    # print('inflow', game.position * 1000 * game.bond.cr * game.bond.par)
+
+    game.display_round(session['ind'])
+
+    g_dict = game.to_dict()
+    session['game'] = json.dumps(g_dict)
+
+    return redirect(url_for('bond_trading_year'))
+
+
+@app.route("/bondtrading", methods=["POST", "GET"])
+def bond_trading_year():
+    if 'game' not in session:
+        return redirect(url_for('bond_trading_home'))
+    if 'ind' not in session:
+        session['ind'] = 0
+
+    # Retrieve the serialized game object from session
+    game_json = session.get('game', None)
+
+    game_data = json.loads(game_json)
+    bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
+
+    game = bnd.BondTrading(bond)
+    game.from_dict(game_data)
+
+    if len(game.transactions.keys()) < 1:
+        if 'ind' in session:
+            session['ind'] = 0
+        if 'game' in session:
+            del session['game']
+        if 'trade' in session:
+            del session['trade']
+        # old_params = f'{game_data['par']}-{game_data['cr']}-{game_data['years']}-{game_data['price']}'
+        # return redirect(url_for('bond_trading_first', rerenderings='100-.05-5-100'))
+    game.graph_bond_price()
+
+    # game.display_round(session['ind'])
+    g_dict = game.to_dict()
+    session['game'] = json.dumps(g_dict)
+
+    if game.years >= 0:
+        return render_template('bond_trading.html',
+                           trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm),
+                               transactions=game.transactions)
+    else:
+        del session['ind']
+        del session['game']
+        if 'trade' in session:
+            del session['trade']
+        if os.path.exists("iv_app/static/images/bond_trading"):
+            # Remove the file
+            os.remove("iv_app/static/images/bond_trading/recent_bond_graph.png")
+        return redirect(url_for('bond_trading_home'))
+
+
+@app.route("/bondtrading/first/<rerenderings>", methods=["POST", "GET"])
+def bond_trading_first(rerenderings=None):
+    if 'ind' in session:
+        del session['ind']
+    if 'game' in session:
+        del session['game']
+    if 'trade' in session:
+        del session['trade']
+
+    if len(rerenderings) < 3:
+        par = float(request.form['par'])
+        cr = float(request.form['coupon_rate'])
+        maturity = int(request.form['maturity_period'])
+        price = float(request.form['price'])
+    else:
+        rerenderings = rerenderings.split('-')
+        par, cr, maturity, price = float(rerenderings[0]), float(rerenderings[1]), int(rerenderings[2]), float(rerenderings[3])
+
+    session['START_par'] = par
+    session['START_cr'] = cr
+    session['START_maturity'] = maturity
+    session['START_price'] = price
+
+
+
+    # Create a new game object
     bond = bnd.Bond(par, cr, maturity, price)
-    return redirect(url_for('bond_trading', bond=bond))
+    game = bnd.BondTrading(bond)
+    g_dict = game.to_dict()
+    # Serialize the game object and store it in session
+
+    session['game'] = json.dumps(g_dict)
+
+    return redirect(url_for('bond_trading_year'))
+
+
+#
+# @app.route("/bondtrading/<bond>/switch", methods=["POST", "GET"])
+# def bond_trading_switch(bond):
+#
+#     split_bond = bond.split('-')
+#     par, cr, maturity, price = float(split_bond[0]), float(split_bond[1]), int(split_bond[2]), float(split_bond[3])
+#     bond = bnd.Bond(par, cr, maturity, price)
+#     game = bnd.BondTrading(bond)
+#
+#     trade = request.form['trade']
+#
+#     game.get_ready_for_next_period(trade)
+#
+#     par, cr, maturity, price = game.bond.par, game.bond.cr, game.years, game.bond.price
+#     bond_str = f"{par}-{cr}-{maturity}-{price}"
+#
+#     return redirect(url_for('bond_trading_year', bond=bond_str))
+#
+# @app.route("/bondtrading/<bond>", methods=["POST", "GET"])
+# def bond_trading_year(bond):
+#     # 100-.05-5-100
+#     # 100-.05-4-103
+#     # get info from url to start game
+#     if 'ind' not in session:
+#         session['ind'] = 0
+#     bond_str = bond
+#     split_bond = bond_str.split('-')
+#     par, cr, maturity, price = float(split_bond[0]), float(split_bond[1]), int(split_bond[2]), float(split_bond[3])
+#     bond = bnd.Bond(par, cr, maturity, price)
+#     game = bnd.BondTrading(bond)
+#
+#     if game.years != 0:
+#         game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
+#     game.display_round(session['ind'])
+#
+#     session['ind'] += 1
+#
+#     if game.years >= 0:
+#         return render_template('bond_trading.html',
+#                            trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm), bond=bond_str)
+#
+#
+#
+# @app.route("/bondtrading/first", methods=["POST", "GET"])
+# def bond_trading_first():
+#     par = float(request.form['par'])
+#     cr = float(request.form['coupon_rate'])
+#     maturity = int(request.form['maturity_period'])
+#     price = float(request.form['price'])
+#     bond_str = f"{par}-{cr}-{maturity}-{price}"
+#
+#     return redirect(url_for('bond_trading_year', bond=bond_str))
+#
+
+
+@app.route("/bondtrading/home", methods=["POST", "GET"])
+def bond_trading_home():
+    return render_template('bond_trading_home.html')
+
+@app.route("/cleantrading", methods=["POST", "GET"])
+def clear_client():
+    if 'ind' in session:
+        del session['ind']
+    if 'game' in session:
+        del session['game']
+    if 'trade' in session:
+        del session['trade']
+    if os.path.exists("iv_app/static/images/bond_trading/recent_bond_graph.png"):
+        # Remove the file
+        os.remove("iv_app/static/images/bond_trading/recent_bond_graph.png")
+
+    return redirect(url_for('home'))
+
+@app.route("/cleantradingstart", methods=["POST", "GET"])
+def clear_trading():
+    if 'ind' in session:
+        del session['ind']
+    if 'game' in session:
+        del session['game']
+    if 'trade' in session:
+        del session['trade']
+    if os.path.exists("iv_app/static/images/bond_trading/recent_bond_graph.png"):
+        # Remove the file
+        os.remove("iv_app/static/images/bond_trading/recent_bond_graph.png")
+
+    return redirect(url_for('bond_trading_home'))
+
+
+@app.route("/bondtrading/restart", methods=["POST", "GET"])
+def bond_trading_restart():
+    old_params = f'{session['START_par']}-{session['START_cr']}-{session['START_maturity']}-{session['START_price']}'
+    return redirect(url_for('bond_trading_first', rerenderings=old_params))
 
 
 

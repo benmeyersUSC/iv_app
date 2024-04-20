@@ -1,3 +1,158 @@
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--<meta charset="UTF-8">-->
+<!--<title>{{ticker}}</title>-->
+
+
+<!--    <style>-->
+<!--/* General styling */-->
+<!--body {-->
+<!--    font-family: "Times New Roman", Times, serif;-->
+<!--    line-height: 1.6;-->
+<!--    margin: 0;-->
+<!--    padding: 20px;-->
+<!--    background-color: #000; /* Black background */-->
+<!--    color: #fff; /* White text color */-->
+<!--    display: flex; /* Use flexbox */-->
+<!--    flex-direction: column; /* Arrange items vertically */-->
+<!--    align-items: center; /* Center items horizontally */-->
+<!--}-->
+
+<!--h1 {-->
+<!--    font-size: 24px;-->
+<!--}-->
+
+<!--p {-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--/* Form styling */-->
+<!--form {-->
+<!--    margin-bottom: 20px;-->
+<!--}-->
+<!--input[type="text"] {-->
+<!--    width: 200px;-->
+<!--    padding: 10px;-->
+<!--    border: 1px solid #ccc;-->
+<!--    border-radius: 5px;-->
+<!--    box-sizing: border-box;-->
+<!--    background-color: transparent; /* Make background clear */-->
+<!--    color: #fff; /* White text color */-->
+<!--}-->
+
+<!--input[type="submit"],-->
+<!--button[type="submit"] {-->
+<!--    font-size: 16px;-->
+<!--    padding: 10px 20px;-->
+<!--    border: none;-->
+<!--    border-radius: 5px;-->
+<!--    background-color: #008000; /* Red color */-->
+<!--    color: #fff; /* White text color */-->
+<!--    cursor: pointer;-->
+<!--}-->
+
+<!--input[type="submit"]:hover,-->
+<!--button[type="submit"]:hover,-->
+<!--.logout-btn:hover {-->
+<!--    background-color: #ff0000; /* Darker blue color on hover */-->
+<!--}-->
+
+<!--/* Image styling */-->
+<!--img {-->
+<!--    width: 80%; /* Adjust image width */-->
+<!--    height: auto;-->
+<!--    display: block;-->
+<!--}-->
+
+<!--/* Table styling */-->
+<!--table {-->
+<!--    width: 30%; /* Adjust table width */-->
+<!--    border-collapse: collapse;-->
+<!--    margin-top: 20px;-->
+<!--}-->
+
+<!--table th, table td {-->
+<!--    padding: 5px; /* Reduce padding for a thinner table */-->
+<!--    border: 1px solid #fff;-->
+<!--}-->
+
+<!--table th {-->
+<!--    background-color: #443f3f; /* Blue color */-->
+<!--    width: 20%; /* Adjust width of the key column */-->
+<!--}-->
+
+<!--table td {-->
+<!--    width: 80%; /* Adjust width of the value column */-->
+<!--}-->
+
+<!--/* Flexbox for positioning */-->
+<!--.container {-->
+<!--    display: flex;-->
+<!--    justify-content: space-between; /* Align items to the start and end of the container */-->
+<!--    align-items: flex-start; /* Align items to the start of the container */-->
+<!--}-->
+
+<!--.container > img,-->
+<!--.container > table {-->
+<!--    flex: 0 0 48%; /* Adjust width of the image and table */-->
+<!--}-->
+<!--</style>-->
+
+
+
+
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>{{title}}</h1>-->
+<!--    &lt;!&ndash; <p>Choose the stock you'd like to research!</p> &ndash;&gt;-->
+<!--    <p>Position: <strong>{{trade_message[0]}}</strong> tranches, <strong>@ ${{trade_message[1]}}</strong>...open profit = <strong>${{trade_message[2]}}</strong>-->
+<!--        -&#45;&#45;&#45;&#45;-->
+<!--        Net lending (long)/borrowing (short): <strong>{{trade_message[3]}}%</strong>-->
+<!--        <br>-->
+<!--        Bond Price: <strong>${{trade_message[4]}}</strong>, yield: <strong>{{trade_message[5]}}%</strong>, years to maturity: <strong>{{trade_message[6]}}</strong>-->
+<!--        -&#45;&#45;&#45;&#45;-->
+<!--        Bond Volatility: <strong>{{trade_message[7]}}%</strong>, Yield Volatility: <strong>{{trade_message[8]}}%</strong></p>-->
+
+
+<!--    <form action="/bondtrading/switch" method="POST">-->
+<!--        <input type="text" name="trade" placeholder=0>-->
+<!--        <input type="submit" value="Trade!">-->
+<!--    </form>-->
+
+<!--    <div class="container">-->
+<!--        <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th>Key</th>-->
+<!--                    <th>Value</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                {% for key, value in transactions.items() %}-->
+<!--                    <tr>-->
+<!--                        <td>{{ key }}</td>-->
+<!--                        <td>{{ value }}</td>-->
+<!--                    </tr>-->
+<!--                {% endfor %}-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
+<!--    <form action="/cleantrading" method="GET">-->
+<!--        <input type="submit" class="logout-btn" value="Home">-->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,115 +161,141 @@
 
 
     <style>
-    /* General styling */
-    body {
-        font-family: "Times New Roman", Times, serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 20px;
-        background-color: #000; /* Black background */
-        color: #fff; /* White text color */
-    }
+/* General styling */
+body {
+    font-family: "Times New Roman", Times, serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #000; /* Black background */
+    color: #fff; /* White text color */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Arrange items vertically */
+    align-items: center; /* Center items horizontally */
+}
 
-    h1 {
-        font-size: 24px;
-    }
+h1 {
+    font-size: 24px;
+}
 
-    p {
-        font-size: 16px;
-    }
+p {
+    font-size: 16px;
+}
 
-    /* Form styling */
-    form {
-        margin-bottom: 20px;
-    }
-    input[type="text"] {
-        width: 200px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        background-color: transparent; /* Make background clear */
-        color: #fff; /* White text color */
-    }
+/* Form styling */
+form {
+    margin-bottom: 20px;
+}
+input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: transparent; /* Make background clear */
+    color: #fff; /* White text color */
+}
 
-    input[type="submit"],
-    button[type="submit"] {
-        font-size: 16px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #008000; /* Red color */
-        color: #fff; /* White text color */
-        cursor: pointer;
-    }
+input[type="submit"],
+button[type="submit"] {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #008000; /* Red color */
+    color: #fff; /* White text color */
+    cursor: pointer;
+}
 
-    input[type="submit"]:hover,
+input[type="submit"]:hover,
 button[type="submit"]:hover,
 .logout-btn:hover {
     background-color: #ff0000; /* Darker blue color on hover */
 }
 
-    input[type="text"] {
-        width: 200px;
-    }
+/* Image styling */
+img {
+    width: 85%; /* Adjust image width */
+    height: auto;
+    display: block;
+}
 
-    button[type="submit"] {
-        font-size: 16px;
-    }
+/* Table styling */
+table {
+    width: 15%; /* Adjust table width */
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
-    button[type="submit"]:hover {
-        background-color: #ff0000; /* Dark green color on hover */
-    }
+table th, table td {
+    padding: 5px; /* Reduce padding for a thinner table */
+    border: 1px solid #fff;
+}
 
-    /* Image styling */
-    img {
-        width: 477px;
-        height: auto;
-    }
+table th {
+    background-color: #443f3f; /* Blue color */
+}
 
-    /* Logout button styling */
-    .logout-btn {
-        font-size: 16px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #325d80; /* Blue color */
-        color: #fff; /* White text color */
-        cursor: pointer;
-    }
+/* Flexbox for positioning */
+.container {
+    display: flex;
+    justify-content: space-between; /* Align items to the start and end of the container */
+    align-items: flex-start; /* Align items to the start of the container */
+}
+
+.container > img,
+.container > table {
+    flex: 0 0 48%; /* Adjust width of the image and table */
+}
 </style>
+
 
 
 
 </head>
 <body>
     <h1>{{title}}</h1>
-<!--    <p>Choose the stock you'd like to research!</p>-->
-    <p>{{trade_message}}</p>
+    <!-- <p>Choose the stock you'd like to research!</p> -->
+    <p>Position: <strong>{{trade_message[0]}}</strong> tranches, <strong>@ ${{trade_message[1]}}</strong>...open profit = <strong>${{trade_message[2]}}</strong>
+        -----
+        Net lending (long)/borrowing (short): <strong>{{trade_message[3]}}%</strong>
+        <br>
+        Bond Price: <strong>${{trade_message[4]}}</strong>, yield: <strong>{{trade_message[5]}}%</strong>, years to maturity: <strong>{{trade_message[6]}}</strong>
+        -----
+        Bond Volatility: <strong>{{trade_message[7]}}%</strong>, Yield Volatility: <strong>{{trade_message[8]}}%</strong></p>
 
 
-
-
-
-
-    <form action="/action/setticker" method="POST">
-        <input type="text" name="set_ticker" placeholder=0>
+    <form action="/bondtrading/switch" method="POST">
+        <input type="text" name="trade" placeholder=0>
         <input type="submit" value="Trade!">
     </form>
 
+    <div class="container">
+        <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%">Key</th>
+                    <th style="width: 80%">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in transactions.items() %}
+                    <tr>
+                        <td style="width: 20%">{{ key }}</td>
+                        <td style="width: 80%">{{ value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
+    <form action="/bondtrading/restart" method="GET">
+        <input type="submit" class="logout-btn" value="Rerender Original Parameters">
+    </form>
+    <br>
 
-
-
-
-
-
-    <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">
-
-
-
-    <form action="/client" method="GET">
+    <form action="/cleantrading" method="GET">
         <input type="submit" class="logout-btn" value="Home">
     </form>
 </body>

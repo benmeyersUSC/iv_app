@@ -32,6 +32,10 @@ __Pages:__
   - Research historical Yield Curve (monthly or quarterly)
   - Render current Yield Curve
 
+- [__Bond Trading Simulation__](https://iv-app-1408b00f8e09.herokuapp.com/cleantradingstart)
+  
+  - Trade treasury bonds by your design
+  - Understand the inverse relationship between price and yield
 
 
 
