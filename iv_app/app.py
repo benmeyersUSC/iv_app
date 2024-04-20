@@ -303,15 +303,15 @@ def bond_trading_year():
     game = bnd.BondTrading(bond)
     game.from_dict(game_data)
 
-    if len(game.transactions.keys()) < 1:
-        if 'ind' in session:
-            session['ind'] = 0
-        else:
-            session['ind'] = 0
-        if 'game' in session:
-            del session['game']
-        if 'trade' in session:
-            del session['trade']
+    # if len(game.transactions.keys()) < 1:
+        # if 'ind' in session:
+        #     session['ind'] = 0
+        # else:
+        #     session['ind'] = 0
+        # if 'game' in session:
+        #     del session['game']
+        # if 'trade' in session:
+        #     del session['trade']
         # old_params = f'{game_data['par']}-{game_data['cr']}-{game_data['years']}-{game_data['price']}'
         # return redirect(url_for('bond_trading_first', rerenderings='100-.05-5-100'))
     game.graph_bond_price()
@@ -337,12 +337,12 @@ def bond_trading_year():
 
 @app.route("/bondtrading/first/<rerenderings>", methods=["POST", "GET"])
 def bond_trading_first(rerenderings=None):
-    if 'ind' in session:
-        del session['ind']
-    if 'game' in session:
-        del session['game']
-    if 'trade' in session:
-        del session['trade']
+    # if 'ind' in session:
+    #     del session['ind']
+    # if 'game' in session:
+    #     del session['game']
+    # if 'trade' in session:
+    #     del session['trade']
 
     if len(rerenderings) < 3:
         par = float(request.form['par'])
