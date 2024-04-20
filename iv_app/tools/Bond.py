@@ -183,10 +183,10 @@ class BondTrading:
         save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bond_trading')
         file_path = os.path.join(save_dir, 'recent_bond_graph.png')
         if os.path.exists(file_path):
-            print('file exists')
+            # print('file exists')
             os.remove(file_path)
-        if os.path.exists(file_path):
-            print('file still here :(')
+        # if os.path.exists(file_path):
+            # print('file still here :(')
 
 
         fig, ax = plt.subplots(2, 2, sharex=True)

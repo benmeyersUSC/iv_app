@@ -268,7 +268,6 @@ def bond_trading_switch():
     game_json = json.loads(json_string)
 
     # game_json = session.get('game', None)
-    print('GAME JSON', game_json, type(game_json))
 
     # game_data = json.loads(game_json)
 
@@ -280,7 +279,7 @@ def bond_trading_switch():
     # print(f"trade: {trade}, @ {game.bond.price}, position: {game.position}")
 
     game.get_ready_for_next_period(trade)
-    print('after switch', game.bond.price)
+    # print('after switch', game.bond.price)
 
     # print(f">>> position: {game.position}")
     if game.years != 0:
@@ -295,7 +294,7 @@ def bond_trading_switch():
     game.display_round(session['ind'])
 
     g_dict = game.to_dict()
-    print('GAME DICT POST TRADE', g_dict)
+    # print('GAME DICT POST TRADE', g_dict)
     # session['game'] = json.dumps(g_dict)
 
     file_path = 'session_repl.json'
@@ -311,9 +310,6 @@ def bond_trading_switch():
 
 @app.route("/bondtrading", methods=["POST", "GET"])
 def bond_trading_year():
-    if 'START_par' in session:
-        print('\n\n\nsession', session['START_par'])
-
 
     # if 'game' not in session:
     #     return redirect(url_for('bond_trading_home'))
@@ -405,10 +401,25 @@ def bond_trading_first(rerenderings=None):
         rerenderings = rerenderings.split('-')
         par, cr, maturity, price = float(rerenderings[0]), float(rerenderings[1]), int(rerenderings[2]), float(rerenderings[3])
 
-    session['START_par'] = par
-    session['START_cr'] = cr
-    session['START_maturity'] = maturity
-    session['START_price'] = price
+    starters = {'START_par':par, 'START_cr':cr, 'START_maturity':maturity, 'START_price':price}
+    file_path = 'starters.json'
+    if os.path.exists(file_path):
+        mode = 'w'  # If file exists, overwrite
+    else:
+        mode = 'x'  # If file doesn't exist, create
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(starters)
+
+    # Write JSON string to the file
+    with open(file_path, mode) as json_file:
+        json_file.write(json_string)
+
+    #
+    # session['START_par'] = par
+    # session['START_cr'] = cr
+    # session['START_maturity'] = maturity
+    # session['START_price'] = price
 
     # Create a new game object
     bond = bnd.Bond(par, cr, maturity, price)
@@ -473,9 +484,13 @@ def clear_trading():
 
 @app.route("/bondtrading/restart", methods=["POST", "GET"])
 def bond_trading_restart():
-    if 'START_par' in session:
-        print('SESSIONNNNN', session['START_par'])
-    old_params = f'{session['START_par']}-{session['START_cr']}-{session['START_maturity']}-{session['START_price']}'
+    with open('starters.json', 'r') as json_file:
+        json_string = json_file.read()
+
+        # Convert JSON string back to dictionary
+        game_json = json.loads(json_string)
+
+    old_params = f'{game_json['START_par']}-{game_json['START_cr']}-{game_json['START_maturity']}-{game_json['START_price']}'
     return redirect(url_for('bond_trading_first', rerenderings=old_params))
 
 

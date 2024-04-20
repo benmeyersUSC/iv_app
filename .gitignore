@@ -6,3 +6,4 @@ iv_app/static/images/*/**/*.png
 !iv_app/static/images/spy_vix_stuff/yearly_charts/*.png
 iv_app/static/images/spy_vix_stuff/yearly_charts/*-*.png
 iv_app/session_repl.json
+iv_app/starters.json
