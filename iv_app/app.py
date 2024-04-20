@@ -254,7 +254,8 @@ def setyieldcurve():
 
 @app.route("/bondtrading/switch", methods=["POST", "GET"])
 def bond_trading_switch():
-    session['ind'] += 1
+    if 'ind' in session:
+        session['ind'] += 1
     # Retrieve the serialized game object from session
     game_json = session.get('game', None)
 
@@ -262,8 +263,6 @@ def bond_trading_switch():
     bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
     game = bnd.BondTrading(bond)
     game.from_dict(game_data)
-
-
 
     trade = request.form['trade']
     # print(f"trade: {trade}, @ {game.bond.price}, position: {game.position}")
@@ -306,6 +305,8 @@ def bond_trading_year():
 
     if len(game.transactions.keys()) < 1:
         if 'ind' in session:
+            session['ind'] = 0
+        else:
             session['ind'] = 0
         if 'game' in session:
             del session['game']
