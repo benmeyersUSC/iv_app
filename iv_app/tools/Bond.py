@@ -233,7 +233,7 @@ class BondTrading:
         std_dev = np.std(returns)
 
         # Calculate the annualized volatility
-        annualized_volatility = std_dev * np.sqrt(252)  # Assuming 252 trading days in a year
+        annualized_volatility = std_dev   # Assuming 252 trading days in a year
 
         return annualized_volatility
 
