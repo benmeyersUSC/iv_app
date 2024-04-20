@@ -259,7 +259,10 @@ def bond_trading_switch():
     # Retrieve the serialized game object from session
     game_json = session.get('game', None)
     print('GAME JSON', game_json, type(game_json))
-    game_data = json.loads(game_json)
+    if type(game_json) == str:
+        game_data = json.loads(game_json)
+    else:
+        return redirect(url_for('bond_trading_restart'))
     bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
     game = bnd.BondTrading(bond)
     game.from_dict(game_data)
@@ -358,8 +361,6 @@ def bond_trading_first(rerenderings=None):
     session['START_maturity'] = maturity
     session['START_price'] = price
 
-
-
     # Create a new game object
     bond = bnd.Bond(par, cr, maturity, price)
     game = bnd.BondTrading(bond)
@@ -370,60 +371,6 @@ def bond_trading_first(rerenderings=None):
 
     return redirect(url_for('bond_trading_year'))
 
-
-#
-# @app.route("/bondtrading/<bond>/switch", methods=["POST", "GET"])
-# def bond_trading_switch(bond):
-#
-#     split_bond = bond.split('-')
-#     par, cr, maturity, price = float(split_bond[0]), float(split_bond[1]), int(split_bond[2]), float(split_bond[3])
-#     bond = bnd.Bond(par, cr, maturity, price)
-#     game = bnd.BondTrading(bond)
-#
-#     trade = request.form['trade']
-#
-#     game.get_ready_for_next_period(trade)
-#
-#     par, cr, maturity, price = game.bond.par, game.bond.cr, game.years, game.bond.price
-#     bond_str = f"{par}-{cr}-{maturity}-{price}"
-#
-#     return redirect(url_for('bond_trading_year', bond=bond_str))
-#
-# @app.route("/bondtrading/<bond>", methods=["POST", "GET"])
-# def bond_trading_year(bond):
-#     # 100-.05-5-100
-#     # 100-.05-4-103
-#     # get info from url to start game
-#     if 'ind' not in session:
-#         session['ind'] = 0
-#     bond_str = bond
-#     split_bond = bond_str.split('-')
-#     par, cr, maturity, price = float(split_bond[0]), float(split_bond[1]), int(split_bond[2]), float(split_bond[3])
-#     bond = bnd.Bond(par, cr, maturity, price)
-#     game = bnd.BondTrading(bond)
-#
-#     if game.years != 0:
-#         game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
-#     game.display_round(session['ind'])
-#
-#     session['ind'] += 1
-#
-#     if game.years >= 0:
-#         return render_template('bond_trading.html',
-#                            trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm), bond=bond_str)
-#
-#
-#
-# @app.route("/bondtrading/first", methods=["POST", "GET"])
-# def bond_trading_first():
-#     par = float(request.form['par'])
-#     cr = float(request.form['coupon_rate'])
-#     maturity = int(request.form['maturity_period'])
-#     price = float(request.form['price'])
-#     bond_str = f"{par}-{cr}-{maturity}-{price}"
-#
-#     return redirect(url_for('bond_trading_year', bond=bond_str))
-#
 
 
 @app.route("/bondtrading/home", methods=["POST", "GET"])

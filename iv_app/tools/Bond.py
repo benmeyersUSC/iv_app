@@ -185,6 +185,8 @@ class BondTrading:
         if os.path.exists(file_path):
             print('file exists')
             os.remove(file_path)
+        if os.path.exists(file_path):
+            print('file still here :(')
 
 
         fig, ax = plt.subplots(2, 2, sharex=True)
