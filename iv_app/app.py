@@ -282,7 +282,7 @@ def bond_trading_switch():
     # print('after switch', game.bond.price)
 
     # print(f">>> position: {game.position}")
-    if game.years != 0:
+    if game.years != 0 and game.position != 0:
         game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
         game.transactions['t' + str(len(game.transactions.keys()))] = ( 'interest',
                                                                         game.position,

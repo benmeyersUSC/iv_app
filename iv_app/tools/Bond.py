@@ -188,7 +188,6 @@ class BondTrading:
         # if os.path.exists(file_path):
             # print('file still here :(')
 
-
         fig, ax = plt.subplots(2, 2, sharex=True)
 
         color = 'g' if self.prices[-1] > self.prices[0] else 'r'
