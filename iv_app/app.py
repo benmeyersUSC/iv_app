@@ -257,6 +257,8 @@ def bond_trading_switch():
 
     if 'ind' in session:
         session['ind'] += 1
+    else:
+        session['ind'] = 1
     # Retrieve the serialized game object from session
 
     with open('session_repl.json', 'r') as json_file:
