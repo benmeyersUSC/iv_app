@@ -337,7 +337,7 @@ def bond_trading_year():
                                transactions=game.transactions)
     else:
         del session['ind']
-        del session['game']
+        # del session['game']
         if 'trade' in session:
             del session['trade']
         if os.path.exists("iv_app/static/images/bond_trading"):
