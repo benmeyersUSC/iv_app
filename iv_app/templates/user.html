@@ -16,6 +16,11 @@
         color: #fff; /* Set text color to white */
     }
 
+  img.logo {
+    width: 400px; /* Set a fixed width */
+    height: 200px; /* Set a fixed height */
+}
+
     h1 {
         font-size: 24px;
     }
@@ -83,7 +88,9 @@
 
 </head>
 <body>
-    <h1>Welcome User!</h1>
+    <img class='logo' src="{{ url_for('static', filename='logo.png') }}" alt="Example Image">
+    <p></p>
+<!--    <h1>Welcome User!</h1>-->
 <!--    <div class="formula-container">-->
 
 <!--        <div class="formula-description">-->
