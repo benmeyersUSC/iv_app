@@ -254,6 +254,9 @@ def setyieldcurve():
 
 @app.route("/bondtrading/switch", methods=["POST", "GET"])
 def bond_trading_switch():
+
+    print('next year switch', session.keys(), session.values())
+
     if 'ind' in session:
         session['ind'] += 1
     # Retrieve the serialized game object from session
@@ -292,10 +295,15 @@ def bond_trading_switch():
 
 @app.route("/bondtrading", methods=["POST", "GET"])
 def bond_trading_year():
+
+
+
     if 'game' not in session:
         return redirect(url_for('bond_trading_home'))
     if 'ind' not in session:
         session['ind'] = 0
+
+    print('year display', session.keys(), session.values())
 
     # Retrieve the serialized game object from session
     game_json = session.get('game', None)
@@ -340,12 +348,15 @@ def bond_trading_year():
 
 @app.route("/bondtrading/first/<rerenderings>", methods=["POST", "GET"])
 def bond_trading_first(rerenderings=None):
-    # if 'ind' in session:
-    #     del session['ind']
-    # if 'game' in session:
-    #     del session['game']
-    # if 'trade' in session:
-    #     del session['trade']
+
+    print('first trade init', session.keys(), session.values())
+
+    if 'ind' in session:
+        del session['ind']
+    if 'game' in session:
+        del session['game']
+    if 'trade' in session:
+        del session['trade']
 
     if len(rerenderings) < 3:
         par = float(request.form['par'])
@@ -375,6 +386,8 @@ def bond_trading_first(rerenderings=None):
 
 @app.route("/bondtrading/home", methods=["POST", "GET"])
 def bond_trading_home():
+    print('trading home', session.keys(), session.values())
+
     return render_template('bond_trading_home.html')
 
 @app.route("/cleantrading", methods=["POST", "GET"])
@@ -408,6 +421,8 @@ def clear_trading():
 
 @app.route("/bondtrading/restart", methods=["POST", "GET"])
 def bond_trading_restart():
+    print('restart', session.keys(), session.values())
+
     old_params = f'{session['START_par']}-{session['START_cr']}-{session['START_maturity']}-{session['START_price']}'
     return redirect(url_for('bond_trading_first', rerenderings=old_params))
 
