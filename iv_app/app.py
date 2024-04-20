@@ -258,7 +258,7 @@ def bond_trading_switch():
         session['ind'] += 1
     # Retrieve the serialized game object from session
     game_json = session.get('game', None)
-
+    print('GAME JSON', game_json, type(game_json))
     game_data = json.loads(game_json)
     bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
     game = bnd.BondTrading(bond)
