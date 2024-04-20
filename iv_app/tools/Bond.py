@@ -180,6 +180,13 @@ class BondTrading:
 
     # no return, builds graph used in display_round()
     def graph_bond_price(self):
+        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bond_trading')
+        file_path = os.path.join(save_dir, 'recent_bond_graph.png')
+        if os.path.exists(file_path):
+            print('file exists')
+            os.remove(file_path)
+
+
         fig, ax = plt.subplots(2, 2, sharex=True)
 
         color = 'g' if self.prices[-1] > self.prices[0] else 'r'
