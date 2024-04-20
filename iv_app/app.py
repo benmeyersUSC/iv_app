@@ -255,25 +255,30 @@ def setyieldcurve():
 @app.route("/bondtrading/switch", methods=["POST", "GET"])
 def bond_trading_switch():
 
-    print('next year switch', session.keys(), session.values())
-
     if 'ind' in session:
         session['ind'] += 1
     # Retrieve the serialized game object from session
-    game_json = session.get('game', None)
+
+    with open('session_repl.json', 'r') as json_file:
+        json_string = json_file.read()
+
+    # Convert JSON string back to dictionary
+    game_json = json.loads(json_string)
+
+    # game_json = session.get('game', None)
     print('GAME JSON', game_json, type(game_json))
-    if type(game_json) == str:
-        game_data = json.loads(game_json)
-    else:
-        return redirect(url_for('bond_trading_restart'))
-    bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
+
+    # game_data = json.loads(game_json)
+
+    bond = bnd.Bond(game_json['par'], game_json['cr'], game_json['years'], game_json['price'])
     game = bnd.BondTrading(bond)
-    game.from_dict(game_data)
+    game.from_dict(game_json)
 
     trade = request.form['trade']
     # print(f"trade: {trade}, @ {game.bond.price}, position: {game.position}")
 
     game.get_ready_for_next_period(trade)
+    print('after switch', game.bond.price)
 
     # print(f">>> position: {game.position}")
     if game.years != 0:
@@ -288,7 +293,16 @@ def bond_trading_switch():
     game.display_round(session['ind'])
 
     g_dict = game.to_dict()
-    session['game'] = json.dumps(g_dict)
+    print('GAME DICT POST TRADE', g_dict)
+    # session['game'] = json.dumps(g_dict)
+
+    file_path = 'session_repl.json'
+    # Check if the file exists
+    # Convert dictionary to JSON string
+    json_string = json.dumps(g_dict)
+    # Write JSON string to the file
+    with open(file_path, 'w') as json_file:
+        json_file.write(json_string)
 
     return redirect(url_for('bond_trading_year'))
 
@@ -296,23 +310,27 @@ def bond_trading_switch():
 @app.route("/bondtrading", methods=["POST", "GET"])
 def bond_trading_year():
 
-
-
-    if 'game' not in session:
-        return redirect(url_for('bond_trading_home'))
+    # if 'game' not in session:
+    #     return redirect(url_for('bond_trading_home'))
     if 'ind' not in session:
         session['ind'] = 0
 
-    print('year display', session.keys(), session.values())
 
     # Retrieve the serialized game object from session
-    game_json = session.get('game', None)
+    # game_json = session.get('game', None)
 
-    game_data = json.loads(game_json)
-    bond = bnd.Bond(game_data['par'], game_data['cr'], game_data['years'], game_data['price'])
+    with open('session_repl.json', 'r') as json_file:
+        json_string = json_file.read()
+
+    # Convert JSON string back to dictionary
+    game_json = json.loads(json_string)
+
+
+    # game_data = json.loads(game_json)
+    bond = bnd.Bond(game_json['par'], game_json['cr'], game_json['years'], game_json['price'])
 
     game = bnd.BondTrading(bond)
-    game.from_dict(game_data)
+    game.from_dict(game_json)
 
     # if len(game.transactions.keys()) < 1:
         # if 'ind' in session:
@@ -331,10 +349,28 @@ def bond_trading_year():
     g_dict = game.to_dict()
     session['game'] = json.dumps(g_dict)
 
+    file_path = 'session_repl.json'
+
+    # # Check if the file exists
+    # if os.path.exists(file_path):
+    #     mode = 'w'  # If file exists, overwrite
+    # else:
+    #     mode = 'x'  # If file doesn't exist, create
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(g_dict)
+
+    # Write JSON string to the file
+    with open(file_path, 'w') as json_file:
+        json_file.write(json_string)
+
+
+
     if game.years >= 0:
         return render_template('bond_trading.html',
                            trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm),
                                transactions=game.transactions)
+
     else:
         del session['ind']
         # del session['game']
@@ -349,7 +385,6 @@ def bond_trading_year():
 @app.route("/bondtrading/first/<rerenderings>", methods=["POST", "GET"])
 def bond_trading_first(rerenderings=None):
 
-    print('first trade init', session.keys(), session.values())
 
     if 'ind' in session:
         del session['ind']
@@ -378,7 +413,23 @@ def bond_trading_first(rerenderings=None):
     g_dict = game.to_dict()
     # Serialize the game object and store it in session
 
-    session['game'] = json.dumps(g_dict)
+    # session['game'] = json.dumps(g_dict)
+
+    file_path = 'session_repl.json'
+
+    # Check if the file exists
+    if os.path.exists(file_path):
+        mode = 'w'  # If file exists, overwrite
+    else:
+        mode = 'x'  # If file doesn't exist, create
+
+    # Convert dictionary to JSON string
+    json_string = json.dumps(g_dict)
+
+    # Write JSON string to the file
+    with open(file_path, mode) as json_file:
+        json_file.write(json_string)
+
 
     return redirect(url_for('bond_trading_year'))
 
@@ -386,8 +437,6 @@ def bond_trading_first(rerenderings=None):
 
 @app.route("/bondtrading/home", methods=["POST", "GET"])
 def bond_trading_home():
-    print('trading home', session.keys(), session.values())
-
     return render_template('bond_trading_home.html')
 
 @app.route("/cleantrading", methods=["POST", "GET"])
@@ -421,7 +470,6 @@ def clear_trading():
 
 @app.route("/bondtrading/restart", methods=["POST", "GET"])
 def bond_trading_restart():
-    print('restart', session.keys(), session.values())
 
     old_params = f'{session['START_par']}-{session['START_cr']}-{session['START_maturity']}-{session['START_price']}'
     return redirect(url_for('bond_trading_first', rerenderings=old_params))
