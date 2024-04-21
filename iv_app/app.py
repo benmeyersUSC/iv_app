@@ -289,10 +289,17 @@ def bond_trading_switch(amt):
     # print(f">>> position: {game.position}")
     if game.years != 0 and game.position != 0:
         game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
-        game.transactions['t' + str(len(game.transactions.keys()))] = ( 'interest',
+        game.transactions['t' + str(len(game.transactions.keys()))] = ( 'interest on holdings',
                                                                         game.position,
-                                                                        game.bond.par * game.bond.cr,
-                                                                        1000 * game.position * game.bond.par * game.bond.cr)
+                                                                        f'{100*game.bond.cr:,.2f}%',
+                                                                        f'${game.bond.par * game.bond.cr:,.2f}',
+                                                                        f'${1000 * game.position * game.bond.par * game.bond.cr:,.2f}')
+    if game.years != 0 and game.profits[-1] > 0:
+        game.inflows += game.profits[-1] * game.bond.ytm
+        game.transactions['t' + str(len(game.transactions.keys()))] = ('interest on profit',
+                                                                       f'${game.profits[-1]:,.2f}',
+                                                                       f'RFR: {100*game.bond.ytm:,.2f}%',
+                                                                       f'${game.profits[-1] * game.bond.ytm:,.2f}')
 
     # print('inflow', game.position * 1000 * game.bond.cr * game.bond.par)
 
