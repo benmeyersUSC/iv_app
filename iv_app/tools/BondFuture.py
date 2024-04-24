@@ -49,8 +49,8 @@ def main():
     future = BondFuture('ZN', '107-280')
     fut = BondFuture('ZT', '101-188')
 
-    long_zn = BondFuturePosition(future, 6, 45)
-    short_zt = BondFuturePosition(fut, 3, 45)
+    long_zn = BondFuturePosition(future, 1, 60)
+    short_zt = BondFuturePosition(fut, 1, 60)
 
     print(long_zn.notional, short_zt.notional)
 
