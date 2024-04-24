@@ -121,7 +121,7 @@
         background-color: #008000; /* Green color on hover */
     }
 
-/* Styling for Close Position button */
+/* Styling for Close/reverse Position button */
 .close_pos input[type="submit"],
 .close_pos button[type="submit"] {
     background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Green if position is negative, red otherwise */
@@ -131,6 +131,24 @@
 .close_pos button[type="submit"]:hover {
     background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Red on hover if position is negative, green otherwise */
 }
+
+
+
+/* Styling for double Position button */
+.double input[type="submit"],
+.double button[type="submit"] {
+    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Green if position is negative, red otherwise */
+}
+
+.close_pos input[type="submit"]:hover,
+.close_pos button[type="submit"]:hover {
+    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Red on hover if position is negative, green otherwise */
+}
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -175,25 +193,38 @@
     </table>
 
     <form class="trade-form" action="/bondtrading/switch/x" method="POST">
+        <p>Enter amount to buy, negative to sell</p>
         <input type="text" name="trade" placeholder="0">
-        <input type="submit" value="Trade!">
+        <input type="submit" value="Trade >> Next year">
     </form>
 
     <div class="button-container">
         <form action="/bondtrading/switch/100" method="POST">
             <input type="hidden" name="trade" placeholder="100">
-            <input type="submit" value="Buy 100!">
+            <input type="submit" value="Buy 100">
         </form>
 
         <form class='sell' action="/bondtrading/switch/-100" method="POST">
             <input type="hidden" name="trade" placeholder="-100">
-            <input type="submit" value="Sell 100!">
+            <input type="submit" value="Sell 100">
         </form>
 
         <form class='close_pos' action="/bondtrading/switch/clear" method="POST">
             <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
-            <input type="submit" value="Close Position!">
+            <input type="submit" value="Close Position">
         </form>
+
+        <form class='double' action="/bondtrading/switch/double" method="POST">
+            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
+            <input type="submit" value="Double Down">
+        </form>
+
+        <form class='close_pos' action="/bondtrading/switch/reverse" method="POST">
+            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
+            <input type="submit" value="Reverse Position">
+        </form>
+
+
     </div>
 
     <div class="container">

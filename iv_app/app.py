@@ -20,8 +20,8 @@ app.secret_key = os.urandom(12)
 
 with open('tickers_available', 'r') as fn:
     tickers_set = set([tick for tick in fn.read().split('\n') if tick])
-bsm_sim_ag_prices_d = {}
-bsm_sim_ag_prices_w = {}
+# bsm_sim_ag_prices_d = {}
+# bsm_sim_ag_prices_w = {}
 
 
 # Define a route for the homepage
@@ -279,6 +279,10 @@ def bond_trading_switch(amt):
         trade = request.form['trade']
     elif amt == 'clear':
         trade = str(game.position * -1)
+    elif amt == 'reverse':
+        trade = str(game.position * -2)
+    elif amt == 'double':
+        trade = str(game.position)
     else:
         trade = amt
 

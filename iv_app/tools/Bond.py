@@ -194,6 +194,7 @@ class BondTrading:
         ax[0, 0].plot(self.prices, marker='*', color=color)
         ax[0, 0].plot([self.bond.par] * len(self.prices), marker='*', color='b')
         ax[0, 0].set(title=f"Bond Price = ${self.prices[-1]:,}", xlabel='Years', ylabel='Price')
+        ax[0, 0].grid(True)
 
         color2 = 'g' if self.yields[-1] < self.cr else 'r'
         ax[1, 0].plot(self.yields, marker='*', color=color2, label=f"Yield ({self.yields[-1]*100:,.2f}%)")
@@ -360,7 +361,7 @@ class BondTrading:
 
 def main():
     # Create an instance of Bond
-    bond_instance = Bond(100, 0.075, 5, 100)
+    bond_instance = Bond(100, 0.075, 10, 100)
     BondTrading(bond_instance).trade_bond()
 
     # Call calculate_ytm method on the instance

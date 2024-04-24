@@ -116,7 +116,7 @@ button[type="submit"]:hover {
             <label for="maturity_period">Maturity Period (years):</label>
             <select name="maturity_period" id="maturity_period">
                 {% for i in range(1, 51, 1) %}
-                <option value="{{ i }}" {% if i == 5 %} selected {% endif %}>{{ i }}</option>
+                <option value="{{ i }}" {% if i == 10 %} selected {% endif %}>{{ i }}</option>
                 {% endfor %}
             </select>
         </div>
