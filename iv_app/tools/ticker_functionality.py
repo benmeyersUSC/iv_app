@@ -29,7 +29,7 @@ class EarningStock:
                 if len(l) > 2:
                     self.vix_prices.append(l[-3])
 
-            self.last_vix = self.vix_prices[-1]
+            self.last_vix = self.vix_prices[-1] if self.vix_prices[-1] else 0
 
             self.iv = round(self.last_vix / 100, 5)
 
