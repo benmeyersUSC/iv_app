@@ -32,6 +32,8 @@ class EarningStock:
             self.last_vix = self.vix_prices[-1] if len(self.vix_prices) > 0 else 0
 
             self.iv = round(self.last_vix / 100, 5)
+            if self.iv == 0:
+                self.iv = round(self.get_implied_volatility(), 4)
 
 
         self.yf_ticker = yf.Ticker(ticker)
