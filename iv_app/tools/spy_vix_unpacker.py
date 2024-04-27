@@ -243,6 +243,7 @@ class spy_vix_frame():
 
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}prices.png')
+        print('image saved', f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}prices.png')
 
         plt.close()
         # plt.show()
@@ -322,6 +323,8 @@ class spy_vix_frame():
 
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}volatility.png')
+        print('image saved', f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}volatility.png')
+
         plt.close()
         # plt.show()
 
