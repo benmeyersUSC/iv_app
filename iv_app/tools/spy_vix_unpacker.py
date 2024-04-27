@@ -59,25 +59,26 @@ class spy_vix_frame():
         self.understated_p = self.understated / len(self.is_understated)
         self.overstated_p = self.overstated / len(self.is_understated)
 
+
+
     def knn_vix_bins(self, start='2007', years=None):
         if not years:
             years = 2024 - int(start)
 
-
         merged_df = self.get_years_group(start, years)[0]
-
 
         bins = [0, 10, 15, 20, 35, float('inf')]  # Bins: [0-10), [10-20), [20-35), [35-inf)
 
         # Labels for the bins
         labels = [0, 1, 2, 3, 4]
 
+        bin_dict = {0:0, 1:10, 2:15, 3:20, 4:35}
+
         # Create a new column with the bin labels based on VIX readings
         merged_df['vix_bin'] = pd.cut(merged_df['vix'], bins=bins, labels=labels, right=False)
 
         features = merged_df[["spy", "sp20vol"]].values
         target = merged_df['vix_bin'].values
-
 
         X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.25, random_state=0)
 
@@ -86,7 +87,12 @@ class spy_vix_frame():
 
         y_pred = knn.predict(X_test)
 
-        return knn.score(X_test, y_test)
+        full_pred = knn.predict(features)
+
+        bin_predictions = [bin_dict[x] for x in full_pred]
+        # print(bin_predictions)
+
+        return knn.score(X_test, y_test), bin_predictions
 
     def vix_reg(self, start='2007', years=None):
         # returns the average absolute percent difference between predicted VIX and real VIX numbers
@@ -108,10 +114,12 @@ class spy_vix_frame():
         simple_test = knn.predict([[453.24, .4950, .68]])
 
         y_pred = knn.predict(X_test)
+
+        full_pred = knn.predict(features)
         avg = []
         for i in range(len(y_pred)):
-            avg.append(abs(y_pred[i]-y_test[i]) / y_test[i])
-        return sum(avg)/len(avg)
+            avg.append(abs(y_pred[i] - y_test[i]) / y_test[i])
+        return sum(avg) / len(avg), full_pred
 
     def knn_vix_understatement(self, start='2007', years=None):
         if not years:
@@ -120,7 +128,6 @@ class spy_vix_frame():
         merged_df = self.get_years_group(start, years)[0]
 
         merged_df['vix_discrep'] = merged_df['vol_diff_p'] > 0
-
 
         merged_df.dropna(inplace=True)
 
@@ -134,7 +141,10 @@ class spy_vix_frame():
 
         y_pred = knn.predict(X_test)
 
-        return knn.score(X_test, y_test)
+        full_pred = knn.predict(features)
+        # print(full_pred)
+
+        return knn.score(X_test, y_test), full_pred
 
 
 
@@ -160,22 +170,55 @@ class spy_vix_frame():
         merged_df = year_group[0]
         list_of_years = year_group[1]
 
-        fig, ax = plt.subplots(2, 1)
+        knn_bin = self.knn_vix_bins(start, years)
+        knn_bin_accuracy = knn_bin[0]
+        knn_bin_preds = knn_bin[1]
+
+        reg_vix = self.vix_reg(start, years)
+        reg_vix_accuracy = reg_vix[0]
+        reg_vix_preds = reg_vix[1]
+
+        if start == '2007':
+            diff1 = len(merged_df['date']) - len(knn_bin_preds)
+            prep = [0] * diff1
+            new_pred = prep
+            for x in knn_bin_preds:
+                new_pred.append(x)
+            knn_bin_preds = new_pred
+
+
+            diff2 = len(merged_df['date']) - len(reg_vix_preds)
+            prep2 = [0] * diff2
+            new_preds2 = prep2
+            for x in reg_vix_preds:
+                new_preds2.append(x)
+            reg_vix_preds = new_preds2
+
+        height_ratios = [4, 6]  # Bottom subplot is 60% (0.6) of the figure, top subplot is 40% (0.4)
+
+        # Create the subplots with specified height ratios
+        fig, ax = plt.subplots(2, 1, gridspec_kw={'height_ratios': height_ratios})
+
+
+        # fig, ax = plt.subplots(2, 1)
 
         # 0
-        ax[0].plot(merged_df['date'], merged_df['spy'], label=f'SPY ({start} - {int(start)+years})', color='green')
+        ax[0].plot(merged_df['date'], merged_df['spy'], label=f'SPY ({start} - {int(start) + years})', color='green')
         ax[0].set(title='SPY Price', xlabel='Year', ylabel='SPY')
         ax[0].legend()
 
         ax[0].grid(True)
 
-
         # 1
-        ax[1].plot(merged_df['date'], merged_df['vix'], label=f'VIX ({start} - {int(start)+years})', color='blue')
+        ax[1].plot(merged_df['date'], merged_df['vix'], label=f'VIX ({start} - {int(start) + years})', color='blue')
         ax[1].plot(merged_df['date'], merged_df['sp20vol'].mul(100),
-                   label=f'Spy Trailing Vol ({start} - {int(start)+years})', color='red')
+                   label=f'Spy Trailing Vol ({start} - {int(start) + years})', color='red', alpha=0.5)
+        ax[1].plot(merged_df['date'], knn_bin_preds, label=f'KNN VIX Region ({100*knn_bin_accuracy:,.2f}% accurate', color='orange', alpha=0.27)
+        ax[1].plot(merged_df['date'], reg_vix_preds, label=f'KNN VIX ({100*reg_vix_accuracy:,.2f}% avg error) ', color='green', alpha=0.5)
         ax[1].set(title='VIX / Trailing Vol', xlabel='Year', ylabel='VIX price')
-        ax[1].legend()
+        # ax[1].legend()
+        ax[1].legend(fontsize='small')
+
         ax[1].grid(True)
 
         if years < 10:
@@ -184,17 +227,20 @@ class spy_vix_frame():
                 ax[1].xaxis.set_ticks(np.arange(0, 251 * years, 251), list_of_years)
             elif years < 3:
                 if years == 1:
-                    ax[0].xaxis.set_ticks(np.arange(0, 251*years, 251//12)[:-years], self.long_month_list*years)
-                    ax[1].xaxis.set_ticks(np.arange(0, 251*years, 251//12)[:-years], self.long_month_list*years)
+                    ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251 // 12)[:-years], self.long_month_list * years)
+                    ax[1].xaxis.set_ticks(np.arange(0, 251 * years, 251 // 12)[:-years], self.long_month_list * years)
                 else:
-                    ax[0].xaxis.set_ticks(np.arange(0, 251*years, 251//12)[:-years], self.month_list*years)
+                    ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251 // 12)[:-years], self.month_list * years)
                     ax[1].xaxis.set_ticks(np.arange(0, 251 * years, 251 // 12)[:-years], self.month_list * years)
         else:
-            ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251*2), list_of_years[::2])
-            ax[1].xaxis.set_ticks(np.arange(0, 251 * years, 251*2), list_of_years[::2])
-
+            ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251 * 2), list_of_years[::2])
+            ax[1].xaxis.set_ticks(np.arange(0, 251 * years, 251 * 2), list_of_years[::2])
 
         plt.tight_layout()
+
+
+
+
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}prices.png')
 
@@ -212,7 +258,23 @@ class spy_vix_frame():
         merged_df = year_group[0]
         list_of_years = year_group[1]
 
+        knn_binary = self.knn_vix_understatement(start, years)
+        accuracy = knn_binary[0]
+        predictions = knn_binary[1]
+        bars = []
+        for p in predictions:
+            if p:
+                bars.append(100)
+            else:
+                bars.append(-100)
 
+        if start == '2007':
+            diff = len(merged_df['date']) - len(bars)
+            prep = [0] * diff
+            new_bars = prep
+            for x in bars:
+                new_bars.append(x)
+            bars = new_bars
 
         fig, ax = plt.subplots(2, 1, figsize=(8, 6), gridspec_kw={'height_ratios': [6, 4]})  # 60% and 40%
 
@@ -222,34 +284,42 @@ class spy_vix_frame():
         ax[0].scatter(merged_df['date'], merged_df['vol_diff_p'], c=colors, s=5)
         ax[0].plot(merged_df['date'], merged_df['vol_diff_p'], label=f'vol diff ({start} - {int(start) + years})',
                    c='gray', alpha=.5)
+        ax[0].bar(merged_df['date'], bars, color='blue', alpha=0.45, label=f'KNN under/overstatement ({100*accuracy:,.2f}% accurate)')
         ax[0].set(title='Realized/Implied Volatility', xlabel='Year', ylabel='Realized/Implied Volatility')
         ax[0].legend()
         ax[0].grid(True)
 
         understated = sum(under_over)
-        understated_p = understated/len(under_over)
+        understated_p = understated / len(under_over)
         overstated = len(under_over) - understated
-        overstated_p = overstated/len(under_over)
+        overstated_p = overstated / len(under_over)
 
-        ax[1].bar("Understated", understated, color='green', label=f'{understated_p*100:.2f}% understated')
-        ax[1].bar("Overstated", overstated, color='red', label=f'{overstated_p*100:.2f}% overstated')
-
+        ax[1].bar("Understated", understated, color='green', label=f'{understated_p * 100:.2f}% understated')
+        ax[1].bar("Overstated", overstated, color='red', label=f'{overstated_p * 100:.2f}% overstated')
 
         if years < 10:
             if years > 2:
                 ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251), list_of_years)
             elif years < 3:
                 if years == 1:
-                    ax[0].xaxis.set_ticks(np.arange(0, 251*years, 251//12)[:-years], self.long_month_list*years)
+                    ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251 // 12)[:-years], self.long_month_list * years)
                 else:
-                    ax[0].xaxis.set_ticks(np.arange(0, 251*years, 251//12)[:-years], self.long_month_list*years)
+                    ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251 // 12)[:-years], self.long_month_list * years)
         else:
-            ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251*2), list_of_years[::2])
+            ax[0].xaxis.set_ticks(np.arange(0, 251 * years, 251 * 2), list_of_years[::2])
 
         ax[1].set(title='Over/Under-stated Volatility', ylabel='Observations')
         ax[1].legend()
 
         plt.tight_layout()
+
+
+
+
+
+
+
+
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}volatility.png')
         plt.close()

@@ -57,10 +57,11 @@ def client():
 
 @app.route("/ticker/<symbol>")
 def ticker(symbol='SPY'):
-    fcc.EarningStock(symbol).graph_iv()
-    fcc.EarningStock(symbol).graphStPrices()
-    fcc.EarningStock(symbol).graph_ticker_options()
-    return render_template("ticker.html", ticker=symbol, ticker_name=fcc.EarningStock(symbol).name)
+    object = fcc.EarningStock(symbol)
+    object.graph_iv()
+    object.graphStPrices()
+    object.graph_ticker_options()
+    return render_template("ticker.html", ticker=symbol, ticker_name=object.name)
 
 
 @app.route("/bsm")
@@ -203,11 +204,16 @@ def spyvixhome():
 
 @app.route("/spyvix/<year>", methods=["POST", "GET"])
 def spyvix(year):
+    years = 1
     load = spv.spy_vix_frame()
-    pred = round(load.knn_vix_bins(start=year, years=1) * 100, 2)
-    pred2 = round(load.knn_vix_understatement(start=year, years=1) * 100, 2)
-    pred3 = round(load.vix_reg(start=year, years=1) * 100, 2)
-    return render_template('spy_vix_year.html', year=year, pred=pred, pred2=pred2, pred3=pred3)
+    load.graph_year_spy_vix(start=year, years=years)
+    load.graph_year_iv_disc(start=year, years=years)
+    # pred = round(load.knn_vix_bins(start=year, years=1)[0] * 100, 2)
+    # pred2 = round(load.knn_vix_understatement(start=year, years=1)[0] * 100, 2)
+    # pred3 = round(load.vix_reg(start=year, years=1)[0] * 100, 2)
+    year = str(year)+'-'+str(int(year)+years)
+    # , pred = pred, pred2 = pred2, pred3 = pred3
+    return render_template('spy_vix_year.html', year=year)
 
 @app.route("/spyvix/range<years>/<year>", methods=["POST", "GET"])
 def spyvixrange(years, year):
@@ -217,11 +223,13 @@ def spyvixrange(years, year):
     load = spv.spy_vix_frame()
     load.graph_year_spy_vix(start=year, years=years)
     load.graph_year_iv_disc(start=year, years=years)
-    pred = round(load.knn_vix_bins(start=year, years=years)*100, 2)
-    pred2 = round(load.knn_vix_understatement(start=year, years=years) * 100, 2)
-    pred3 = round(load.vix_reg(start=year, years=years) * 100, 2)
-    return render_template('spy_vix_year.html', year=f'{year}-{int(year)+years}', pred=pred, pred2=pred2,
-                           pred3=pred3)
+    # pred = round(load.knn_vix_bins(start=year, years=years)[0]*100, 2)
+    # pred2 = round(load.knn_vix_understatement(start=year, years=years)[0] * 100, 2)
+    # pred3 = round(load.vix_reg(start=year, years=years)[0] * 100, 2)
+    #
+    # , pred = pred, pred2 = pred2,
+    # pred3 = pred3
+    return render_template('spy_vix_year.html', year=f'{year}-{int(year)+years}')
 
 @app.route("/spyvix/custom", methods=["POST", "GET"])
 def spyvixcustom():
