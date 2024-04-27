@@ -9,6 +9,7 @@ from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
 import json
 
+
 file_path = 'starters.json'
 if os.path.exists(file_path):
     mode = 'w'  # If file exists, overwrite
@@ -354,20 +355,23 @@ def bond_trading_switch(amt):
     with open(file_path, 'w') as json_file:
         json_file.write(json_string)
 
-    return redirect(url_for('bond_trading_year'))
+    return redirect(url_for('bond_trading_year', on='go'))
 
 
 @app.route("/bondtrading", methods=["POST", "GET"])
-def bond_trading_year():
+def bond_trading_year(on=None):
 
     # if 'game' not in session:
     #     return redirect(url_for('bond_trading_home'))
-    if 'ind' not in session:
-        session['ind'] = 0
 
 
     # Retrieve the serialized game object from session
     # game_json = session.get('game', None)
+
+
+    if not on:
+        return redirect(url_for('bond_trading_home'))
+
 
     with open('session_repl.json', 'r') as json_file:
         json_string = json_file.read()
@@ -484,7 +488,7 @@ def bond_trading_first(rerenderings=None):
         json_file.write(json_string)
 
 
-    return redirect(url_for('bond_trading_year'))
+    return redirect(url_for('bond_trading_year', on='go'))
 
 
 
