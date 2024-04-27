@@ -355,12 +355,11 @@ def bond_trading_switch(amt):
     with open(file_path, 'w') as json_file:
         json_file.write(json_string)
 
-    return redirect(url_for('bond_trading_year', on='go'))
+    return redirect(url_for('bond_trading_year'))
 
 
 @app.route("/bondtrading", methods=["POST", "GET"])
-def bond_trading_year(on=None):
-
+def bond_trading_year():
     # if 'game' not in session:
     #     return redirect(url_for('bond_trading_home'))
 
@@ -369,8 +368,8 @@ def bond_trading_year(on=None):
     # game_json = session.get('game', None)
 
 
-    if not on:
-        return redirect(url_for('bond_trading_home'))
+    # if not on:
+    #     return redirect(url_for('bond_trading_home'))
 
 
     with open('session_repl.json', 'r') as json_file:
@@ -488,7 +487,7 @@ def bond_trading_first(rerenderings=None):
         json_file.write(json_string)
 
 
-    return redirect(url_for('bond_trading_year', on='go'))
+    return redirect(url_for('bond_trading_year'))
 
 
 
@@ -507,7 +506,6 @@ def clear_client():
     if os.path.exists("iv_app/static/images/bond_trading/recent_bond_graph.png"):
         # Remove the file
         os.remove("iv_app/static/images/bond_trading/recent_bond_graph.png")
-
     return redirect(url_for('home'))
 
 @app.route("/cleantradingstart", methods=["POST", "GET"])
