@@ -170,7 +170,7 @@ def top(criteria):
         StockSet(stocks, criteria)
         tail = "the Magnificent 7"
     elif criteria == 'reddit':
-        stocks = ['AAPL', 'DJT', 'SPY', 'NVDA', 'TSLA', 'USO', 'QQQ', 'AZZ']
+        stocks = ['IBRX', 'AMZN', 'SPY', 'NVDA', 'GOOG', 'AAPL', 'SOFI', 'QQQ']
         StockSet(stocks, criteria)
         tail = "r/WallStBets most mentioned stocks"
     elif criteria == 'macro':

@@ -76,6 +76,9 @@ class YieldCurve:
         filtered_row = df[df["Month"] == df["Month"].max()].values.tolist()[0]
         row_values = filtered_row
 
+        if row_values[-1] == 0:
+            row_values[-1] = row_values[-2]
+
         ax.plot(self.maturities, row_values[3:], marker='.')
         ax.set(title=f"{self.long_month_list[row_values[1]-1]} 2024", ylabel='Yield %')
 
@@ -113,6 +116,9 @@ class YieldCurve:
             month = self.long_month_list[i-1]
             filtered_row = df[df["Month"] == i]
             row_values = filtered_row.values.tolist()[0]
+
+            if row_values[-1] == 0:
+                row_values[-1] = row_values[-2]
 
             axs[row,col].plot(self.maturities, row_values[3:], marker='.')
             axs[row,col].set(title=f"{month} {year}", ylabel='Yield %')
@@ -156,6 +162,9 @@ class YieldCurve:
             filtered_row = df[df["Month"] == int(i)]
 
             row_values = filtered_row.values.tolist()[0]
+
+            if row_values[-1] == 0:
+                row_values[-1] = row_values[-2]
 
             axs[row,col].plot(self.maturities, row_values[3:], marker='.')
             axs[row,col].set(title=f"{month} {year}", ylabel='Yield %')
