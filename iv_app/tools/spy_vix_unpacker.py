@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -238,8 +240,10 @@ class spy_vix_frame():
 
         plt.tight_layout()
 
-
-
+        directory = f'static/images/spy_vix_stuff/yearly_charts'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            print('created directory')
 
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}prices.png')
@@ -313,13 +317,6 @@ class spy_vix_frame():
         ax[1].legend()
 
         plt.tight_layout()
-
-
-
-
-
-
-
 
 
         plt.savefig(f'static/images/spy_vix_stuff/yearly_charts/{start}-{int(start)+years}volatility.png')
