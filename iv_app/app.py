@@ -9,6 +9,31 @@ from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
 import json
 
+file_path = 'starters.json'
+if os.path.exists(file_path):
+    mode = 'w'  # If file exists, overwrite
+else:
+    mode = 'x'  # If file doesn't exist, create
+
+# Write JSON string to the file
+with open(file_path, mode) as json_file:
+    json_file.write('')
+
+
+
+file_path = 'session_repl.json'
+if os.path.exists(file_path):
+    mode = 'w'  # If file exists, overwrite
+else:
+    mode = 'x'  # If file doesn't exist, create
+
+# Write JSON string to the file
+with open(file_path, mode) as json_file:
+    json_file.write('')
+
+
+
+
 
 # globals (eek, I know) for today's date.....if any global is valid, its this
 today = str(datetime.today()).split()[0]
