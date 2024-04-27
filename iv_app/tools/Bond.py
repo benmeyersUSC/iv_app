@@ -265,7 +265,7 @@ class BondTrading:
         if trade == 0:
             self.years -= 1
             # Generate a new random yield for the next period
-            new_yield = old_yld + np.random.normal(loc=0, scale=0.01)
+            new_yield = old_yld + np.random.normal(loc=0.0005, scale=0.005)
             # print(new_yield)
             self.bond = Bond(self.bond.par, self.cr, self.years,
                              self.bond.calculate_fair_price(new_yield, cr=self.cr, ttm=self.years))
