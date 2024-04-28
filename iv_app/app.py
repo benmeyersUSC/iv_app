@@ -340,18 +340,25 @@ def bond_trading_switch(amt):
 
     # print(f">>> position: {game.position}")
     if game.years != 0 and game.position != 0:
-        game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
+        # game.inflows += game.position * 1000 * game.bond.cr * game.bond.par
+        game.cash += game.position * 1000 * game.bond.cr * game.bond.par
         game.transactions['t' + str(len(game.transactions.keys()))] = ( 'interest on holdings',
                                                                         game.position,
                                                                         f'{100*game.bond.cr:,.2f}%',
                                                                         f'${game.bond.par * game.bond.cr:,.2f}',
                                                                         f'${1000 * game.position * game.bond.par * game.bond.cr:,.2f}')
-    if game.years != 0 and game.profits[-1] > 0:
-        game.inflows += game.profits[-1] * game.bond.ytm
-        game.transactions['t' + str(len(game.transactions.keys()))] = ('interest on profit',
-                                                                       f'${game.profits[-1]:,.2f}',
-                                                                       f'RFR: {100*game.bond.ytm:,.2f}%',
-                                                                       f'${game.profits[-1] * game.bond.ytm:,.2f}')
+
+    """
+    sitting on whether to do interest on cash at rfr or not
+    """
+    # if game.years != 0 and game.profits[-1] > 0:
+        # game.inflows += game.profits[-1] * game.bond.ytm
+
+        # game.cash += game.profits[-1] * game.bond.ytm
+        # game.transactions['t' + str(len(game.transactions.keys()))] = ('interest on profit',
+        #                                                                f'${game.profits[-1]:,.2f}',
+        #                                                                f'RFR: {100*game.bond.ytm:,.2f}%',
+        #                                                                f'${game.profits[-1] * game.bond.ytm:,.2f}')
 
     # print('inflow', game.position * 1000 * game.bond.cr * game.bond.par)
 
@@ -393,7 +400,11 @@ def bond_trading_year():
     game = bnd.BondTrading(bond)
     game.from_dict(game_json)
 
-    game.graph_bond_price()
+    print(f'CASH ${game.cash:,.2f}, ASSETS(LIAB) ${game.get_asset_liab():,.2f}, NETLIQ ${game.get_portfolio_value():,.2f}')
+
+
+    tb_message1, tb_message2, tb_message3, tb_message4, tb_message5, tb_message6 = game.graph_bond_price()
+
 
     # game.display_round(session['ind'])
     g_dict = game.to_dict()
@@ -413,7 +424,6 @@ def bond_trading_year():
     # Write JSON string to the file
     with open(file_path, 'w') as json_file:
         json_file.write(json_string)
-
     if game.years >= 0:
         if game.position >= 0:
             close_color = '#ff0000'
@@ -421,7 +431,9 @@ def bond_trading_year():
             close_color = '#008000'
         return render_template('bond_trading.html',
                            trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm),
-                               transactions=game.transactions, close_color=close_color)
+                               transactions=game.transactions, close_color=close_color,
+                               tb_message1=tb_message1, tb_message2=tb_message2, tb_message3=tb_message3,
+                               tb_message4=tb_message4, tb_message5=tb_message5, tb_message6=tb_message6)
     else:
         if 'ind' in session:
             del session['ind']

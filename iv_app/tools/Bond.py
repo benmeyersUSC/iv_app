@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import matplotlib.ticker as tx
 
 class Bond:
     def __init__(self, par, cr, ttm, price):
@@ -53,6 +54,8 @@ class Bond:
 
 class BondTrading:
     def __init__(self, bond):
+        self.cash = 1000000
+
         # init the bond
         self.bond = bond
         self.par = bond.par
@@ -62,10 +65,14 @@ class BondTrading:
         self.years = bond.ttm
         self.price = self.bond.price
 
+
         # used in bond_trading_message(), updated in display_round()
         self.average_ytm = 0
 
         #cumulative arrays for graphing
+        self.cashes = [100_000_000]
+        self.asset_liab_s = [0]
+        self.net_liqs = [100_000_000]
         self.prices = [self.price]
         self.yields = [self.bond.calculate_ytm()]
         self.profits = [0]
@@ -94,13 +101,19 @@ class BondTrading:
                 'yields':self.yields, 'profits':self.profits, 'volatility':self.volatility,
                 'yield_volatility':self.yield_volatility, 'position_array':self.position_array,
                 'pos_bar_colors':self.pos_bar_colors,  'trades':self.trades, 'position':self.position, 'inflows':self.inflows,
-                'outflows':self.outflows, 'repaid_principal':self.repaid_principal, 'profit':self.get_net_prof(),
-                    'transactions':self.transactions}
+                'outflows':self.outflows, 'repaid_principal':self.repaid_principal, 'transactions':self.transactions,
+                'value':self.get_portfolio_value(), 'net_liqs':self.net_liqs, 'cashes':self.cashes, 'asset_liab_s':self.asset_liab_s,
+            'profit':self.get_net_prof()
+        }
+
     def from_dict(self, data):
         self.bond.cr = data['cr']
         self.years = data['years']
         self.bond.price = data['price']
         self.average_ytm = data['average_ytm']
+        self.net_liqs = data['net_liqs']
+        self.cashes = data['cashes']
+        self.asset_liab_s = data['asset_liab_s']
         self.prices = data['prices']
         self.yields = data['yields']
         self.profits = data['profits']
@@ -114,6 +127,7 @@ class BondTrading:
         self.outflows = data['outflows']
         self.repaid_principal = data['repaid_principal']
         self.transactions = data['transactions']
+        self.cash = data['cashes'][-1]
 
 
 
@@ -130,6 +144,8 @@ class BondTrading:
         for quantity, price in self.trades:
             total_cost += quantity * price
             total_quantity += quantity
+            if total_quantity == 0:
+                total_cost = 0
 
         # Avoid division by zero
         if total_quantity == 0:
@@ -140,12 +156,30 @@ class BondTrading:
 
         return avg_cost
 
+
+
+
     # returns overall net profit, used in display_round()
     def get_net_prof(self):
         # print('profit', self.get_realized() + self.get_asset_liab())
         # print('position', self.position)
-        return self.get_realized() + self.get_asset_liab()
 
+
+        # return self.get_realized() + self.get_asset_liab()
+
+        return self.get_portfolio_value() - 100_000_000
+
+    def get_portfolio_value(self):
+        # asset liab is closing proceeds. positive means long, negative means short
+        self.get_realized()
+        return self.cash + self.get_asset_liab()
+
+
+
+
+
+
+    # SIDE EFFECTS CHANGE CASH and REPAID PRINCIPAL
     # calculates and returns realized profit used in get_net_prof()
     def get_realized(self):
         if self.years == 0:
@@ -153,7 +187,8 @@ class BondTrading:
                 pass
             else:
                 if self.position > 0 and self.repaid_principal < 1:
-                    self.inflows += 1000 * self.position * (self.bond.par * (1 + self.bond.cr))
+                    # self.inflows += 1000 * self.position * (self.bond.par * (1 + self.bond.cr))
+                    self.cash += 1000 * self.position * (self.bond.par * (1 + self.bond.cr))
                     self.repaid_principal += 1
                     # print('end inflow:', 1000 * self.position * (self.bond.par * (1 + self.bond.cr)))
                     self.transactions['t'+str(len(self.transactions.keys()))] = ('principal settlement', self.position,
@@ -161,7 +196,8 @@ class BondTrading:
                                                             f'${1000 * self.position * (self.bond.par * (1 + self.bond.cr)):,.2f}')
 
                 elif self.position < 1 and self.repaid_principal < 1:
-                    self.outflows += -1000 * self.position * (self.bond.par * (1 + self.bond.cr))
+                    # self.outflows += -1000 * self.position * (self.bond.par * (1 + self.bond.cr))
+                    self.cash -= -1000 * self.position * (self.bond.par * (1 + self.bond.cr))
                     # print('end outflow:', -1000 * self.position * (self.bond.par * (1 + self.bond.cr)))
                     self.repaid_principal += 1
                     self.transactions['t'+str(len(self.transactions.keys()))] = ('principal settlement', self.position,
@@ -172,6 +208,7 @@ class BondTrading:
 
     # calculates and returns equivalent of open profit used in bond_trading_message(), get_avg_cost(), and get_net_prof()
     def get_asset_liab(self):
+        # basically closing proceeds. if positive, we're long, if negative we're short and have to pay to close
         if self.position == 0:
             return 0
         if self.years == 0:
@@ -194,6 +231,12 @@ class BondTrading:
         ax[0, 0].plot(self.prices, marker='*', color=color)
         ax[0, 0].plot([self.bond.par] * len(self.prices), marker='*', color='b')
         ax[0, 0].set(title=f"Bond Price = ${self.prices[-1]:,}", xlabel='Years', ylabel='Price')
+        ax[0, 0].bar(range(len(self.position_array)), list(map(lambda x:x/(self.par/10), self.position_array)), alpha=0.5,
+                     color=self.pos_bar_colors,
+                     bottom=self.par, label=f'position: {self.position_array[-1]}')
+        # ax[0, 0].set(title=f"Position Size: {self.position_array[-1] if len(self.position_array) > 0 else 0}",
+        #              xlabel='Years', ylabel='Position')
+        ax[0, 0].legend(loc='upper left')
         ax[0, 0].grid(True)
 
         color2 = 'g' if self.yields[-1] < self.cr else 'r'
@@ -204,11 +247,66 @@ class BondTrading:
 
         color3 = 'g' if self.profits[-1] > 0 else 'r'
         ax[0, 1].plot(self.profits, marker='*', color=color3, label=f"Profit: ${self.profits[-1]:,.2f}")
-        ax[0, 1].set(title=f"Cumulative Profit = ${self.profits[-1]:,.2f}", xlabel='Years', ylabel='Profit')
+        years = len(self.profits) - 1
+        if years == 0:
+            years = 1
+        raw_prof = self.profits[-1]/100000000
+        annualized = (1 + raw_prof) ** (1/years) - 1
+        ax[0, 1].set(title=f"Net Profit = {100 * self.profits[-1]/100000000:,.2f}% \n Annual: {annualized * 100:,.2f}%", xlabel='Years', ylabel='Profit')
         ax[0, 1].legend(loc='upper left')
 
-        ax[1, 1].bar(range(len(self.position_array)), self.position_array, color=self.pos_bar_colors)
-        ax[1, 1].set(title=f"Position Size: {self.position_array[-1] if len(self.position_array) > 0 else 0}", xlabel='Years', ylabel='Position')
+        # Assuming ax is your axis object
+        ax[0, 1].yaxis.set_major_formatter(tx.FuncFormatter(lambda x, pos: '{:.1f}M'.format(x / 1000000)))
+        ax[0, 1].xaxis.set_major_formatter(tx.FuncFormatter(lambda x, pos: '{:.0f}'.format(x)))
+
+
+        # ax[1, 1].bar(range(len(self.position_array)), self.position_array, color=self.pos_bar_colors)
+        # ax[1, 1].set(title=f"Position Size: {self.position_array[-1] if len(self.position_array) > 0 else 0}", xlabel='Years', ylabel='Position')
+
+        if self.get_asset_liab() >= 0:
+            al_color = 'g'
+            al_marker = '^'
+        else:
+            al_color = 'r'
+            al_marker = 'X'
+
+        # ax[1, 1].plot(self.cashes, marker='X', color='b', label=f'cash')
+        # ax[1, 1].plot(self.asset_liab_s, marker=al_marker, color=al_color, label=f'assets/(liab)')
+        # ax[1, 1].plot(self.net_liqs, marker='.', color='m', label=f'net liq')
+        # ax[1, 1].legend(loc='upper left')
+
+
+        # ax[1, 1].fill_between(range(len(self.cashes)), self.cashes, color='blue', alpha=0.3, label='Cash')
+        # ax[1, 1].fill_between(range(len(self.asset_liab_s)), self.asset_liab_s, where=np.array(self.asset_liab_s) >= 0,
+        #                       color='green', alpha=0.3, label='Assets')
+        # ax[1, 1].fill_between(range(len(self.asset_liab_s)), self.asset_liab_s, where=np.array(self.asset_liab_s) < 0,
+        #                       color='red', alpha=0.3, label='Liabilities')
+        # ax[1, 1].plot(self.net_liqs, marker='.', color='m', label='Net Liquidation')
+        # ax[1, 1].legend(loc='upper left')
+
+        total_value = np.array(self.net_liqs)
+        cash_values = np.array(self.cashes)
+        asset_liability_values = np.array(self.asset_liab_s)
+
+        ax[1, 1].fill_between(range(len(self.cashes)), cash_values, color='blue', alpha=0.3, label='Cash')
+
+        # Adjust the y-values for assets to start from the top of cash and go up to net liquidation
+        ax[1, 1].fill_between(range(len(self.asset_liab_s)), cash_values, cash_values + asset_liability_values,
+                              where=asset_liability_values >= 0, color='green', alpha=0.3, label='Assets')
+
+        # Adjust the y-values for liabilities to start from the bottom of cash and go down to net liquidation
+        ax[1, 1].fill_between(range(len(self.asset_liab_s)), cash_values, cash_values + asset_liability_values,
+                              where=asset_liability_values < 0, color='red', alpha=0.3, label='Liabilities')
+
+        ax[1, 1].plot(total_value, marker='.', color='m', label='Net Liq')
+
+
+        ax[1, 1].yaxis.set_major_formatter(tx.FuncFormatter(lambda x, pos: '{:.1f}M'.format(x / 1000000)))
+        ax[1, 1].xaxis.set_major_formatter(tx.FuncFormatter(lambda x, pos: '{:.0f}'.format(x)))
+        ax[1, 1].set(title=f"Net Liq = ${self.get_portfolio_value() / 1000000:,.4f}M", xlabel='Years', ylabel='Value')
+        ax[1, 1].legend(loc='upper left', fontsize='small')
+
+
 
         plt.suptitle(f"{self.years} years to maturity")
         plt.tight_layout()  # Add this line to adjust subplot parameters for better layout
@@ -221,6 +319,14 @@ class BondTrading:
         # Save the plot
         plt.savefig(file_path)
         plt.close()
+        return (f"CASH:",
+                f"${self.cash:,.2f}",
+                f"ASSETS/(LIABILITIES):",
+                f"${self.get_asset_liab():,.2f}",
+                f"NET LIQ:",
+                f"${self.get_portfolio_value():,.2f}")
+
+
 
 
 
@@ -272,17 +378,24 @@ class BondTrading:
             return None
         elif trade > 0:
             self.position += trade
-            self.outflows += trade * self.bond.price * 1000
+            # self.outflows += trade * self.bond.price * 1000
+            self.cash -= trade * self.bond.price * 1000
+            print('sub cash', trade * self.bond.price * 1000)
             self.years -= 1
             # print('outflow', trade * self.bond.price * 1000)
         else:
             self.position += trade
-            self.inflows += abs(trade) * self.bond.price * 1000
+            # self.inflows += abs(trade) * self.bond.price * 1000
+            self.cash += abs(trade) * self.bond.price * 1000
+            print('add cash', abs(trade) * self.bond.price * 1000)
             self.years -= 1
             # print('inflow', abs(trade) * self.bond.price * 1000)
 
+        # +10, 102.89
         self.trades.append((trade, self.bond.price))
-        self.transactions['t'+str(len(self.transactions.keys()))] = ('trade', f'buy {trade}', f'price: ${self.bond.price}', f'yield: {self.bond.ytm*100:.2f}%', f'${-1*self.bond.price*trade*1000:,.2f}')
+        self.transactions['t'+str(len(self.transactions.keys()))] = ('trade', f'buy {trade}', f'price: '
+                                                         f'${self.bond.price}', f'yield: {self.bond.ytm*100:.2f}%',
+                                                                     f'${-1*self.bond.price*trade*1000:,.2f}')
         # Generate a new random yield for the next period
         new_yield = old_yld + np.random.normal(loc=0, scale=0.01)
         #re init self.bond
@@ -296,6 +409,9 @@ class BondTrading:
         price, yld = self.bond.price, self.bond.ytm
         prof = self.get_net_prof()
         if ind != 0:
+            self.net_liqs.append(self.get_portfolio_value())
+            self.cashes.append(self.cash)
+            self.asset_liab_s.append(self.get_asset_liab())
             self.prices.append(price)
             self.yields.append(yld)
             self.volatility.append(self.annualized_volatility(self.prices))
@@ -307,6 +423,9 @@ class BondTrading:
             else:
                 self.pos_bar_colors.append('g')
         else:
+            self.net_liqs = [100_000_000]
+            self.cashes = [100_000_000]
+            self.asset_liab_s.append(self.get_asset_liab())
             self.prices = [price]
             self.yields = [yld]
             self.volatility = [0]

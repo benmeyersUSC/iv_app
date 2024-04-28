@@ -1,271 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>{{ticker}}</title>
-<style>
-    /* General styling */
-    body {
-        font-family: "Times New Roman", Times, serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 20px;
-        background-color: #000; /* Black background */
-        color: #fff; /* White text color */
-        display: flex; /* Use flexbox */
-        flex-direction: column; /* Arrange items vertically */
-        align-items: center; /* Center items horizontally */
-    }
-
-    h1 {
-        font-size: 24px;
-    }
-
-    p {
-        font-size: 16px;
-    }
-
-    /* Form styling */
-    form {
-        margin-bottom: 20px;
-    }
-
-    input[type="text"] {
-        width: 200px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-        background-color: transparent; /* Make background clear */
-        color: #fff; /* White text color */
-    }
-
-    input[type="submit"],
-    button[type="submit"] {
-        font-size: 16px;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background-color: #008000; /* Green color */
-        color: #fff; /* White text color */
-        cursor: pointer;
-    }
-
-    input[type="text"] {
-        margin-right: 10px;
-    }
-
-    input[type="submit"],
-    button[type="submit"] {
-        flex: 0 0 auto;
-    }
-
-    input[type="submit"]:hover,
-    button[type="submit"]:hover {
-        background-color: #ff0000; /* Red color on hover */
-    }
-
-    /* Container for buttons */
-    .button-container {
-        display: flex;
-    }
-
-    .button-container form {
-        margin-right: 10px; /* Adjust spacing between buttons */
-    }
-
-    /* Image styling */
-    img {
-        width: 85%; /* Adjust image width */
-        height: auto;
-        display: block;
-    }
-
-    /* Table styling */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    table th,
-    table td {
-        padding: 10px;
-        border: 1px solid #fff;
-    }
-
-    table th {
-        background-color: #443f3f; /* Blue color */
-    }
-
-    /* Flexbox for positioning */
-    .container {
-        display: flex;
-        justify-content: space-between; /* Align items to the start and end of the container */
-        align-items: flex-start; /* Align items to the start of the container */
-    }
-
-    .container > img,
-    .container > table {
-        flex: 0 0 48%; /* Adjust width of the image and table */
-    }
-
-    /* Styling for Sell 100 shares button */
-    .sell input[type="submit"],
-    .sell button[type="submit"] {
-        background-color: #ff0000; /* Red color */
-    }
-
-    .sell input[type="submit"]:hover,
-    .sell button[type="submit"]:hover {
-        background-color: #008000; /* Green color on hover */
-    }
-
-/* Styling for Close/reverse Position button */
-.close_pos input[type="submit"],
-.close_pos button[type="submit"] {
-    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Green if position is negative, red otherwise */
-}
-
-.close_pos input[type="submit"]:hover,
-.close_pos button[type="submit"]:hover {
-    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Red on hover if position is negative, green otherwise */
-}
-
-
-
-/* Styling for double Position button */
-.double input[type="submit"],
-.double button[type="submit"] {
-    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Green if position is negative, red otherwise */
-}
-
-.close_pos input[type="submit"]:hover,
-.close_pos button[type="submit"]:hover {
-    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Red on hover if position is negative, green otherwise */
-}
-
-
-
-
-
-</style>
-</head>
-<body>
-    <h1>{{title}}</h1>
-    <table class="quote-position-table">
-        <tr>
-            <th>Position</th>
-            <td>{{trade_message[0]}} tranches</td>
-        </tr>
-        <tr>
-            <th>Price</th>
-            <td>${{trade_message[1]}}</td>
-        </tr>
-        <tr>
-            <th>Open Profit</th>
-            <td>${{trade_message[2]}}</td>
-        </tr>
-        <tr>
-            <th>Net Lending/Borrowing</th>
-            <td>{{trade_message[3]}}%</td>
-        </tr>
-        <tr>
-            <th>Bond Price</th>
-            <td>${{trade_message[4]}}</td>
-        </tr>
-        <tr>
-            <th>Yield</th>
-            <td>{{trade_message[5]}}%</td>
-        </tr>
-        <tr>
-            <th>Years to Maturity</th>
-            <td>{{trade_message[6]}}</td>
-        </tr>
-        <tr>
-            <th>Bond Volatility</th>
-            <td>{{trade_message[7]}}%</td>
-        </tr>
-        <tr>
-            <th>Yield Volatility</th>
-            <td>{{trade_message[8]}}%</td>
-        </tr>
-    </table>
-
-    <form class="trade-form" action="/bondtrading/switch/x" method="POST">
-        <p>Enter amount to buy, negative to sell</p>
-        <input type="text" name="trade" placeholder="0">
-        <input type="submit" value="Trade >> Next year">
-    </form>
-
-    <div class="button-container">
-        <form action="/bondtrading/switch/100" method="POST">
-            <input type="hidden" name="trade" placeholder="100">
-            <input type="submit" value="Buy 100">
-        </form>
-
-        <form class='sell' action="/bondtrading/switch/-100" method="POST">
-            <input type="hidden" name="trade" placeholder="-100">
-            <input type="submit" value="Sell 100">
-        </form>
-
-        <form class='close_pos' action="/bondtrading/switch/clear" method="POST">
-            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
-            <input type="submit" value="Close Position">
-        </form>
-
-        <form class='double' action="/bondtrading/switch/double" method="POST">
-            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
-            <input type="submit" value="Double Down">
-        </form>
-
-        <form class='close_pos' action="/bondtrading/switch/reverse" method="POST">
-            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
-            <input type="submit" value="Reverse Position">
-        </form>
-
-
-    </div>
-
-    <div class="container">
-        <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 20%">ID #</th>
-                    <th style="width: 80%">Transaction</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for key, value in transactions.items() %}
-                    <tr>
-                        <td style="width: 20%">{{ key }}</td>
-                        <td style="width: 80%">{{ value }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <form action="/bondtrading/restart" method="GET">
-        <input type="submit" class="logout-btn" value="Rerender Original Parameters">
-    </form>
-    <br>
-
-    <form action="/cleantrading" method="GET">
-        <input type="submit" class="logout-btn" value="Home">
-    </form>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
 <!--<!DOCTYPE html>-->
 <!--<html lang="en">-->
 <!--<head>-->
@@ -378,6 +110,45 @@
 <!--        flex: 0 0 48%; /* Adjust width of the image and table */-->
 <!--    }-->
 
+<!--    /* Styling for Sell 100 shares button */-->
+<!--    .sell input[type="submit"],-->
+<!--    .sell button[type="submit"] {-->
+<!--        background-color: #ff0000; /* Red color */-->
+<!--    }-->
+
+<!--    .sell input[type="submit"]:hover,-->
+<!--    .sell button[type="submit"]:hover {-->
+<!--        background-color: #008000; /* Green color on hover */-->
+<!--    }-->
+
+<!--/* Styling for Close/reverse Position button */-->
+<!--.close_pos input[type="submit"],-->
+<!--.close_pos button[type="submit"] {-->
+<!--    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Green if position is negative, red otherwise */-->
+<!--}-->
+
+<!--.close_pos input[type="submit"]:hover,-->
+<!--.close_pos button[type="submit"]:hover {-->
+<!--    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Red on hover if position is negative, green otherwise */-->
+<!--}-->
+
+
+
+<!--/* Styling for double Position button */-->
+<!--.double input[type="submit"],-->
+<!--.double button[type="submit"] {-->
+<!--    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Green if position is negative, red otherwise */-->
+<!--}-->
+
+<!--.close_pos input[type="submit"]:hover,-->
+<!--.close_pos button[type="submit"]:hover {-->
+<!--    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Red on hover if position is negative, green otherwise */-->
+<!--}-->
+
+
+
+
+
 <!--</style>-->
 <!--</head>-->
 <!--<body>-->
@@ -422,34 +193,51 @@
 <!--    </table>-->
 
 <!--    <form class="trade-form" action="/bondtrading/switch/x" method="POST">-->
+<!--        <p>Enter amount to buy, negative to sell</p>-->
 <!--        <input type="text" name="trade" placeholder="0">-->
-<!--        <input type="submit" value="Trade!">-->
+<!--        <input type="submit" value="Trade >> Next year">-->
 <!--    </form>-->
 
 <!--    <div class="button-container">-->
 <!--        <form action="/bondtrading/switch/100" method="POST">-->
 <!--            <input type="hidden" name="trade" placeholder="100">-->
-<!--            <input type="submit" value="Buy 100!">-->
+<!--            <input type="submit" value="Buy 100">-->
 <!--        </form>-->
 
 <!--        <form class='sell' action="/bondtrading/switch/-100" method="POST">-->
 <!--            <input type="hidden" name="trade" placeholder="-100">-->
-<!--            <input type="submit" value="Sell 100!">-->
+<!--            <input type="submit" value="Sell 100">-->
 <!--        </form>-->
 
 <!--        <form class='close_pos' action="/bondtrading/switch/clear" method="POST">-->
 <!--            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">-->
-<!--            <input type="submit" value="Close Position!">-->
+<!--            <input type="submit" value="Close Position">-->
 <!--        </form>-->
+
+<!--        <form class='double' action="/bondtrading/switch/double" method="POST">-->
+<!--            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">-->
+<!--            <input type="submit" value="Double Down">-->
+<!--        </form>-->
+
+<!--        <form class='close_pos' action="/bondtrading/switch/reverse" method="POST">-->
+<!--            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">-->
+<!--            <input type="submit" value="Reverse Position">-->
+<!--        </form>-->
+
+
 <!--    </div>-->
 
 <!--    <div class="container">-->
 <!--        <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">-->
-<!--        <table>-->
+
+<!--&lt;!&ndash;        MAKE THE TEXTBOX HERE&ndash;&gt;-->
+<!--    </div>-->
+
+<!--    <table>-->
 <!--            <thead>-->
 <!--                <tr>-->
-<!--                    <th style="width: 20%">Key</th>-->
-<!--                    <th style="width: 80%">Value</th>-->
+<!--                    <th style="width: 20%">ID #</th>-->
+<!--                    <th style="width: 80%">Transaction</th>-->
 <!--                </tr>-->
 <!--            </thead>-->
 <!--            <tbody>-->
@@ -461,7 +249,6 @@
 <!--                {% endfor %}-->
 <!--            </tbody>-->
 <!--        </table>-->
-<!--    </div>-->
 
 <!--    <form action="/bondtrading/restart" method="GET">-->
 <!--        <input type="submit" class="logout-btn" value="Rerender Original Parameters">-->
@@ -473,3 +260,456 @@
 <!--    </form>-->
 <!--</body>-->
 <!--</html>-->
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ticker}}</title>
+<style>
+
+
+
+    /* General styling */
+body {
+    font-family: "Times New Roman", Times, serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #000; /* Black background */
+    color: #fff; /* White text color */
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Arrange items vertically */
+    align-items: center; /* Center items horizontally */
+}
+
+h1 {
+    font-size: 24px;
+}
+
+p {
+    font-size: 16px;
+}
+
+/* Form styling */
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: transparent; /* Make background clear */
+    color: #fff; /* White text color */
+}
+
+input[type="submit"],
+button[type="submit"] {
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #008000; /* Green color */
+    color: #fff; /* White text color */
+    cursor: pointer;
+}
+
+input[type="text"] {
+    margin-right: 10px;
+}
+
+input[type="submit"],
+button[type="submit"] {
+    flex: 0 0 auto;
+}
+
+input[type="submit"]:hover,
+button[type="submit"]:hover {
+    background-color: #ff0000; /* Red color on hover */
+}
+
+/* Container for buttons */
+.button-container {
+    display: flex;
+}
+
+.button-container form {
+    margin-right: 10px; /* Adjust spacing between buttons */
+}
+
+/* Image styling */
+img {
+    width: 85%; /* Adjust image width */
+    height: auto;
+    display: block;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    padding: 10px;
+    border: 1px solid #fff;
+}
+
+table th {
+    background-color: #443f3f; /* Blue color */
+}
+
+/* Flexbox for positioning */
+.container {
+    display: flex;
+    justify-content: space-between; /* Align items to the start and end of the container */
+    align-items: flex-start; /* Align items to the start of the container */
+}
+
+.container > img,
+.container > table {
+    flex: 0 0 48%; /* Adjust width of the image and table */
+}
+
+/* Styling for Sell 100 shares button */
+.sell input[type="submit"],
+.sell button[type="submit"] {
+    background-color: #ff0000; /* Red color */
+}
+
+.sell input[type="submit"]:hover,
+.sell button[type="submit"]:hover {
+    background-color: #008000; /* Green color on hover */
+}
+
+/* Styling for Close/reverse Position button */
+.close_pos input[type="submit"],
+.close_pos button[type="submit"] {
+    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Green if position is negative, red otherwise */
+}
+
+.close_pos input[type="submit"]:hover,
+.close_pos button[type="submit"]:hover {
+    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Red on hover if position is negative, green otherwise */
+}
+
+/* Styling for double Position button */
+.double input[type="submit"],
+.double button[type="submit"] {
+    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; /* Green if position is negative, red otherwise */
+}
+
+.double input[type="submit"]:hover,
+.double button[type="submit"]:hover {
+    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; /* Red on hover if position is negative, green otherwise */
+}
+
+/* Styling for text box */
+.textbox {
+    background-color: #000; /* Black background */
+    color: #008000; /* Green text color */
+    padding: 20px;
+    margin-top: 20px; /* Adjust margin as needed */
+    width: 90%; /* Adjust width as needed */
+}
+
+.textbox p {
+    font-weight: bold; /* Make text bold */
+    font-size: 18px; /* Slightly bigger */
+
+}
+
+.textbox p.centered {
+    text-align: center; /* Center align the text */
+     text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; /* Outline effect */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    /*!* General styling *!*/
+    /*body {*/
+    /*    font-family: "Times New Roman", Times, serif;*/
+    /*    line-height: 1.6;*/
+    /*    margin: 0;*/
+    /*    padding: 20px;*/
+    /*    background-color: #000; !* Black background *!*/
+    /*    color: #fff; !* White text color *!*/
+    /*    display: flex; !* Use flexbox *!*/
+    /*    flex-direction: column; !* Arrange items vertically *!*/
+    /*    align-items: center; !* Center items horizontally *!*/
+    /*}*/
+
+    /*h1 {*/
+    /*    font-size: 24px;*/
+    /*}*/
+
+    /*p {*/
+    /*    font-size: 16px;*/
+    /*}*/
+
+    /*!* Form styling *!*/
+    /*form {*/
+    /*    margin-bottom: 20px;*/
+    /*}*/
+
+    /*input[type="text"] {*/
+    /*    width: 200px;*/
+    /*    padding: 10px;*/
+    /*    border: 1px solid #ccc;*/
+    /*    border-radius: 5px;*/
+    /*    box-sizing: border-box;*/
+    /*    background-color: transparent; !* Make background clear *!*/
+    /*    color: #fff; !* White text color *!*/
+    /*}*/
+
+    /*input[type="submit"],*/
+    /*button[type="submit"] {*/
+    /*    font-size: 16px;*/
+    /*    padding: 10px;*/
+    /*    border: none;*/
+    /*    border-radius: 5px;*/
+    /*    background-color: #008000; !* Green color *!*/
+    /*    color: #fff; !* White text color *!*/
+    /*    cursor: pointer;*/
+    /*}*/
+
+    /*input[type="text"] {*/
+    /*    margin-right: 10px;*/
+    /*}*/
+
+    /*input[type="submit"],*/
+    /*button[type="submit"] {*/
+    /*    flex: 0 0 auto;*/
+    /*}*/
+
+    /*input[type="submit"]:hover,*/
+    /*button[type="submit"]:hover {*/
+    /*    background-color: #ff0000; !* Red color on hover *!*/
+    /*}*/
+
+    /*!* Container for buttons *!*/
+    /*.button-container {*/
+    /*    display: flex;*/
+    /*}*/
+
+    /*.button-container form {*/
+    /*    margin-right: 10px; !* Adjust spacing between buttons *!*/
+    /*}*/
+
+    /*!* Image styling *!*/
+    /*img {*/
+    /*    width: 85%; !* Adjust image width *!*/
+    /*    height: auto;*/
+    /*    display: block;*/
+    /*}*/
+
+    /*!* Table styling *!*/
+    /*table {*/
+    /*    width: 100%;*/
+    /*    border-collapse: collapse;*/
+    /*    margin-top: 20px;*/
+    /*}*/
+
+    /*table th,*/
+    /*table td {*/
+    /*    padding: 10px;*/
+    /*    border: 1px solid #fff;*/
+    /*}*/
+
+    /*table th {*/
+    /*    background-color: #443f3f; !* Blue color *!*/
+    /*}*/
+
+    /*!* Flexbox for positioning *!*/
+    /*.container {*/
+    /*    display: flex;*/
+    /*    justify-content: space-between; !* Align items to the start and end of the container *!*/
+    /*    align-items: flex-start; !* Align items to the start of the container *!*/
+    /*}*/
+
+    /*.container > img,*/
+    /*.container > table {*/
+    /*    flex: 0 0 48%; !* Adjust width of the image and table *!*/
+    /*}*/
+
+    /*!* Styling for Sell 100 shares button *!*/
+    /*.sell input[type="submit"],*/
+    /*.sell button[type="submit"] {*/
+    /*    background-color: #ff0000; !* Red color *!*/
+    /*}*/
+
+    /*.sell input[type="submit"]:hover,*/
+    /*.sell button[type="submit"]:hover {*/
+    /*    background-color: #008000; !* Green color on hover *!*/
+    /*}*/
+
+    /*!* Styling for Close/reverse Position button *!*/
+    /*.close_pos input[type="submit"],*/
+    /*.close_pos button[type="submit"] {*/
+    /*    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; !* Green if position is negative, red otherwise *!*/
+    /*}*/
+
+    /*.close_pos input[type="submit"]:hover,*/
+    /*.close_pos button[type="submit"]:hover {*/
+    /*    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; !* Red on hover if position is negative, green otherwise *!*/
+    /*}*/
+
+    /*!* Styling for double Position button *!*/
+    /*.double input[type="submit"],*/
+    /*.double button[type="submit"] {*/
+    /*    background-color: {% if '-' in trade_message[0] %}#ff0000;{% else %}#008000;{% endif %}; !* Green if position is negative, red otherwise *!*/
+    /*}*/
+
+    /*.double input[type="submit"]:hover,*/
+    /*.double button[type="submit"]:hover {*/
+    /*    background-color: {% if '-' in trade_message[0] %}#008000;{% else %}#ff0000;{% endif %}; !* Red on hover if position is negative, green otherwise *!*/
+    /*}*/
+
+    /*!* Styling for text box *!*/
+    /*.textbox {*/
+    /*    background-color: #000; !* Black background *!*/
+    /*    color: #fff; !* White text color *!*/
+    /*    padding: 20px;*/
+    /*    margin-top: 20px; !* Adjust margin as needed *!*/
+    /*    width: 90%; !* Adjust width as needed *!*/
+    /*}*/
+</style>
+</head>
+<body>
+        <h1>{{title}}</h1>
+    <table class="quote-position-table">
+        <tr>
+            <th>Position</th>
+            <td>{{trade_message[0]}} tranches</td>
+        </tr>
+        <tr>
+            <th>Price</th>
+            <td>${{trade_message[1]}}</td>
+        </tr>
+        <tr>
+            <th>Open Profit</th>
+            <td>${{trade_message[2]}}</td>
+        </tr>
+        <tr>
+            <th>Net Lending/Borrowing</th>
+            <td>{{trade_message[3]}}%</td>
+        </tr>
+        <tr>
+            <th>Bond Price</th>
+            <td>${{trade_message[4]}}</td>
+        </tr>
+        <tr>
+            <th>Yield</th>
+            <td>{{trade_message[5]}}%</td>
+        </tr>
+        <tr>
+            <th>Years to Maturity</th>
+            <td>{{trade_message[6]}}</td>
+        </tr>
+        <tr>
+            <th>Bond Volatility</th>
+            <td>{{trade_message[7]}}%</td>
+        </tr>
+        <tr>
+            <th>Yield Volatility</th>
+            <td>{{trade_message[8]}}%</td>
+        </tr>
+    </table>
+
+        <form class="trade-form" action="/bondtrading/switch/x" method="POST">
+        <p>Enter amount to buy, negative to sell</p>
+        <input type="text" name="trade" placeholder="0">
+        <input type="submit" value="Trade >> Next year">
+    </form>
+
+    <div class="button-container">
+        <form action="/bondtrading/switch/100" method="POST">
+            <input type="hidden" name="trade" placeholder="100">
+            <input type="submit" value="Buy 100">
+        </form>
+
+        <form class='sell' action="/bondtrading/switch/-100" method="POST">
+            <input type="hidden" name="trade" placeholder="-100">
+            <input type="submit" value="Sell 100">
+        </form>
+
+        <form class='close_pos' action="/bondtrading/switch/clear" method="POST">
+            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
+            <input type="submit" value="Close Position">
+        </form>
+
+        <form class='double' action="/bondtrading/switch/double" method="POST">
+            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
+            <input type="submit" value="Double Down">
+        </form>
+
+        <form class='close_pos' action="/bondtrading/switch/reverse" method="POST">
+            <input type="hidden" name="trade" placeholder="{{trade_message[0]}}">
+            <input type="submit" value="Reverse Position">
+        </form>
+
+
+    </div>
+
+    <div class="container">
+        <img src="{{ url_for('static', filename='images/bond_trading/recent_bond_graph.png') }}" alt="Example Image">
+
+        <!-- Text box -->
+        <div class="textbox">
+            <p style="color: #ffffff">{{tb_message1}}</p>
+            <p class="centered">{{tb_message2}}</p>
+            <p style="color: #ffffff">{{tb_message3}}</p>
+            <p class="centered">{{tb_message4}}</p>
+            <p style="color: #ffffff">{{tb_message5}}</p>
+            <p class="centered">{{tb_message6}}</p>
+        </div>
+    </div>
+
+      <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%">ID #</th>
+                    <th style="width: 80%">Transaction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in transactions.items() %}
+                    <tr>
+                        <td style="width: 20%">{{ key }}</td>
+                        <td style="width: 80%">{{ value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <form action="/bondtrading/restart" method="GET">
+        <input type="submit" class="logout-btn" value="Rerender Original Parameters">
+    </form>
+    <br>
+
+    <form action="/cleantrading" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+    </form>
+</body>
+</html>
