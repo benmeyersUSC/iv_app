@@ -49,9 +49,20 @@ with open('tickers_available', 'r') as fn:
 # bsm_sim_ag_prices_d = {}
 # bsm_sim_ag_prices_w = {}
 
-# @app.route('/<endpoint>')
-# def redirector(endpoint):
-#     if endpoint
+
+
+# Error handling for 404 Not Found
+@app.errorhandler(404)
+def page_not_found(e):
+    print('not found')
+    return redirect(url_for('home'))
+
+# Error handling for Internal Server Error (500)
+@app.errorhandler(500)
+def internal_server_error(e):
+    print('internal server error')
+    return redirect(url_for('home'))
+
 
 # Define a route for the homepage
 @app.route('/')
