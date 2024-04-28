@@ -57,7 +57,7 @@ def client():
 
     :return: redirects home if not logged in,
                 renders admin.html if logged in as admin,
-                user.html otherwise
+                home.html otherwise
     """
     # if logged out
     if not session["logged_in"]:
@@ -70,7 +70,7 @@ def client():
                             message='Welcome back!', result=db_get_user_list())
     else:
         # otherwise, the user page
-        return render_template("user.html", username=session['username'].upper())
+        return render_template("home.html", username=session['username'].upper())
 
 @app.route("/ticker")
 def ticker():
@@ -251,11 +251,11 @@ def remove_user():
 @app.route("/action/setticker", methods=["POST", "GET"])
 def set_ticker():
     """
-    Gets called from user.html form submit
+    Gets called from home.html form submit
     Updates user food by calling db_set_food, then re-renders user template
 
     :return: redirects to home if user not logged in,
-                re-renders user.html otherwise
+                re-renders home.html otherwise
     """
     if not session["logged_in"]:
         return redirect(url_for('home'))

@@ -90,9 +90,9 @@ def client():
 
     :return: redirects home if not logged in,
                 renders admin.html if logged in as admin,
-                user.html otherwise
+                home.html otherwise
     """
-    return render_template("user.html")
+    return render_template("home.html")
 
 
 @app.route("/ticker/<symbol>")
@@ -215,11 +215,11 @@ def top(criteria):
 @app.route("/action/setticker", methods=["POST", "GET"])
 def set_ticker():
     """
-    Gets called from user.html form submit
+    Gets called from home.html form submit
     Updates user food by calling db_set_food, then re-renders user template
 
     :return: redirects to home if user not logged in,
-                re-renders user.html otherwise
+                re-renders home.html otherwise
     """
     if not ticker_check(request.form['set_ticker'].upper()):
         #return redirect(url_for('ticker', symbol='SPY'))
