@@ -49,6 +49,9 @@ with open('tickers_available', 'r') as fn:
 # bsm_sim_ag_prices_d = {}
 # bsm_sim_ag_prices_w = {}
 
+# @app.route('/<endpoint>')
+# def redirector(endpoint):
+#     if endpoint
 
 # Define a route for the homepage
 @app.route('/')
@@ -360,23 +363,17 @@ def bond_trading_switch(amt):
 
 @app.route("/bondtrading", methods=["POST", "GET"])
 def bond_trading_year():
-    # if 'game' not in session:
-    #     return redirect(url_for('bond_trading_home'))
 
-
-    # Retrieve the serialized game object from session
-    # game_json = session.get('game', None)
-
-
-    # if not on:
-    #     return redirect(url_for('bond_trading_home'))
 
 
     with open('session_repl.json', 'r') as json_file:
         json_string = json_file.read()
 
     # Convert JSON string back to dictionary
-    game_json = json.loads(json_string)
+    try:
+        game_json = json.loads(json_string)
+    except Exception as e:
+        return redirect(url_for('bond_trading_home'))
 
 
     # game_data = json.loads(game_json)
@@ -415,7 +412,8 @@ def bond_trading_year():
                            trade_message=game.bond_trading_message(game.bond.price, game.bond.ytm),
                                transactions=game.transactions, close_color=close_color)
     else:
-        del session['ind']
+        if 'ind' in session:
+            del session['ind']
         # del session['game']
         if 'trade' in session:
             del session['trade']
