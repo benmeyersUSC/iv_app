@@ -172,7 +172,7 @@ def bsm_new_params():
 @app.route('/top/<criteria>')
 def top(criteria):
     if criteria == 'earnings':
-        stocks = ["TSLA", 'V', 'CMG', 'LMT', 'ENPH', 'RTX', 'META' ,'MSFT', 'INTC', 'XOM', 'BA', 'SNAP']
+        stocks = ['AMD', 'AMZN', 'SBUX', 'PTON', 'AAPL', 'PFE', 'MA', 'HSY', 'COIN', 'DKNG', 'TXRH', 'VICI', 'CBOE']
         StockSet(stocks, criteria)
         tail = "This Week's Top Earnings"
     elif criteria == 'oi':
@@ -184,7 +184,7 @@ def top(criteria):
         StockSet(stocks, criteria)
         tail = "the Magnificent 7"
     elif criteria == 'reddit':
-        stocks = ['IBRX', 'AMZN', 'SPY', 'NVDA', 'GOOG', 'AAPL', 'SOFI', 'QQQ']
+        stocks = ['TLRY', 'AMZN', 'SPY', 'NVDA', 'PYPL', 'AAPL', 'MSOS', 'AMD']
         StockSet(stocks, criteria)
         tail = "r/WallStBets most mentioned stocks"
     elif criteria == 'macro':
