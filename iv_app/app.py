@@ -172,7 +172,7 @@ def bsm_new_params():
 @app.route('/top/<criteria>')
 def top(criteria):
     if criteria == 'earnings':
-        stocks = ['AMD', 'AMZN', 'SBUX', 'PTON', 'AAPL', 'PFE', 'MA', 'HSY', 'COIN', 'DKNG', 'TXRH', 'VICI', 'CBOE']
+        stocks = ['PLTR', 'DIS', 'LYFT', 'UBER', 'OXY', 'RIVN', 'MARA', 'SHOP', 'ABNB', 'HOOD']
         StockSet(stocks, criteria)
         tail = "This Week's Top Earnings"
     elif criteria == 'oi':
