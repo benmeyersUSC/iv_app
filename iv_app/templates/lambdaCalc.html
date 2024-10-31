@@ -1,3 +1,165 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Lambda Calculus</title>-->
+<!--</head>-->
+<!--<style>-->
+<!--    .logout-btn {-->
+<!--        font-size: 16px;-->
+<!--        padding: 10px 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        background-color: #008000;-->
+<!--        color: #fff;-->
+<!--        cursor: pointer;-->
+<!--        margin: 10px;-->
+<!--    }-->
+<!--    .logout-btn:hover {-->
+<!--        background-color: #ff0000;-->
+<!--    }-->
+<!--    .operation-btn {-->
+<!--        font-size: 14px;-->
+<!--        padding: 8px 16px;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        background-color: #404040;-->
+<!--        color: #fff;-->
+<!--        cursor: pointer;-->
+<!--        margin: 5px;-->
+<!--    }-->
+<!--    .operation-btn:hover {-->
+<!--        background-color: #606060;-->
+<!--    }-->
+<!--    body {-->
+<!--        font-family: "Times New Roman", Times, serif;-->
+<!--        line-height: 1.6;-->
+<!--        margin: 0;-->
+<!--        padding: 20px;-->
+<!--        text-align: center;-->
+<!--        background-color: #000;-->
+<!--        color: #fff;-->
+<!--    }-->
+<!--    h1 {-->
+<!--        font-size: 24px;-->
+<!--    }-->
+<!--    p {-->
+<!--        font-size: 16px;-->
+<!--    }-->
+
+<!--    .textarea-box {-->
+<!--        width: 100%;-->
+<!--        height: 150px;-->
+<!--        margin-bottom: 20px;-->
+<!--        padding: 10px;-->
+<!--        font-family: monospace;-->
+<!--        white-space: pre-wrap;-->
+<!--        background-color: #2c2c2c;-->
+<!--        color: #fff;-->
+<!--        border: 1px solid #404040;-->
+<!--        border-radius: 5px;-->
+<!--        font-size: 14px;-->
+<!--    }-->
+<!--    .output-box {-->
+<!--        width: 100%;-->
+<!--        height: 150px;-->
+<!--        margin: 20px 0;-->
+<!--        padding: 10px;-->
+<!--        background-color: #2c2c2c;-->
+<!--        color: #fff;-->
+<!--        border-radius: 5px;-->
+<!--        white-space: pre-wrap;-->
+<!--        overflow-y: auto;-->
+<!--        font-family: monospace;-->
+<!--        text-align: left;-->
+<!--        border: 1px solid #404040;-->
+<!--    }-->
+<!--    .file-content-box {-->
+<!--        width: 100%;-->
+<!--        height: 270px;-->
+<!--        margin: 20px 0;-->
+<!--        padding: 10px;-->
+<!--        background-color: #2c2c2c;-->
+<!--        color: #fff;-->
+<!--        border-radius: 5px;-->
+<!--        white-space: pre-wrap;-->
+<!--        overflow-y: auto;-->
+<!--        font-family: monospace;-->
+<!--        text-align: left;-->
+<!--        border: 1px solid #404040;-->
+<!--    }-->
+<!--    .container {-->
+<!--        width: 80%;-->
+<!--        margin: 0 auto;-->
+<!--    }-->
+<!--    .section-title {-->
+<!--        text-align: left;-->
+<!--        margin: 20px 0 10px 0;-->
+<!--        color: #808080;-->
+<!--        font-size: 14px;-->
+<!--    }-->
+<!--    .operation-buttons {-->
+<!--        margin: 10px 0;-->
+<!--    }-->
+<!--</style>-->
+<!--<body>-->
+
+<!--<h1>LAMBDA CALCULUS</h1>-->
+
+<!--<div class="container">-->
+<!--    <form action="/runLambda" method="POST">-->
+<!--        <div class="section-title">Input:</div>-->
+<!--        <textarea name="inputText" class="textarea-box">{{starter_code}}</textarea>-->
+<!--        <div class="operation-buttons">-->
+<!--            <button class="operation-btn" action="/lambdefineADD" method="POST">define ADD</button>-->
+<!--            <button class="operation-btn" action="/lambdefineSUB" method="POST">define SUB</button>-->
+<!--            <button class="operation-btn" action="/lambdefineMUL" method="POST">define MUL</button>-->
+<!--            <button class="operation-btn" action="/lambdefinePOW" method="POST">define POW</button>-->
+<!--        </div>-->
+<!--        <input type="submit" class="logout-btn" value="Run!">-->
+<!--    </form>-->
+
+<!--    <div class="section-title">Program Output:</div>-->
+<!--    <div class="output-box" id="output">{{output_text}}</div>-->
+
+<!--    <div class="section-title">Abstract Syntax Tree:</div>-->
+<!--    <div class="file-content-box" id="fileContent">{{file_content}}</div>-->
+
+<!--    <form action="/client" method="GET">-->
+<!--        <input type="submit" class="logout-btn" value="Home">-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // Function to escape HTML special characters while preserving formatting-->
+<!--    function escapeHTML(text) {-->
+<!--        return text-->
+<!--            .replace(/&/g, '&amp;')-->
+<!--            .replace(/</g, '&lt;')-->
+<!--            .replace(/>/g, '&gt;')-->
+<!--            .replace(/"/g, '&quot;')-->
+<!--            .replace(/'/g, '&#039;');-->
+<!--    }-->
+
+<!--    // Get the output element-->
+<!--    const outputElement = document.getElementById('output');-->
+<!--    const fileContentElement = document.getElementById('fileContent');-->
+
+<!--    // If there's output text, display it while preserving formatting-->
+<!--    if (outputElement.textContent.trim()) {-->
+<!--        outputElement.innerHTML = escapeHTML(outputElement.textContent);-->
+<!--    }-->
+
+<!--    // If there's file content, display it while preserving formatting-->
+<!--    if (fileContentElement.textContent.trim()) {-->
+<!--        fileContentElement.innerHTML = escapeHTML(fileContentElement.textContent);-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +208,6 @@
     p {
         font-size: 16px;
     }
-
     .textarea-box {
         width: 100%;
         height: 150px;
@@ -109,13 +270,17 @@
 <div class="container">
     <form action="/runLambda" method="POST">
         <div class="section-title">Input:</div>
-        <textarea name="inputText" class="textarea-box">{{starter_code}}</textarea>
+        <textarea id="inputText" name="inputText" class="textarea-box">{{starter_code}}</textarea>
         <div class="operation-buttons">
-            <button type="button" class="operation-btn">define ADD</button>
-            <button type="button" class="operation-btn">define SUB</button>
-            <button type="button" class="operation-btn">define MUL</button>
-            <button type="button" class="operation-btn">define DIV</button>
-            <button type="button" class="operation-btn">define POW</button>
+            <button type="button" class="operation-btn" onclick="addText('ADD')">Define ADD</button>
+            <button type="button" class="operation-btn" onclick="addText('SUB')">Define SUB</button>
+            <button type="button" class="operation-btn" onclick="addText('MUL')">Define MUL</button>
+            <button type="button" class="operation-btn" onclick="addText('POW')">Define POW</button>
+            <button type="button" class="operation-btn" onclick="addText('TRU')">Define TRU</button>
+            <button type="button" class="operation-btn" onclick="addText('FLS')">Define FLS</button>
+            <button type="button" class="operation-btn" onclick="addText('OR')">Define OR</button>
+            <button type="button" class="operation-btn" onclick="addText('AND')">Define AND</button>
+            <button type="button" class="operation-btn" onclick="addText('NOT')">Define NOT</button>
         </div>
         <input type="submit" class="logout-btn" value="Run!">
     </form>
@@ -132,30 +297,45 @@
 </div>
 
 <script>
-    // Function to escape HTML special characters while preserving formatting
-    function escapeHTML(text) {
-        return text
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    // Get the output element
-    const outputElement = document.getElementById('output');
-    const fileContentElement = document.getElementById('fileContent');
-
-    // If there's output text, display it while preserving formatting
-    if (outputElement.textContent.trim()) {
-        outputElement.innerHTML = escapeHTML(outputElement.textContent);
-    }
-
-    // If there's file content, display it while preserving formatting
-    if (fileContentElement.textContent.trim()) {
-        fileContentElement.innerHTML = escapeHTML(fileContentElement.textContent);
+    // JavaScript function to add text to the textarea based on the button clicked
+    function addText(operation) {
+        const textarea = document.getElementById('inputText');
+        let textToAdd = '';
+        switch (operation) {
+            case 'ADD':
+                textToAdd = 'add = Lm.Ln.m scc n'; // Define ADD example
+                break;
+            case 'SUB':
+                textToAdd = 'pred = Ln.Lf.Lx.n (Lg.Lh.h (g f)) (Lu.x) (Lu.u)\n' +
+                    'sub = Lm.Ln.n pred m'; // Define SUB example
+                break;
+            case 'MUL':
+                textToAdd = 'mul = Lm.Ln.m (add n) zero'; // Define MUL example
+                break;
+            case 'POW':
+                textToAdd = 'pow = Lm.Ln.m n'; // Define POW example
+                break;
+            case 'TRU':
+                textToAdd = 'tru = Lx.Ly.x';
+                break;
+            case 'FLS':
+                textToAdd = 'fls = Lx.Ly.y';
+                break;
+            case 'OR':
+                textToAdd = 'or = Lp.Lq.p tru q';
+                break;
+            case 'AND':
+                textToAdd = 'and = Lp.Lq.p q p';
+                break;
+            case 'NOT':
+                textToAdd = 'not = Lp.p fls tru';
+                break;
+        }
+        // Append text to the existing content in the textarea
+        textarea.value = `${textToAdd}\n` + textarea.value;
     }
 </script>
 
 </body>
 </html>
+
