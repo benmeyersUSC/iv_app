@@ -7,7 +7,7 @@ from iv_app.tools.graphing_stock import StockSet
 from iv_app.tools import spy_vix_unpacker as spv
 from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
-from iv_app.tools.lambdaCalculus import lambda_calculus_interpreter
+from iv_app.tools.lambdaCalculus import lambda_calculus_interpreter as LI
 import json
 
 
@@ -115,10 +115,10 @@ def runLambdaCalc():
 
     with open('./tools/lambdaCalculus/userCode.lambda', 'w') as fn:
         fn.write(code)
-    evaluated, exprs = lambda_calculus_interpreter.lambda_interpret_file_viz(filename='./tools/lambdaCalculus/userCode.lambda')
+    exprs, evaluated = LI.lambda_interpret_file_viz(filename='./tools/lambdaCalculus/userCode.lambda')
     with open("./tools/lambdaCalculus/userCode_parsed_tree.txt", 'r') as fn:
         tree_text = fn.read()
-    program = ">>" + "\n>>".join([str(evaluated[x]) for x in range(len(evaluated))])
+    program = ">>" + "\n>>".join([LI.format_church_numeral_output(str(evaluated[x])) for x in range(len(evaluated))])
     return render_template("lambdaCalc.html", starter_code=code,
                            output_text=program,
                            file_content=tree_text)

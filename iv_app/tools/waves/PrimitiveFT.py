@@ -22,9 +22,9 @@ def makeFrequencyMatrix(ran, duration, sampleRate):
         # Generate the sine wave for the current frequency
         signal = np.sin(2 * np.pi * freq * time_points)
         frequencies.append(signal)
-        # if freq == ran//2:
-        #     plt.plot(signal)
-        #     plt.show()
+        if freq == ran//2:
+            plt.plot(signal)
+            plt.show()
 
     # Convert the list of signals into a DataFrame
     return pd.DataFrame(frequencies)
@@ -71,7 +71,7 @@ def plotFromWav(file='/Users/benmeyers/Desktop/homnee.wav'):
 
 def main():
 
-    runNewWave(3)
+    runNewWave(5)
 
 
 

@@ -34,7 +34,7 @@ class RParen(Token):
 
 class Lambda(Token):
     """
-    lambdaCalculus call ("L") Token
+    lambda call ("L") Token
     """
     def __init__(self, text):
         super().__init__(text)
@@ -299,6 +299,12 @@ def parse_statement(token_list, depth):
     :return: Parsed SYNTAX TREE of entire file, with Statements and Blocks at highest level
                 Also return rest during recursion, final should be []
     """
+    try:
+        print(f"PARSING: {token_list[0]}")
+    except:
+        print("Done parsing")
+#############################################################################
+
     result = None
     rest = None
     if len(token_list) == 0:
@@ -317,8 +323,11 @@ def parse_statement(token_list, depth):
             while i < len(token_list) and isinstance(token_list[i], Whitespace):
                 i += 1
             parsed, rest = parse_expression(token_list[i:], do_app=True, depth=0)
-            print(f"NEW ASSIGNMENT and PARSED IS: {parsed}({type(parsed)})")
+            # print(f"NEW ASSIGNMENT and PARSED IS: {parsed}({type(parsed)})")
             result = AssignmentStmt(token_list[0].text, parsed)
+
+
+
 
     if not is_assign:
         result, rest = parse_expression(token_list, do_app=True, depth=0)
@@ -334,7 +343,7 @@ def parse_statement(token_list, depth):
 
     parsed, rest = parse_statement(rest[i:], depth + 1)
 
-    print(f"Block of result: {result}({type(result)}), parsed: {parsed}({type(parsed)}) and then rest: {rest}({type(rest)})")
+    # print(f"Block of result: {result}({type(result)}), parsed: {parsed}({type(parsed)}) and then rest: {rest}({type(rest)})")
     return BlockStmt(result, parsed), rest
 
 
@@ -388,7 +397,7 @@ def parse_expression(token_list, do_app, depth):
     prefix = '\t' * depth
 
     # special print to include prefixes. also can be turned off
-    # print_pre = lambdaCalculus v: print(f'{prefix}{v}')
+    # print_pre = lambda v: print(f'{prefix}{v}')
     print_pre = lambda v: None
     print_pre('--------------------------------------------------')
     print_pre(f"parse_expression({token_list}, {do_app}, {depth})")
@@ -465,7 +474,7 @@ def eval_expr(expr, depth):
     """
     prefix = '\t' * depth
     # special print to include prefixes. also can be turned off
-    # print_pre = lambdaCalculus v: print(f'{prefix}{v}')
+    # print_pre = lambda v: print(f'{prefix}{v}')
     print_pre = lambda v: None
 
 
@@ -662,14 +671,13 @@ def lambda_interpret_file_viz(txt=None, filename=None):
             text = fn.read()
     else:
         text = txt
-        print(text)
     tokens = tokenize(text)
     print(f"TOKENS: {tokens}")
     parsed = parse_statement(tokens, depth=0)
     print(f"PARSED: {parsed[0]}")
 
     # Visualize the parsed tree
-    save_tree_visualization_ascii(parsed[0], f'{filename[:-7]}_parsed_tree.txt')
+    save_tree_visualization_ascii(parsed[0], f'{filename}_parsed_tree.txt')
 
     compiled_tree = compile_tree(parsed[0])
     print(f"REWRITTEN: {compiled_tree[0]}")
@@ -677,31 +685,66 @@ def lambda_interpret_file_viz(txt=None, filename=None):
 
     evaluated = eval_stmt(compiled_tree[0])
 
-    expres = []
     print(f'\nPROGRAM:')
     for x, y in zip(EXPRS, evaluated):
         print(f"{x} --> {y}")
-        expres.append(f"{x} --> {y}\n")
-    return evaluated, expres
+    return EXPRS, evaluated
 
+def format_church_numeral_output(term: str):
+    # Debug helper to see what we're counting
+    def debug_print(term, cleaned, binding_vars):
+        print(f"\nDEBUG for term: {term}")
+        print(f"After cleaning: {cleaned}")
+        print(f"Binding vars: {binding_vars}")
+        print(f"Final chars: {cleaned}")
 
+    # 1. Basic validation: two L's and two periods
+    if term.count('L') != 2 or term.count('.') != 2:
+        return f"{term} :: [Not integer]"
 
+    # 2. Check balanced parentheses
+    paren_count = 0
+    for char in term:
+        if char == '(':
+            paren_count += 1
+        elif char == ')':
+            paren_count -= 1
+        if paren_count < 0:
+            return f"{term} :: [Not integer]"
+    if paren_count != 0:
+        return f"{term} :: [Not integer]"
 
+    # 3. Strip everything except letters
+    cleaned = ''.join(c for c in term if c.isalpha())
 
+    # 4. Remove the L's
+    cleaned = cleaned.replace('L', '')
 
+    # 5. Find the two binding variables
+    parts = term.split('L')[1:]
+    binding_vars = [p[0] for p in parts]
+
+    # DEBUG: Let's see what we have before removing binding vars
+    # debug_print(term, cleaned, binding_vars)
+
+    # 6. Special handling: if the second binding var is 'z',
+    # we need to account for an extra 's' that appears in the pattern
+    second_var = binding_vars[1]
+    needs_adjustment = second_var == 'z'
+
+    # Remove one occurrence of each binding variable
+    for var in binding_vars:
+        cleaned = cleaned.replace(var, '', 1)
+
+    # Count remaining chars (should be all 's')
+    count = len(cleaned)
+    if needs_adjustment:
+        count -= 1
+
+    return f"{term} :: [{count}]"
 
 if __name__ == '__main__':
 
-    lambda_interpret_file_viz(filename='code2.lambda')
+    lambda_interpret_file_viz(filename='code.lambda')
 
-# """
-# At the end, check for variables that are numbers, then choose from list of letters to replace them with if
-# """
-
-
-
-
-# factAux = yComb (Lf.La.Ln.(if (isZero n) a (f (mul a n) (pred n))))
-# factorial = Ln.factAux one n
-# factorialINFINITE = yComb (Lf.Ln.(if (isZero n) (one) (mul n (f (pred n)))))
 
