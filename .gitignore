@@ -7,3 +7,10 @@ iv_app/static/images/spy_vix_stuff/yearly_charts/*.png
 iv_app/session_repl.json
 iv_app/starters.json
 !iv_app/static/images/spy_vix_stuff/yearly_charts
+iv_app/tools/lambdaCalculus/userCode.lambda
+iv_app/tools/lambdaCalculus/userCode_parsed_tree.txt
+iv_app/tools/NeuralNetworks/F_MNIST-NN/fashion-mnist_train.csv
+iv_app/tools/NeuralNetworks/MNIST-NN/mnist_train.csv
+iv_app/tools/NeuralNetworks/F_MNIST-NN/fashion-mnist_test.csv
+iv_app/tools/NeuralNetworks/MNIST-NN/mnist_test.csv
+

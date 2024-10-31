@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lambda Calculus</title>
+
+
+     <style>
+
+         .diagram-caption {
+            max-width: 75%;
+            text-align: center;
+            align-items: center; /* Align vertically */
+  margin-left: 150px; /* Adjust the value as needed */
+
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text */
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .formula-container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #000000;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #ffffff; /* Text color for formula container */
+        }
+
+        .formula-diagram,
+.formula-diagram1 {
+    background-color: #222222;
+    padding: 10px; /* Adjust padding to make it smaller */
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    max-height: 70px; /* Adjust max-height to make it smaller vertically */
+}
+
+
+        .formula-diagram img,
+.formula-diagram1 img {
+    height: 50px;
+    max-width: 70%;
+
+}
+
+        .logout-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #008000; /* Red button background */
+            color: #ffffff; /* Button text color */
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff0000; /* Dark green hover */
+        }
+
+        /* Add more styles if needed */
+
+            .delta-b {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    text-align: center; /* Center-align the image */
+    margin: 0 10px; /* Adjust the margin to provide spacing between the images */
+}
+
+.image-container img {
+    max-height: 327px;
+}
+
+
+    </style>
+
+
+</head>
+<body>
+    <h1>Understanding the Lambda Calculus</h1>
+
+    <div class="formula-container">
+
+    <div class="formula-description">
+        <p>Lambda Calculus, created by Alonzo Church in the 1930s, is a formal system in mathematical logic that expresses
+            Turing-complete computation with functions. It laid the foundation for many programming languages, and helped prove
+            crucial facts about the nature and limits of computation and formality.</p>
+
+        <p>At its core, Lambda Calculus represents a radical idea: everything is a function. There are no primitive data types,
+           no built-in numbers, no native boolean values - just functions that take other functions as inputs and return new functions
+           as outputs. This elegant simplicity is what makes it so powerful and foundational to computer science.</p>
+
+        <p>The system consists of 3 kinds of terms:</p>
+        <ul>
+            <li><strong>Variable</strong>: A symbolic representation of a Lambda term (ie 'x')</li>
+            <li><strong>Abstraction</strong>: The declaration of a function on a lambda variable, denoted by 'L' (ie 'Lx.x')</li>
+            <li><strong>Application</strong>: The application of one term to another (ie '(x) (y)')</li>
+        </ul>
+    </div>
+
+    <div class="formula-diagram1">
+        <img src="{{ url_for('static', filename='images/lambdaAbstraction.png') }}" alt="Abstraction">
+    </div>
+
+    <p>Believe it or not, this formal system has baked into its rules all of the possible computational power
+        you could ever conjure, allowing you to create any program you could in any of today's most popular coding languages.
+        Indeed, albeit in a different world than we have today, this very website could be written in Lambda Calculus. Certainly,
+        this website would not be possible as it is without Lambda Calculus playing the key role it did in the history of computing.
+        <br><br>
+
+    <h3>How it works</h3>
+    <p> Wait, how is it possible to do "all possible computation" with such simple rules and terms? Where are the numbers?
+        Where are the functions? While it seems alien now, we will explore all the ways to encode concepts like numbers,
+        true/false booleans, conditional loops, and all the other features of a Turing-complete coding language in due course.
+        The key is "encoding"!
+        <br><br>
+        The way the calculus "works" is by creating abstractions (defining functions) and applying them to others,
+    plugging one into the variables of the other and reducing recursively. Just like in modern programming and math, when
+        a term is subbed into a function, all the instances of that function's variable are replaced by the new term
+        and that new body of 'code' or 'math' is what we are left with.
+    </p>
+    <h2>Example</h2>
+    <p>
+        Suppose we have an abstraction term, Lx.x, and we want to (apply it to) plug in another term, y.
+        "(Lx.x) (y)" simply becomes "y" when we do this application. Pretty simple. Importantly, when we perform
+        a substitution, the "Lx", or variable binding, disappears.
+        <br><br>
+        Now suppose we have "(Lx.Ly.x) (z)". When we plug in "z", we get "Ly.z". Seems odd, but we can create nested
+        abstractions of this type to encode more complicated operations. Suppose we had "(Lx.Ly.x) (a) (b)".
+        Lambda Calculus is "left-associative", meaning in a scenario like this, it applies the function starting on the left,
+        so, first to "a". We have "(Lx.Ly.x) (a) (b)" --> "(Ly.a) (b)" --> "a". On our final substitution of "b", clearly
+        "b" became entirely useless. If we instead had "(Lx.Ly.y) (a) (b)", we would reduce to "b".
+        <br>
+        While, again, this may hurt to accept, these two examples actually explain how boolean logic is done in
+        Lambda Calculus. The first abstraction, "Lx.Ly.x" is the encoding of the notion of "True", while "Lx.Ly.y"
+        is the notion of "False". Let us see where we can go from here to appeal more to intuition.
+        <br>
+        The encoding of an "or" function in Lambda Calculus is "Lp.Lq.p tru q"...If we have "a" and "b", "or a b" should
+        be true if one of the two are true; is this what we get? "(Lp.Lq.p tru q) (a) (b)" --> "(Lq.a tru q) (b)" -->
+        "(a tru b)"...at this point we can see that 1) if "a" is true (Lx.Ly.x) then it will reduce to the first of its two
+        arguments, which here is "tru", and if 2) "a" is fls (Lx.Ly.y), it will reduce only to "b", which then will be, trivially,
+        true if "b" is true, and false if not.
+        <br>
+        For "and", we use "Lp.Lq.p q p"...This time "and a b" should reduce to true if and only if "a" and "b" are both true.
+        Examining "(Lp.Lq.p q p) (a) (b)" --> "(Lq.a q a) (b)" --> "a b a"...and again from here we can see that if "a" is true,
+        this will first reduce to "b", which will either be true or false, and if "a" is false, it will reduce to "a", which is false!
+        <br>
+        With "or" and "and", we naturally ask then about the boolean "not" operator, which is encoded as "Lp.p fls tru", which
+        clearly passes the burden of truth right to the "p" that we pass in, which, if true, will reduce to the first term, false,
+        and if false will reduce to true! While at first these assignments of "tru" and "fls" seemed arbitrary and illogical, they
+        actually lend themselves quite well to boolean algebra. After all, what is truth or falsehood if not an arbitrary line?
+        <br><br>
+
+    <h3>What about numbers? </h3>
+    <p>Okay, you are thinking, we have seen what booleans are like in Lambda Calculus, but what about numbers?
+        As with booleans, we encode numbers in a foreign-looking, yet very effective way. Named after Lambda Calculus's creator, Alonzo
+        Church, we use "Church Numerals" to represent integers. Just like in other formal systems of logic that encode Natural Numbers,
+        who use something like "ssss0" or "0''''" to represent "4", in Lambda Calculus, this number is encoded as "(Ls.Lz.s(s(s(s(z)))))".
+        To unpack this, let's start at "zero" and go from there.  <br><br>
+        Characteristic of computational systems, we can recursively define Natural Numbers and arithmetic with successorship. Starting
+        with zero, which is encoded as "Ls.Lz.z" (interestingly the same as "fls"), we need only to define a "successor" function that
+        will take any Church Numeral and reduce to its successor. Zero would become "Ls.Lz.s z" ideally, which would then become "Ls.Lz.s(s(z))".
+        We are simply adding an "s" to whatever numeral we get, just like we add "1" to any number to get the next number. After all, numbers are just arbitrary representations of quantity.
+        <br>The conventional successor function, "scc", for Church Numerals is defined as "Ln.Ls.Lz.s (n s z)".
+        Let us see an example: "(scc) (zero)" --> "(Ln.Ls.Lz.s (n s z)) (zero)" --> "(Ls.Lz.s (zero s z))" -->
+        "(Ls.Lz.s ((Ls.Lz.z) s z))" --> "(Ls.Lz.s ((Lz.z) z))" --> "Ls.Lz.s(z)" !!!
+
+        <br>
+        From here, we can define any natural integer by repeatedly applying the "scc" function. But we can do better.
+        What about addition? Isn't addition just repeated successorship? When I add "2" and "3" aren't I just applying "scc" to
+        "3" 2 times or "scc" to "2" 3 times?
+        <br>
+        Thus, "add" is defined commonly in Lambda Calculus as "Lm.Ln.m scc n". It takes two arguments (it will only work if they are Church Numerals!)
+        and returns one Church numeral that combines their values.
+
+        Then "mul" is "Lm.Ln.m (add n) zero", and "pow" is "Lx.Ly.y x".
+
+    <h3>The Power of Recursion</h3>
+    <p>Now we arrive at perhaps the most powerful feature of Lambda Calculus: recursion. How do we make a function call itself
+       when everything is just functions? The answer lies in what's known as the Y combinator, one of the most elegant constructs
+       in computer science.
+       <br><br>
+       The Y combinator, written as "Y = Lf.(Lx.f(x x))(Lx.f(x x))", allows us to create recursive functions without explicitly
+       naming them. This might look like nonsense at first, but it's actually a stroke of genius. When applied to a function,
+       it creates an infinite sequence of expansions that mimics recursion.
+       <br><br>
+       For example, to create a factorial function, we first write a function that takes both the factorial function itself
+       and the number as arguments: "Lfact.Ln.if (isZero n) 1 (mul n (fact (pred n)))". The Y combinator then "ties the knot",
+       allowing this function to call itself indefinitely.
+       <br><br>
+       This ability to encode recursion completes our toolkit. With booleans, numbers, and recursion, we can now write any
+       program we could write in a modern programming language - albeit in a much more fundamental way. Lists? They're just
+       functions that hold onto values. Objects? They're functions that return different values based on what you ask for.
+       Everything reduces to functions applying other functions.
+
+    <h3>Beyond the Basics</h3>
+    <p>With these building blocks - pure functions, Church numerals, boolean logic, and recursion - we can construct increasingly
+       complex programs. We can implement sorting algorithms, tree structures, and even simulate state and side effects (through
+       clever use of continuation-passing style).
+       <br><br>
+       The beauty of Lambda Calculus isn't just its theoretical completeness - it's how it reveals the pure essence of computation.
+       Every programming language you've ever used, every app you've ever written, can be reduced to this simple calculus of
+       functions applying to other functions. It's not just a historical curiosity; it's a window into the very nature of
+       computation itself.
+       <br><br>
+       In the next section, we'll start playing with these concepts in our Lambda Calculus environment, where you can see
+       these reductions happening step by step and build your own Lambda terms from scratch.</p>
+</div>
+
+
+    <p>See Lambda Caclulus in Action!</p>
+     <form action="/runLambda" method="GET">
+        <input type="submit" class="logout-btn" value="Run Lambda Code">
+    </form>
+
+    <form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+    </form>
+
+
+
+</body>
+</html>

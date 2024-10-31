@@ -1,0 +1,547 @@
+└── BlockStmt
+    ├── AssignmentStmt: zero = (Ls.(Lz.z))
+    │   └── Abstraction: Ls. (Lz.z)
+    │       └── Abstraction: Lz. z
+    │           └── Variable: z
+    └── BlockStmt
+        ├── AssignmentStmt: scc = (Ln.(Ls.(Lz.(s) (((n) (s)) (z)))))
+        │   └── Abstraction: Ln. (Ls.(Lz.(s) (((n) (s)) (z))))
+        │       └── Abstraction: Ls. (Lz.(s) (((n) (s)) (z)))
+        │           └── Abstraction: Lz. (s) (((n) (s)) (z))
+        │               └── Application: (s) (((n) (s)) (z))
+        │                   ├── Variable: s
+        │                   └── Application: ((n) (s)) (z)
+        │                       ├── Application: (n) (s)
+        │                       │   ├── Variable: n
+        │                       │   └── Variable: s
+        │                       └── Variable: z
+        └── BlockStmt
+            ├── AssignmentStmt: pred = (Ln.(Lf.(Lx.(((n) ((Lg.(Lh.(h) ((g) (f)))))) ((Lu.x))) ((Lu.u)))))
+            │   └── Abstraction: Ln. (Lf.(Lx.(((n) ((Lg.(Lh.(h) ((g) (f)))))) ((Lu.x))) ((Lu.u))))
+            │       └── Abstraction: Lf. (Lx.(((n) ((Lg.(Lh.(h) ((g) (f)))))) ((Lu.x))) ((Lu.u)))
+            │           └── Abstraction: Lx. (((n) ((Lg.(Lh.(h) ((g) (f)))))) ((Lu.x))) ((Lu.u))
+            │               └── Application: (((n) ((Lg.(Lh.(h) ((g) (f)))))) ((Lu.x))) ((Lu.u))
+            │                   ├── Application: ((n) ((Lg.(Lh.(h) ((g) (f)))))) ((Lu.x))
+            │                   │   ├── Application: (n) ((Lg.(Lh.(h) ((g) (f)))))
+            │                   │   │   ├── Variable: n
+            │                   │   │   └── Abstraction: Lg. (Lh.(h) ((g) (f)))
+            │                   │   │       └── Abstraction: Lh. (h) ((g) (f))
+            │                   │   │           └── Application: (h) ((g) (f))
+            │                   │   │               ├── Variable: h
+            │                   │   │               └── Application: (g) (f)
+            │                   │   │                   ├── Variable: g
+            │                   │   │                   └── Variable: f
+            │                   │   └── Abstraction: Lu. x
+            │                   │       └── Variable: x
+            │                   └── Abstraction: Lu. u
+            │                       └── Variable: u
+            └── BlockStmt
+                ├── AssignmentStmt: sub = (Lm.(Ln.((n) (pred)) (m)))
+                │   └── Abstraction: Lm. (Ln.((n) (pred)) (m))
+                │       └── Abstraction: Ln. ((n) (pred)) (m)
+                │           └── Application: ((n) (pred)) (m)
+                │               ├── Application: (n) (pred)
+                │               │   ├── Variable: n
+                │               │   └── Variable: pred
+                │               └── Variable: m
+                └── BlockStmt
+                    ├── AssignmentStmt: one = (scc) (zero)
+                    │   └── Application: (scc) (zero)
+                    │       ├── Variable: scc
+                    │       └── Variable: zero
+                    └── BlockStmt
+                        ├── AssignmentStmt: two = (scc) (one)
+                        │   └── Application: (scc) (one)
+                        │       ├── Variable: scc
+                        │       └── Variable: one
+                        └── BlockStmt
+                            ├── AssignmentStmt: three = (scc) (two)
+                            │   └── Application: (scc) (two)
+                            │       ├── Variable: scc
+                            │       └── Variable: two
+                            └── BlockStmt
+                                ├── AssignmentStmt: four = (scc) (three)
+                                │   └── Application: (scc) (three)
+                                │       ├── Variable: scc
+                                │       └── Variable: three
+                                └── BlockStmt
+                                    ├── AssignmentStmt: add = (Lm.(Ln.((m) (scc)) (n)))
+                                    │   └── Abstraction: Lm. (Ln.((m) (scc)) (n))
+                                    │       └── Abstraction: Ln. ((m) (scc)) (n)
+                                    │           └── Application: ((m) (scc)) (n)
+                                    │               ├── Application: (m) (scc)
+                                    │               │   ├── Variable: m
+                                    │               │   └── Variable: scc
+                                    │               └── Variable: n
+                                    └── BlockStmt
+                                        ├── AssignmentStmt: pow = (Lx.(Ly.(y) (x)))
+                                        │   └── Abstraction: Lx. (Ly.(y) (x))
+                                        │       └── Abstraction: Ly. (y) (x)
+                                        │           └── Application: (y) (x)
+                                        │               ├── Variable: y
+                                        │               └── Variable: x
+                                        └── BlockStmt
+                                            ├── AssignmentStmt: mul = (Lm.(Ln.((m) ((add) (n))) (zero)))
+                                            │   └── Abstraction: Lm. (Ln.((m) ((add) (n))) (zero))
+                                            │       └── Abstraction: Ln. ((m) ((add) (n))) (zero)
+                                            │           └── Application: ((m) ((add) (n))) (zero)
+                                            │               ├── Application: (m) ((add) (n))
+                                            │               │   ├── Variable: m
+                                            │               │   └── Application: (add) (n)
+                                            │               │       ├── Variable: add
+                                            │               │       └── Variable: n
+                                            │               └── Variable: zero
+                                            └── BlockStmt
+                                                ├── AssignmentStmt: tru = (Lx.(Ly.x))
+                                                │   └── Abstraction: Lx. (Ly.x)
+                                                │       └── Abstraction: Ly. x
+                                                │           └── Variable: x
+                                                └── BlockStmt
+                                                    ├── AssignmentStmt: fls = (Lx.(Ly.y))
+                                                    │   └── Abstraction: Lx. (Ly.y)
+                                                    │       └── Abstraction: Ly. y
+                                                    │           └── Variable: y
+                                                    └── BlockStmt
+                                                        ├── AssignmentStmt: or = (Lp.(Lq.((p) (tru)) (q)))
+                                                        │   └── Abstraction: Lp. (Lq.((p) (tru)) (q))
+                                                        │       └── Abstraction: Lq. ((p) (tru)) (q)
+                                                        │           └── Application: ((p) (tru)) (q)
+                                                        │               ├── Application: (p) (tru)
+                                                        │               │   ├── Variable: p
+                                                        │               │   └── Variable: tru
+                                                        │               └── Variable: q
+                                                        └── BlockStmt
+                                                            ├── AssignmentStmt: and = (Lp.(Lq.((p) (q)) (p)))
+                                                            │   └── Abstraction: Lp. (Lq.((p) (q)) (p))
+                                                            │       └── Abstraction: Lq. ((p) (q)) (p)
+                                                            │           └── Application: ((p) (q)) (p)
+                                                            │               ├── Application: (p) (q)
+                                                            │               │   ├── Variable: p
+                                                            │               │   └── Variable: q
+                                                            │               └── Variable: p
+                                                            └── BlockStmt
+                                                                ├── AssignmentStmt: not = (Lp.((p) (fls)) (tru))
+                                                                │   └── Abstraction: Lp. ((p) (fls)) (tru)
+                                                                │       └── Application: ((p) (fls)) (tru)
+                                                                │           ├── Application: (p) (fls)
+                                                                │           │   ├── Variable: p
+                                                                │           │   └── Variable: fls
+                                                                │           └── Variable: tru
+                                                                └── BlockStmt
+                                                                    ├── AssignmentStmt: if = (Lp.(La.(Lb.((p) (a)) (b))))
+                                                                    │   └── Abstraction: Lp. (La.(Lb.((p) (a)) (b)))
+                                                                    │       └── Abstraction: La. (Lb.((p) (a)) (b))
+                                                                    │           └── Abstraction: Lb. ((p) (a)) (b)
+                                                                    │               └── Application: ((p) (a)) (b)
+                                                                    │                   ├── Application: (p) (a)
+                                                                    │                   │   ├── Variable: p
+                                                                    │                   │   └── Variable: a
+                                                                    │                   └── Variable: b
+                                                                    └── BlockStmt
+                                                                        ├── AssignmentStmt: pair = (La.(Lb.(Lf.((f) (a)) (b))))
+                                                                        │   └── Abstraction: La. (Lb.(Lf.((f) (a)) (b)))
+                                                                        │       └── Abstraction: Lb. (Lf.((f) (a)) (b))
+                                                                        │           └── Abstraction: Lf. ((f) (a)) (b)
+                                                                        │               └── Application: ((f) (a)) (b)
+                                                                        │                   ├── Application: (f) (a)
+                                                                        │                   │   ├── Variable: f
+                                                                        │                   │   └── Variable: a
+                                                                        │                   └── Variable: b
+                                                                        └── BlockStmt
+                                                                            ├── AssignmentStmt: first = (Lp.(p) ((La.(Lb.a))))
+                                                                            │   └── Abstraction: Lp. (p) ((La.(Lb.a)))
+                                                                            │       └── Application: (p) ((La.(Lb.a)))
+                                                                            │           ├── Variable: p
+                                                                            │           └── Abstraction: La. (Lb.a)
+                                                                            │               └── Abstraction: Lb. a
+                                                                            │                   └── Variable: a
+                                                                            └── BlockStmt
+                                                                                ├── AssignmentStmt: second = (Lp.(p) ((La.(Lb.b))))
+                                                                                │   └── Abstraction: Lp. (p) ((La.(Lb.b)))
+                                                                                │       └── Application: (p) ((La.(Lb.b)))
+                                                                                │           ├── Variable: p
+                                                                                │           └── Abstraction: La. (Lb.b)
+                                                                                │               └── Abstraction: Lb. b
+                                                                                │                   └── Variable: b
+                                                                                └── BlockStmt
+                                                                                    ├── AssignmentStmt: cons = (La.(Lb.(Lf.(Lx.((f) (a)) (((b) (f)) (x))))))
+                                                                                    │   └── Abstraction: La. (Lb.(Lf.(Lx.((f) (a)) (((b) (f)) (x)))))
+                                                                                    │       └── Abstraction: Lb. (Lf.(Lx.((f) (a)) (((b) (f)) (x))))
+                                                                                    │           └── Abstraction: Lf. (Lx.((f) (a)) (((b) (f)) (x)))
+                                                                                    │               └── Abstraction: Lx. ((f) (a)) (((b) (f)) (x))
+                                                                                    │                   └── Application: ((f) (a)) (((b) (f)) (x))
+                                                                                    │                       ├── Application: (f) (a)
+                                                                                    │                       │   ├── Variable: f
+                                                                                    │                       │   └── Variable: a
+                                                                                    │                       └── Application: ((b) (f)) (x)
+                                                                                    │                           ├── Application: (b) (f)
+                                                                                    │                           │   ├── Variable: b
+                                                                                    │                           │   └── Variable: f
+                                                                                    │                           └── Variable: x
+                                                                                    └── BlockStmt
+                                                                                        ├── AssignmentStmt: nil = (Lf.(Lx.x))
+                                                                                        │   └── Abstraction: Lf. (Lx.x)
+                                                                                        │       └── Abstraction: Lx. x
+                                                                                        │           └── Variable: x
+                                                                                        └── BlockStmt
+                                                                                            ├── AssignmentStmt: isnil = (Ll.((l) ((La.(Lb.false)))) (true))
+                                                                                            │   └── Abstraction: Ll. ((l) ((La.(Lb.false)))) (true)
+                                                                                            │       └── Application: ((l) ((La.(Lb.false)))) (true)
+                                                                                            │           ├── Application: (l) ((La.(Lb.false)))
+                                                                                            │           │   ├── Variable: l
+                                                                                            │           │   └── Abstraction: La. (Lb.false)
+                                                                                            │           │       └── Abstraction: Lb. false
+                                                                                            │           │           └── Variable: false
+                                                                                            │           └── Variable: true
+                                                                                            └── BlockStmt
+                                                                                                ├── AssignmentStmt: head = (Ll.((l) ((La.(Lb.a)))) (nil))
+                                                                                                │   └── Abstraction: Ll. ((l) ((La.(Lb.a)))) (nil)
+                                                                                                │       └── Application: ((l) ((La.(Lb.a)))) (nil)
+                                                                                                │           ├── Application: (l) ((La.(Lb.a)))
+                                                                                                │           │   ├── Variable: l
+                                                                                                │           │   └── Abstraction: La. (Lb.a)
+                                                                                                │           │       └── Abstraction: Lb. a
+                                                                                                │           │           └── Variable: a
+                                                                                                │           └── Variable: nil
+                                                                                                └── BlockStmt
+                                                                                                    ├── AssignmentStmt: tail = (Ll.((l) ((La.(Lt.t)))) (nil))
+                                                                                                    │   └── Abstraction: Ll. ((l) ((La.(Lt.t)))) (nil)
+                                                                                                    │       └── Application: ((l) ((La.(Lt.t)))) (nil)
+                                                                                                    │           ├── Application: (l) ((La.(Lt.t)))
+                                                                                                    │           │   ├── Variable: l
+                                                                                                    │           │   └── Abstraction: La. (Lt.t)
+                                                                                                    │           │       └── Abstraction: Lt. t
+                                                                                                    │           │           └── Variable: t
+                                                                                                    │           └── Variable: nil
+                                                                                                    └── BlockStmt
+                                                                                                        ├── AssignmentStmt: left = (Ll.(Lr.(Ls.l)))
+                                                                                                        │   └── Abstraction: Ll. (Lr.(Ls.l))
+                                                                                                        │       └── Abstraction: Lr. (Ls.l)
+                                                                                                        │           └── Abstraction: Ls. l
+                                                                                                        │               └── Variable: l
+                                                                                                        └── BlockStmt
+                                                                                                            ├── AssignmentStmt: right = (Ll.(Lr.(Ls.r)))
+                                                                                                            │   └── Abstraction: Ll. (Lr.(Ls.r))
+                                                                                                            │       └── Abstraction: Lr. (Ls.r)
+                                                                                                            │           └── Abstraction: Ls. r
+                                                                                                            │               └── Variable: r
+                                                                                                            └── BlockStmt
+                                                                                                                ├── AssignmentStmt: symbol = (Ll.(Lr.(Ls.s)))
+                                                                                                                │   └── Abstraction: Ll. (Lr.(Ls.s))
+                                                                                                                │       └── Abstraction: Lr. (Ls.s)
+                                                                                                                │           └── Abstraction: Ls. s
+                                                                                                                │               └── Variable: s
+                                                                                                                └── BlockStmt
+                                                                                                                    ├── AssignmentStmt: moveRight = (Lt.(((right) (t)) (((cons) ((head) ((left) (t)))) ((right) (t)))) ((tail) ((left) (t))))
+                                                                                                                    │   └── Abstraction: Lt. (((right) (t)) (((cons) ((head) ((left) (t)))) ((right) (t)))) ((tail) ((left) (t)))
+                                                                                                                    │       └── Application: (((right) (t)) (((cons) ((head) ((left) (t)))) ((right) (t)))) ((tail) ((left) (t)))
+                                                                                                                    │           ├── Application: ((right) (t)) (((cons) ((head) ((left) (t)))) ((right) (t)))
+                                                                                                                    │           │   ├── Application: (right) (t)
+                                                                                                                    │           │   │   ├── Variable: right
+                                                                                                                    │           │   │   └── Variable: t
+                                                                                                                    │           │   └── Application: ((cons) ((head) ((left) (t)))) ((right) (t))
+                                                                                                                    │           │       ├── Application: (cons) ((head) ((left) (t)))
+                                                                                                                    │           │       │   ├── Variable: cons
+                                                                                                                    │           │       │   └── Application: (head) ((left) (t))
+                                                                                                                    │           │       │       ├── Variable: head
+                                                                                                                    │           │       │       └── Application: (left) (t)
+                                                                                                                    │           │       │           ├── Variable: left
+                                                                                                                    │           │       │           └── Variable: t
+                                                                                                                    │           │       └── Application: (right) (t)
+                                                                                                                    │           │           ├── Variable: right
+                                                                                                                    │           │           └── Variable: t
+                                                                                                                    │           └── Application: (tail) ((left) (t))
+                                                                                                                    │               ├── Variable: tail
+                                                                                                                    │               └── Application: (left) (t)
+                                                                                                                    │                   ├── Variable: left
+                                                                                                                    │                   └── Variable: t
+                                                                                                                    └── BlockStmt
+                                                                                                                        ├── AssignmentStmt: moveLeft = (Lt.(((left) (((cons) ((head) ((right) (t)))) ((left) (t)))) ((tail) ((right) (t)))) ((symbol) (t)))
+                                                                                                                        │   └── Abstraction: Lt. (((left) (((cons) ((head) ((right) (t)))) ((left) (t)))) ((tail) ((right) (t)))) ((symbol) (t))
+                                                                                                                        │       └── Application: (((left) (((cons) ((head) ((right) (t)))) ((left) (t)))) ((tail) ((right) (t)))) ((symbol) (t))
+                                                                                                                        │           ├── Application: ((left) (((cons) ((head) ((right) (t)))) ((left) (t)))) ((tail) ((right) (t)))
+                                                                                                                        │           │   ├── Application: (left) (((cons) ((head) ((right) (t)))) ((left) (t)))
+                                                                                                                        │           │   │   ├── Variable: left
+                                                                                                                        │           │   │   └── Application: ((cons) ((head) ((right) (t)))) ((left) (t))
+                                                                                                                        │           │   │       ├── Application: (cons) ((head) ((right) (t)))
+                                                                                                                        │           │   │       │   ├── Variable: cons
+                                                                                                                        │           │   │       │   └── Application: (head) ((right) (t))
+                                                                                                                        │           │   │       │       ├── Variable: head
+                                                                                                                        │           │   │       │       └── Application: (right) (t)
+                                                                                                                        │           │   │       │           ├── Variable: right
+                                                                                                                        │           │   │       │           └── Variable: t
+                                                                                                                        │           │   │       └── Application: (left) (t)
+                                                                                                                        │           │   │           ├── Variable: left
+                                                                                                                        │           │   │           └── Variable: t
+                                                                                                                        │           │   └── Application: (tail) ((right) (t))
+                                                                                                                        │           │       ├── Variable: tail
+                                                                                                                        │           │       └── Application: (right) (t)
+                                                                                                                        │           │           ├── Variable: right
+                                                                                                                        │           │           └── Variable: t
+                                                                                                                        │           └── Application: (symbol) (t)
+                                                                                                                        │               ├── Variable: symbol
+                                                                                                                        │               └── Variable: t
+                                                                                                                        └── BlockStmt
+                                                                                                                            ├── AssignmentStmt: read = (Lt.(head) ((right) (t)))
+                                                                                                                            │   └── Abstraction: Lt. (head) ((right) (t))
+                                                                                                                            │       └── Application: (head) ((right) (t))
+                                                                                                                            │           ├── Variable: head
+                                                                                                                            │           └── Application: (right) (t)
+                                                                                                                            │               ├── Variable: right
+                                                                                                                            │               └── Variable: t
+                                                                                                                            └── BlockStmt
+                                                                                                                                ├── AssignmentStmt: write = (Lt.(Ln.(((left) (t)) (((cons) (n)) ((tail) ((right) (t))))) ((symbol) (t))))
+                                                                                                                                │   └── Abstraction: Lt. (Ln.(((left) (t)) (((cons) (n)) ((tail) ((right) (t))))) ((symbol) (t)))
+                                                                                                                                │       └── Abstraction: Ln. (((left) (t)) (((cons) (n)) ((tail) ((right) (t))))) ((symbol) (t))
+                                                                                                                                │           └── Application: (((left) (t)) (((cons) (n)) ((tail) ((right) (t))))) ((symbol) (t))
+                                                                                                                                │               ├── Application: ((left) (t)) (((cons) (n)) ((tail) ((right) (t))))
+                                                                                                                                │               │   ├── Application: (left) (t)
+                                                                                                                                │               │   │   ├── Variable: left
+                                                                                                                                │               │   │   └── Variable: t
+                                                                                                                                │               │   └── Application: ((cons) (n)) ((tail) ((right) (t)))
+                                                                                                                                │               │       ├── Application: (cons) (n)
+                                                                                                                                │               │       │   ├── Variable: cons
+                                                                                                                                │               │       │   └── Variable: n
+                                                                                                                                │               │       └── Application: (tail) ((right) (t))
+                                                                                                                                │               │           ├── Variable: tail
+                                                                                                                                │               │           └── Application: (right) (t)
+                                                                                                                                │               │               ├── Variable: right
+                                                                                                                                │               │               └── Variable: t
+                                                                                                                                │               └── Application: (symbol) (t)
+                                                                                                                                │                   ├── Variable: symbol
+                                                                                                                                │                   └── Variable: t
+                                                                                                                                └── BlockStmt
+                                                                                                                                    ├── AssignmentStmt: yComb = (Lf.((Lx.(f) ((x) (x)))) ((Lx.(f) ((x) (x)))))
+                                                                                                                                    │   └── Abstraction: Lf. ((Lx.(f) ((x) (x)))) ((Lx.(f) ((x) (x))))
+                                                                                                                                    │       └── Application: ((Lx.(f) ((x) (x)))) ((Lx.(f) ((x) (x))))
+                                                                                                                                    │           ├── Abstraction: Lx. (f) ((x) (x))
+                                                                                                                                    │           │   └── Application: (f) ((x) (x))
+                                                                                                                                    │           │       ├── Variable: f
+                                                                                                                                    │           │       └── Application: (x) (x)
+                                                                                                                                    │           │           ├── Variable: x
+                                                                                                                                    │           │           └── Variable: x
+                                                                                                                                    │           └── Abstraction: Lx. (f) ((x) (x))
+                                                                                                                                    │               └── Application: (f) ((x) (x))
+                                                                                                                                    │                   ├── Variable: f
+                                                                                                                                    │                   └── Application: (x) (x)
+                                                                                                                                    │                       ├── Variable: x
+                                                                                                                                    │                       └── Variable: x
+                                                                                                                                    └── BlockStmt
+                                                                                                                                        ├── AssignmentStmt: isZero = (Ln.((n) ((Lx.fls))) (tru))
+                                                                                                                                        │   └── Abstraction: Ln. ((n) ((Lx.fls))) (tru)
+                                                                                                                                        │       └── Application: ((n) ((Lx.fls))) (tru)
+                                                                                                                                        │           ├── Application: (n) ((Lx.fls))
+                                                                                                                                        │           │   ├── Variable: n
+                                                                                                                                        │           │   └── Abstraction: Lx. fls
+                                                                                                                                        │           │       └── Variable: fls
+                                                                                                                                        │           └── Variable: tru
+                                                                                                                                        └── BlockStmt
+                                                                                                                                            ├── AssignmentStmt: factAux = (yComb) ((Lf.(La.(Ln.(((if) ((isZero) (n))) (a)) (((f) (((mul) (a)) (n))) ((pred) (n)))))))
+                                                                                                                                            │   └── Application: (yComb) ((Lf.(La.(Ln.(((if) ((isZero) (n))) (a)) (((f) (((mul) (a)) (n))) ((pred) (n)))))))
+                                                                                                                                            │       ├── Variable: yComb
+                                                                                                                                            │       └── Abstraction: Lf. (La.(Ln.(((if) ((isZero) (n))) (a)) (((f) (((mul) (a)) (n))) ((pred) (n)))))
+                                                                                                                                            │           └── Abstraction: La. (Ln.(((if) ((isZero) (n))) (a)) (((f) (((mul) (a)) (n))) ((pred) (n))))
+                                                                                                                                            │               └── Abstraction: Ln. (((if) ((isZero) (n))) (a)) (((f) (((mul) (a)) (n))) ((pred) (n)))
+                                                                                                                                            │                   └── Application: (((if) ((isZero) (n))) (a)) (((f) (((mul) (a)) (n))) ((pred) (n)))
+                                                                                                                                            │                       ├── Application: ((if) ((isZero) (n))) (a)
+                                                                                                                                            │                       │   ├── Application: (if) ((isZero) (n))
+                                                                                                                                            │                       │   │   ├── Variable: if
+                                                                                                                                            │                       │   │   └── Application: (isZero) (n)
+                                                                                                                                            │                       │   │       ├── Variable: isZero
+                                                                                                                                            │                       │   │       └── Variable: n
+                                                                                                                                            │                       │   └── Variable: a
+                                                                                                                                            │                       └── Application: ((f) (((mul) (a)) (n))) ((pred) (n))
+                                                                                                                                            │                           ├── Application: (f) (((mul) (a)) (n))
+                                                                                                                                            │                           │   ├── Variable: f
+                                                                                                                                            │                           │   └── Application: ((mul) (a)) (n)
+                                                                                                                                            │                           │       ├── Application: (mul) (a)
+                                                                                                                                            │                           │       │   ├── Variable: mul
+                                                                                                                                            │                           │       │   └── Variable: a
+                                                                                                                                            │                           │       └── Variable: n
+                                                                                                                                            │                           └── Application: (pred) (n)
+                                                                                                                                            │                               ├── Variable: pred
+                                                                                                                                            │                               └── Variable: n
+                                                                                                                                            └── BlockStmt
+                                                                                                                                                ├── AssignmentStmt: factorial = (Ln.((factAux) (one)) (n))
+                                                                                                                                                │   └── Abstraction: Ln. ((factAux) (one)) (n)
+                                                                                                                                                │       └── Application: ((factAux) (one)) (n)
+                                                                                                                                                │           ├── Application: (factAux) (one)
+                                                                                                                                                │           │   ├── Variable: factAux
+                                                                                                                                                │           │   └── Variable: one
+                                                                                                                                                │           └── Variable: n
+                                                                                                                                                └── BlockStmt
+                                                                                                                                                    ├── AssignmentStmt: factorialINFINITE = (yComb) ((Lf.(Ln.(((if) ((isZero) (n))) (one)) (((mul) (n)) ((f) ((pred) (n)))))))
+                                                                                                                                                    │   └── Application: (yComb) ((Lf.(Ln.(((if) ((isZero) (n))) (one)) (((mul) (n)) ((f) ((pred) (n)))))))
+                                                                                                                                                    │       ├── Variable: yComb
+                                                                                                                                                    │       └── Abstraction: Lf. (Ln.(((if) ((isZero) (n))) (one)) (((mul) (n)) ((f) ((pred) (n)))))
+                                                                                                                                                    │           └── Abstraction: Ln. (((if) ((isZero) (n))) (one)) (((mul) (n)) ((f) ((pred) (n))))
+                                                                                                                                                    │               └── Application: (((if) ((isZero) (n))) (one)) (((mul) (n)) ((f) ((pred) (n))))
+                                                                                                                                                    │                   ├── Application: ((if) ((isZero) (n))) (one)
+                                                                                                                                                    │                   │   ├── Application: (if) ((isZero) (n))
+                                                                                                                                                    │                   │   │   ├── Variable: if
+                                                                                                                                                    │                   │   │   └── Application: (isZero) (n)
+                                                                                                                                                    │                   │   │       ├── Variable: isZero
+                                                                                                                                                    │                   │   │       └── Variable: n
+                                                                                                                                                    │                   │   └── Variable: one
+                                                                                                                                                    │                   └── Application: ((mul) (n)) ((f) ((pred) (n)))
+                                                                                                                                                    │                       ├── Application: (mul) (n)
+                                                                                                                                                    │                       │   ├── Variable: mul
+                                                                                                                                                    │                       │   └── Variable: n
+                                                                                                                                                    │                       └── Application: (f) ((pred) (n))
+                                                                                                                                                    │                           ├── Variable: f
+                                                                                                                                                    │                           └── Application: (pred) (n)
+                                                                                                                                                    │                               ├── Variable: pred
+                                                                                                                                                    │                               └── Variable: n
+                                                                                                                                                    └── BlockStmt
+                                                                                                                                                        ├── AssignmentStmt: isEven = (Ln.(isZero) (((n) (not)) (tru)))
+                                                                                                                                                        │   └── Abstraction: Ln. (isZero) (((n) (not)) (tru))
+                                                                                                                                                        │       └── Application: (isZero) (((n) (not)) (tru))
+                                                                                                                                                        │           ├── Variable: isZero
+                                                                                                                                                        │           └── Application: ((n) (not)) (tru)
+                                                                                                                                                        │               ├── Application: (n) (not)
+                                                                                                                                                        │               │   ├── Variable: n
+                                                                                                                                                        │               │   └── Variable: not
+                                                                                                                                                        │               └── Variable: tru
+                                                                                                                                                        └── BlockStmt
+                                                                                                                                                            ├── AssignmentStmt: incUntilOdd = (yComb) ((Lf.(Ln.(((isEven) (n)) ((f) ((scc) (n)))) (n))))
+                                                                                                                                                            │   └── Application: (yComb) ((Lf.(Ln.(((isEven) (n)) ((f) ((scc) (n)))) (n))))
+                                                                                                                                                            │       ├── Variable: yComb
+                                                                                                                                                            │       └── Abstraction: Lf. (Ln.(((isEven) (n)) ((f) ((scc) (n)))) (n))
+                                                                                                                                                            │           └── Abstraction: Ln. (((isEven) (n)) ((f) ((scc) (n)))) (n)
+                                                                                                                                                            │               └── Application: (((isEven) (n)) ((f) ((scc) (n)))) (n)
+                                                                                                                                                            │                   ├── Application: ((isEven) (n)) ((f) ((scc) (n)))
+                                                                                                                                                            │                   │   ├── Application: (isEven) (n)
+                                                                                                                                                            │                   │   │   ├── Variable: isEven
+                                                                                                                                                            │                   │   │   └── Variable: n
+                                                                                                                                                            │                   │   └── Application: (f) ((scc) (n))
+                                                                                                                                                            │                   │       ├── Variable: f
+                                                                                                                                                            │                   │       └── Application: (scc) (n)
+                                                                                                                                                            │                   │           ├── Variable: scc
+                                                                                                                                                            │                   │           └── Variable: n
+                                                                                                                                                            │                   └── Variable: n
+                                                                                                                                                            └── BlockStmt
+                                                                                                                                                                ├── AssignmentStmt: leq = (Lm.(Ln.(isZero) (((sub) (m)) (n))))
+                                                                                                                                                                │   └── Abstraction: Lm. (Ln.(isZero) (((sub) (m)) (n)))
+                                                                                                                                                                │       └── Abstraction: Ln. (isZero) (((sub) (m)) (n))
+                                                                                                                                                                │           └── Application: (isZero) (((sub) (m)) (n))
+                                                                                                                                                                │               ├── Variable: isZero
+                                                                                                                                                                │               └── Application: ((sub) (m)) (n)
+                                                                                                                                                                │                   ├── Application: (sub) (m)
+                                                                                                                                                                │                   │   ├── Variable: sub
+                                                                                                                                                                │                   │   └── Variable: m
+                                                                                                                                                                │                   └── Variable: n
+                                                                                                                                                                └── BlockStmt
+                                                                                                                                                                    ├── AssignmentStmt: eq = (Lm.(Ln.((and) (((leq) (m)) (n))) (((leq) (n)) (m))))
+                                                                                                                                                                    │   └── Abstraction: Lm. (Ln.((and) (((leq) (m)) (n))) (((leq) (n)) (m)))
+                                                                                                                                                                    │       └── Abstraction: Ln. ((and) (((leq) (m)) (n))) (((leq) (n)) (m))
+                                                                                                                                                                    │           └── Application: ((and) (((leq) (m)) (n))) (((leq) (n)) (m))
+                                                                                                                                                                    │               ├── Application: (and) (((leq) (m)) (n))
+                                                                                                                                                                    │               │   ├── Variable: and
+                                                                                                                                                                    │               │   └── Application: ((leq) (m)) (n)
+                                                                                                                                                                    │               │       ├── Application: (leq) (m)
+                                                                                                                                                                    │               │       │   ├── Variable: leq
+                                                                                                                                                                    │               │       │   └── Variable: m
+                                                                                                                                                                    │               │       └── Variable: n
+                                                                                                                                                                    │               └── Application: ((leq) (n)) (m)
+                                                                                                                                                                    │                   ├── Application: (leq) (n)
+                                                                                                                                                                    │                   │   ├── Variable: leq
+                                                                                                                                                                    │                   │   └── Variable: n
+                                                                                                                                                                    │                   └── Variable: m
+                                                                                                                                                                    └── BlockStmt
+                                                                                                                                                                        ├── AssignmentStmt: fact = (Ln.(((n) ((Lf.(Lx.((mul) (x)) ((f) ((pred) (x))))))) ((Lx.(scc) (zero)))) (one))
+                                                                                                                                                                        │   └── Abstraction: Ln. (((n) ((Lf.(Lx.((mul) (x)) ((f) ((pred) (x))))))) ((Lx.(scc) (zero)))) (one)
+                                                                                                                                                                        │       └── Application: (((n) ((Lf.(Lx.((mul) (x)) ((f) ((pred) (x))))))) ((Lx.(scc) (zero)))) (one)
+                                                                                                                                                                        │           ├── Application: ((n) ((Lf.(Lx.((mul) (x)) ((f) ((pred) (x))))))) ((Lx.(scc) (zero)))
+                                                                                                                                                                        │           │   ├── Application: (n) ((Lf.(Lx.((mul) (x)) ((f) ((pred) (x))))))
+                                                                                                                                                                        │           │   │   ├── Variable: n
+                                                                                                                                                                        │           │   │   └── Abstraction: Lf. (Lx.((mul) (x)) ((f) ((pred) (x))))
+                                                                                                                                                                        │           │   │       └── Abstraction: Lx. ((mul) (x)) ((f) ((pred) (x)))
+                                                                                                                                                                        │           │   │           └── Application: ((mul) (x)) ((f) ((pred) (x)))
+                                                                                                                                                                        │           │   │               ├── Application: (mul) (x)
+                                                                                                                                                                        │           │   │               │   ├── Variable: mul
+                                                                                                                                                                        │           │   │               │   └── Variable: x
+                                                                                                                                                                        │           │   │               └── Application: (f) ((pred) (x))
+                                                                                                                                                                        │           │   │                   ├── Variable: f
+                                                                                                                                                                        │           │   │                   └── Application: (pred) (x)
+                                                                                                                                                                        │           │   │                       ├── Variable: pred
+                                                                                                                                                                        │           │   │                       └── Variable: x
+                                                                                                                                                                        │           │   └── Abstraction: Lx. (scc) (zero)
+                                                                                                                                                                        │           │       └── Application: (scc) (zero)
+                                                                                                                                                                        │           │           ├── Variable: scc
+                                                                                                                                                                        │           │           └── Variable: zero
+                                                                                                                                                                        │           └── Variable: one
+                                                                                                                                                                        └── BlockStmt
+                                                                                                                                                                            ├── AssignmentStmt: fib = (Ln.(fst) (((n) ((Lp.((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))))) (((pair) (zero)) (one))))
+                                                                                                                                                                            │   └── Abstraction: Ln. (fst) (((n) ((Lp.((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))))) (((pair) (zero)) (one)))
+                                                                                                                                                                            │       └── Application: (fst) (((n) ((Lp.((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))))) (((pair) (zero)) (one)))
+                                                                                                                                                                            │           ├── Variable: fst
+                                                                                                                                                                            │           └── Application: ((n) ((Lp.((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))))) (((pair) (zero)) (one))
+                                                                                                                                                                            │               ├── Application: (n) ((Lp.((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))))
+                                                                                                                                                                            │               │   ├── Variable: n
+                                                                                                                                                                            │               │   └── Abstraction: Lp. ((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))
+                                                                                                                                                                            │               │       └── Application: ((pair) ((snd) (p))) (((add) ((fst) (p))) ((snd) (p)))
+                                                                                                                                                                            │               │           ├── Application: (pair) ((snd) (p))
+                                                                                                                                                                            │               │           │   ├── Variable: pair
+                                                                                                                                                                            │               │           │   └── Application: (snd) (p)
+                                                                                                                                                                            │               │           │       ├── Variable: snd
+                                                                                                                                                                            │               │           │       └── Variable: p
+                                                                                                                                                                            │               │           └── Application: ((add) ((fst) (p))) ((snd) (p))
+                                                                                                                                                                            │               │               ├── Application: (add) ((fst) (p))
+                                                                                                                                                                            │               │               │   ├── Variable: add
+                                                                                                                                                                            │               │               │   └── Application: (fst) (p)
+                                                                                                                                                                            │               │               │       ├── Variable: fst
+                                                                                                                                                                            │               │               │       └── Variable: p
+                                                                                                                                                                            │               │               └── Application: (snd) (p)
+                                                                                                                                                                            │               │                   ├── Variable: snd
+                                                                                                                                                                            │               │                   └── Variable: p
+                                                                                                                                                                            │               └── Application: ((pair) (zero)) (one)
+                                                                                                                                                                            │                   ├── Application: (pair) (zero)
+                                                                                                                                                                            │                   │   ├── Variable: pair
+                                                                                                                                                                            │                   │   └── Variable: zero
+                                                                                                                                                                            │                   └── Variable: one
+                                                                                                                                                                            └── BlockStmt
+                                                                                                                                                                                ├── AssignmentStmt: yeaThree = ((add) (one)) (two)
+                                                                                                                                                                                │   └── Application: ((add) (one)) (two)
+                                                                                                                                                                                │       ├── Application: (add) (one)
+                                                                                                                                                                                │       │   ├── Variable: add
+                                                                                                                                                                                │       │   └── Variable: one
+                                                                                                                                                                                │       └── Variable: two
+                                                                                                                                                                                └── BlockStmt
+                                                                                                                                                                                    ├── AssignmentStmt: yeaTwo = ((sub) (four)) (two)
+                                                                                                                                                                                    │   └── Application: ((sub) (four)) (two)
+                                                                                                                                                                                    │       ├── Application: (sub) (four)
+                                                                                                                                                                                    │       │   ├── Variable: sub
+                                                                                                                                                                                    │       │   └── Variable: four
+                                                                                                                                                                                    │       └── Variable: two
+                                                                                                                                                                                    └── BlockStmt
+                                                                                                                                                                                        ├── AssignmentStmt: powNine = (two) (three)
+                                                                                                                                                                                        │   └── Application: (two) (three)
+                                                                                                                                                                                        │       ├── Variable: two
+                                                                                                                                                                                        │       └── Variable: three
+                                                                                                                                                                                        └── BlockStmt
+                                                                                                                                                                                            ├── AssignmentStmt: powTwoSev = (three) (three)
+                                                                                                                                                                                            │   └── Application: (three) (three)
+                                                                                                                                                                                            │       ├── Variable: three
+                                                                                                                                                                                            │       └── Variable: three
+                                                                                                                                                                                            └── BlockStmt
+                                                                                                                                                                                                ├── ExprStmt: yeaThree
+                                                                                                                                                                                                │   └── Variable: yeaThree
+                                                                                                                                                                                                └── BlockStmt
+                                                                                                                                                                                                    ├── ExprStmt: ((mul) (yeaTwo)) (yeaThree)
+                                                                                                                                                                                                    │   └── Application: ((mul) (yeaTwo)) (yeaThree)
+                                                                                                                                                                                                    │       ├── Application: (mul) (yeaTwo)
+                                                                                                                                                                                                    │       │   ├── Variable: mul
+                                                                                                                                                                                                    │       │   └── Variable: yeaTwo
+                                                                                                                                                                                                    │       └── Variable: yeaThree
+                                                                                                                                                                                                    └── BlockStmt
+                                                                                                                                                                                                        ├── ExprStmt: powNine
+                                                                                                                                                                                                        │   └── Variable: powNine
+                                                                                                                                                                                                        └── BlockStmt
+                                                                                                                                                                                                            ├── ExprStmt: powTwoSev
+                                                                                                                                                                                                            │   └── Variable: powTwoSev
+                                                                                                                                                                                                            └── BlockStmt
+                                                                                                                                                                                                                ├── ExprStmt: (fib) (three)
+                                                                                                                                                                                                                │   └── Application: (fib) (three)
+                                                                                                                                                                                                                │       ├── Variable: fib
+                                                                                                                                                                                                                │       └── Variable: three
+                                                                                                                                                                                                                └── NullStmt

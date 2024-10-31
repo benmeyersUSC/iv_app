@@ -7,6 +7,7 @@ from iv_app.tools.graphing_stock import StockSet
 from iv_app.tools import spy_vix_unpacker as spv
 from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
+from iv_app.tools.lambdaCalculus import lambda_calculus_interpreter
 import json
 
 
@@ -80,6 +81,68 @@ def home():
     return redirect(url_for("client"))
 
 
+# finance endpoint
+# renders appropriate template (admin or user)
+@app.route("/finance")
+def finance():
+    return render_template("finance.html")
+
+
+
+# lambdaCalculus calc endpoint
+# renders appropriate template (admin or user)
+@app.route("/lambda", methods=["POST", "GET"])
+def lambdaCalc():
+
+    return render_template("lambdaCalc.html")
+
+# lambdaCalculus what is endpong
+# renders appropriate template (admin or user)
+@app.route("/whatIsLambda", methods=["POST", "GET"])
+def whatIsLambdaCalc():
+
+    return render_template("whatIsLambda.html")
+
+# lambdaCalculus calc endpoint
+# renders appropriate template (admin or user)
+@app.route("/runLambda", methods=["POST", "GET"])
+def runLambdaCalc():
+    code = request.form.get('inputText')
+    if code == None:
+        with open("./tools/lambdaCalculus/userStarter.lambda", 'r') as fn:
+            code = fn.read()
+        return render_template("lambdaCalc.html", starter_code=code)
+
+    with open('./tools/lambdaCalculus/userCode.lambda', 'w') as fn:
+        fn.write(code)
+    evaluated, exprs = lambda_calculus_interpreter.lambda_interpret_file_viz(filename='./tools/lambdaCalculus/userCode.lambda')
+    with open("./tools/lambdaCalculus/userCode_parsed_tree.txt", 'r') as fn:
+        tree_text = fn.read()
+    program = ">>" + "\n>>".join([str(evaluated[x]) for x in range(len(evaluated))])
+    return render_template("lambdaCalc.html", starter_code=code,
+                           output_text=program,
+                           file_content=tree_text)
+
+
+
+# neural networks endpoint
+# renders appropriate template (admin or user)
+@app.route("/neural")
+def neural():
+    return render_template("neural.html")
+
+# turing  endpoint
+# renders appropriate template (admin or user)
+@app.route("/turing")
+def turing():
+    return render_template("turing.html")
+
+# sound waves endpoint
+# renders appropriate template (admin or user)
+@app.route("/waves")
+def waves():
+    return render_template("waves.html")
+
 # client endpoint
 # renders appropriate template (admin or user)
 @app.route("/client")
@@ -90,9 +153,9 @@ def client():
 
     :return: redirects home if not logged in,
                 renders admin.html if logged in as admin,
-                home.html otherwise
+                finance.html otherwise
     """
-    return render_template("home.html")
+    return render_template("main.html")
 
 
 @app.route("/ticker/<symbol>")
@@ -215,11 +278,11 @@ def top(criteria):
 @app.route("/action/setticker", methods=["POST", "GET"])
 def set_ticker():
     """
-    Gets called from home.html form submit
+    Gets called from finance.html form submit
     Updates user food by calling db_set_food, then re-renders user template
 
     :return: redirects to home if user not logged in,
-                re-renders home.html otherwise
+                re-renders finance.html otherwise
     """
     if not ticker_check(request.form['set_ticker'].upper()):
         #return redirect(url_for('ticker', symbol='SPY'))

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+
+    <style>
+    /* General styling */
+    body {
+        font-family: "Times New Roman", Times, serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        text-align: center; /* Center align the content */
+        background-color: #000; /* Set background color to black */
+        color: #fff; /* Set text color to white */
+    }
+
+  img.logo {
+    width: 400px; /* Set a fixed width */
+    height: 270px; /* Set a fixed height */
+}
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    /* Form styling */
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */
+        grid-gap: 20px; /* Set spacing between buttons */
+        margin: 0 auto; /* Center align the grid */
+        max-width: 900px; /* Limit grid width */
+    }
+
+    button[type="submit"] {
+        font-size: 16px;
+        padding: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #ff0000; /* Green color on hover */
+    }
+
+    .formula-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #404040;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: smaller; /* or specify a specific size like '10px' */
+}
+
+.formula-description {
+    text-align: left; /* Align bullet points to the left */
+    margin-bottom: 20px;
+    font-size: smaller; /* or specify a specific size like '10px' */
+}
+</style>
+
+
+</head>
+<body>
+    <h1>Ben Meyers Coding Projects</h1>
+    <p></p>
+
+
+<!--<p>Main Pages:</p>-->
+    <div class="button-grid">
+
+        <form action="/finance" method="GET">
+            <p><strong>Finance Tools</strong></p>
+        <p>Explore Option Pricing, Bond Trading, and Stock Research</p>
+            <input type="hidden" name="bsm">
+            <button type="submit">Finance</button>
+        </form>
+
+        <form action="/whatIsLambda" method="GET">
+            <p><strong>Lambda Calculus</strong></p>
+        <p>Write and run code in the un-typed Lambda Calculus programming language</p>
+            <input type="hidden" name="lambda">
+            <button type="submit">Lambda Calculus</button>
+        </form>
+
+        <form action="/neural" method="GET">
+            <p><strong>Neural Networks</strong></p>
+        <p>Explore Neural Networks that classify raw data</p>
+            <input type="hidden" name="neural">
+            <button type="submit">Neural Networks</button>
+        </form>
+
+        <form action="/turing" method="GET">
+            <p><strong>Neural Networks</strong></p>
+        <p>Explore Turing Machines, on a Turing Machine</p>
+            <input type="hidden" name="neural">
+            <button type="submit">Turing Machines</button>
+        </form>
+
+        <form action="/waves" method="GET">
+            <p><strong>Sound Wave Tools</strong></p>
+        <p>Explore Modulation of sound waves and Fourier Transforms to extract frequencies from sounds</p>
+            <input type="hidden" name="waves">
+            <button type="submit">Sound Waves</button>
+        </form>
+
+
+    </div>
+    <br><br>
+
+
+    <p> </p>
+    <br>
+
+</body>
+</html>

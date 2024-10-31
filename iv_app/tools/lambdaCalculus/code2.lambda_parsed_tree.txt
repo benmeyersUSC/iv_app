@@ -1,0 +1,9 @@
+└── BlockStmt
+    ├── AssignmentStmt: zero = (Ls.(Lz.z))
+    │   └── Abstraction: Ls. (Lz.z)
+    │       └── Abstraction: Lz. z
+    │           └── Variable: z
+    └── BlockStmt
+        ├── ExprStmt: zero
+        │   └── Variable: zero
+        └── NullStmt
