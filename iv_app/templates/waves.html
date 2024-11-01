@@ -1,3 +1,97 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Sound Waves</title>-->
+<!--</head>-->
+<!--<style>-->
+<!--    /* General styling */-->
+<!--    body {-->
+<!--        font-family: "Times New Roman", Times, serif;-->
+<!--        line-height: 1.6;-->
+<!--        margin: 0;-->
+<!--        padding: 20px;-->
+<!--        text-align: center; /* Center align the content */-->
+<!--        background-color: #000; /* Set background color to black */-->
+<!--        color: #fff; /* Set text color to white */-->
+<!--    }-->
+
+<!--  img.logo {-->
+<!--    width: 400px; /* Set a fixed width */-->
+<!--    height: 270px; /* Set a fixed height */-->
+<!--}-->
+
+<!--    h1 {-->
+<!--        font-size: 24px;-->
+<!--    }-->
+
+<!--    p {-->
+<!--        font-size: 16px;-->
+<!--    }-->
+
+<!--    /* Form styling */-->
+<!--    .button-grid {-->
+<!--        display: grid;-->
+<!--        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */-->
+<!--        grid-gap: 20px; /* Set spacing between buttons */-->
+<!--        margin: 0 auto; /* Center align the grid */-->
+<!--        max-width: 900px; /* Limit grid width */-->
+<!--    }-->
+
+<!--    button[type="submit"] {-->
+<!--        font-size: 16px;-->
+<!--        padding: 20px;-->
+<!--        border: none;-->
+<!--        border-radius: 5px;-->
+<!--        background-color: #008000; /* Red color */-->
+<!--        color: #fff; /* White text color */-->
+<!--        cursor: pointer;-->
+<!--    }-->
+
+<!--    button[type="submit"]:hover {-->
+<!--        background-color: #ff0000; /* Green color on hover */-->
+<!--    }-->
+
+<!--    .formula-container {-->
+<!--    width: 80%;-->
+<!--    margin: 0 auto;-->
+<!--    background-color: #404040;-->
+<!--    padding: 20px;-->
+<!--    border-radius: 5px;-->
+<!--    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
+<!--    font-size: smaller; /* or specify a specific size like '10px' */-->
+<!--}-->
+
+<!--.formula-description {-->
+<!--    text-align: left; /* Align bullet points to the left */-->
+<!--    margin-bottom: 20px;-->
+<!--    font-size: smaller; /* or specify a specific size like '10px' */-->
+<!--}-->
+<!--    .logout-btn {-->
+<!--            font-size: 16px;-->
+<!--            padding: 10px 20px;-->
+<!--            border: none;-->
+<!--            border-radius: 5px;-->
+<!--            background-color: #008000; /* Red color */-->
+<!--            color: #fff; /* White text color */-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        .logout-btn:hover {-->
+<!--            background-color: #ff0000; /* Dark green color on hover */-->
+<!--        }-->
+<!--</style>-->
+<!--<body>-->
+
+<!--<p>SOUND WAVES</p>-->
+
+<!--</body>-->
+<!--<form action="/client" method="GET">-->
+<!--        <input type="submit" class="logout-btn" value="Home">-->
+<!--    </form>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,37 +99,30 @@
     <title>Sound Waves</title>
 </head>
 <style>
-    /* General styling */
     body {
         font-family: "Times New Roman", Times, serif;
         line-height: 1.6;
         margin: 0;
         padding: 20px;
-        text-align: center; /* Center align the content */
-        background-color: #000; /* Set background color to black */
-        color: #fff; /* Set text color to white */
+        text-align: center;
+        background-color: #000;
+        color: #fff;
     }
 
-  img.logo {
-    width: 400px; /* Set a fixed width */
-    height: 270px; /* Set a fixed height */
-}
-
-    h1 {
-        font-size: 24px;
+    img.logo {
+        width: 400px;
+        height: 270px;
     }
 
-    p {
-        font-size: 16px;
-    }
+    h1 { font-size: 24px; }
+    p { font-size: 16px; }
 
-    /* Form styling */
     .button-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */
-        grid-gap: 20px; /* Set spacing between buttons */
-        margin: 0 auto; /* Center align the grid */
-        max-width: 900px; /* Limit grid width */
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 20px;
+        margin: 0 auto;
+        max-width: 900px;
     }
 
     button[type="submit"] {
@@ -43,49 +130,130 @@
         padding: 20px;
         border: none;
         border-radius: 5px;
-        background-color: #008000; /* Red color */
-        color: #fff; /* White text color */
+        background-color: #008000;
+        color: #fff;
         cursor: pointer;
     }
 
     button[type="submit"]:hover {
-        background-color: #ff0000; /* Green color on hover */
+        background-color: #ff0000;
     }
 
     .formula-container {
-    width: 80%;
-    margin: 0 auto;
-    background-color: #404040;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: smaller; /* or specify a specific size like '10px' */
-}
+        width: 80%;
+        margin: 0 auto;
+        background-color: #404040;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-size: smaller;
+    }
 
-.formula-description {
-    text-align: left; /* Align bullet points to the left */
-    margin-bottom: 20px;
-    font-size: smaller; /* or specify a specific size like '10px' */
-}
+    .formula-description {
+        text-align: left;
+        margin-bottom: 20px;
+        font-size: smaller;
+    }
+
     .logout-btn {
-            font-size: 16px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #008000; /* Red color */
-            color: #fff; /* White text color */
-            cursor: pointer;
-        }
-        .logout-btn:hover {
-            background-color: #ff0000; /* Dark green color on hover */
-        }
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .logout-btn:hover {
+        background-color: #ff0000;
+    }
+
+    .wave-form {
+        margin: 20px auto;
+        max-width: 1000px;
+        background-color: #404040;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    select {
+        margin: 10px 5px;
+        padding: 8px;
+        width: 80px;
+        background-color: #333;
+        color: white;
+        border: 1px solid #666;
+        border-radius: 3px;
+    }
+
+    #freqSelects {
+        margin: 15px 0;
+    }
+
+    label {
+        display: block;
+        margin: 10px 0;
+    }
 </style>
 <body>
 
 <p>SOUND WAVES</p>
 
-</body>
-<form action="/client" method="GET">
-        <input type="submit" class="logout-btn" value="Home">
+<div class="wave-form">
+    <form id="waveForm" action="/runWaves" method="POST">
+        <label for="numFreqs">Number of Frequencies:</label>
+
+        <select id="numFreqs" name="numFreqs" onchange="updateFrequencySelects()">
+            {% for i in range(1, 6) %}
+                <option value="{{ i }}" {% if last_value == i %}selected{% endif %}>{{ i }}</option>
+            {% endfor %}
+        </select>
+
+        <div id="freqSelects">
+        </div>
+
+        <button type="submit">Generate Waves</button>
     </form>
+</div>
+
+{% if show_image %}
+<div class="formula-container">
+    <img src="{{ url_for('static', filename='images/fourier/fourier.png') }}" alt="Fourier Transform">
+</div>
+{% endif %}
+
+<form action="/client" method="GET">
+    <input type="submit" class="logout-btn" value="Home">
+</form>
+
+<script>
+function createFrequencyOptions() {
+    let options = '';
+    for (let i = 1; i <= 100; i++) {
+        options += `<option value="${i}">${i}</option>`;
+    }
+    return options;
+}
+
+function updateFrequencySelects() {
+    const numFreqs = document.getElementById('numFreqs').value;
+    const container = document.getElementById('freqSelects');
+    container.innerHTML = '';
+
+    for (let i = 0; i < numFreqs; i++) {
+        const select = document.createElement('select');
+        select.name = `freq${i + 1}`;
+        select.innerHTML = createFrequencyOptions();
+        select.value = Math.floor(Math.random() * 100) + 1;
+        container.appendChild(select);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateFrequencySelects();
+});
+</script>
+
+</body>
 </html>

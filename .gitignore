@@ -13,4 +13,7 @@ iv_app/tools/NeuralNetworks/F_MNIST-NN/fashion-mnist_train.csv
 iv_app/tools/NeuralNetworks/MNIST-NN/mnist_train.csv
 iv_app/tools/NeuralNetworks/F_MNIST-NN/fashion-mnist_test.csv
 iv_app/tools/NeuralNetworks/MNIST-NN/mnist_test.csv
+iv_app/static/images/fourier/fourier.png
+iv_app/tools/waves/fromwav
+
 

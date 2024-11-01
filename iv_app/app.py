@@ -8,6 +8,7 @@ from iv_app.tools import spy_vix_unpacker as spv
 from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
 from iv_app.tools.lambdaCalculus import lambda_calculus_interpreter as LI
+import iv_app.tools.waves.PrimitiveFT as ft
 import json
 
 
@@ -140,9 +141,25 @@ def turing():
 
 # sound waves endpoint
 # renders appropriate template (admin or user)
-@app.route("/waves")
+@app.route("/waves", methods=["GET", "POST"])
 def waves():
-    return render_template("waves.html")
+    return render_template("waves.html", show_image=False)
+
+# sound waves endpoint
+# renders appropriate template (admin or user)
+@app.route("/runWaves", methods=["GET", "POST"])
+def runWaves():
+    frm = request.form
+    numFreqs = int(frm["numFreqs"])
+    freqs = []
+    for i in range(1, 6):
+        if f"freq{i}" in frm:
+            freqs.append(int(frm[f"freq{i}"]))
+
+    ft.runNewWave(numFreqs, freqs)
+    return render_template("waves.html", show_image=True, last_value=numFreqs)
+
+
 
 # client endpoint
 # renders appropriate template (admin or user)
