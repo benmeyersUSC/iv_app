@@ -156,6 +156,7 @@ def runWaves():
         if f"freq{i}" in frm:
             freqs.append(int(frm[f"freq{i}"]))
 
+
     ft.runNewWave(numFreqs, freqs)
     return render_template("waves.html", show_image=True, last_value=numFreqs)
 
