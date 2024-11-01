@@ -143,7 +143,7 @@ def turing():
 # renders appropriate template (admin or user)
 @app.route("/waves", methods=["GET", "POST"])
 def waves():
-    return render_template("waves.html", show_image=False)
+    return render_template("waves.html", show_image=False, show_descr=True)
 
 # sound waves endpoint
 # renders appropriate template (admin or user)
@@ -158,7 +158,8 @@ def runWaves():
 
 
     ft.runNewWave(numFreqs, freqs)
-    return render_template("waves.html", show_image=True, last_value=numFreqs)
+    return render_template("waves.html", show_image=True, last_value=numFreqs,
+                           show_descr=False)
 
 
 

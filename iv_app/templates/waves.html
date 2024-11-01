@@ -1,94 +1,3 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Sound Waves</title>-->
-<!--</head>-->
-<!--<style>-->
-<!--    /* General styling */-->
-<!--    body {-->
-<!--        font-family: "Times New Roman", Times, serif;-->
-<!--        line-height: 1.6;-->
-<!--        margin: 0;-->
-<!--        padding: 20px;-->
-<!--        text-align: center; /* Center align the content */-->
-<!--        background-color: #000; /* Set background color to black */-->
-<!--        color: #fff; /* Set text color to white */-->
-<!--    }-->
-
-<!--  img.logo {-->
-<!--    width: 400px; /* Set a fixed width */-->
-<!--    height: 270px; /* Set a fixed height */-->
-<!--}-->
-
-<!--    h1 {-->
-<!--        font-size: 24px;-->
-<!--    }-->
-
-<!--    p {-->
-<!--        font-size: 16px;-->
-<!--    }-->
-
-<!--    /* Form styling */-->
-<!--    .button-grid {-->
-<!--        display: grid;-->
-<!--        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */-->
-<!--        grid-gap: 20px; /* Set spacing between buttons */-->
-<!--        margin: 0 auto; /* Center align the grid */-->
-<!--        max-width: 900px; /* Limit grid width */-->
-<!--    }-->
-
-<!--    button[type="submit"] {-->
-<!--        font-size: 16px;-->
-<!--        padding: 20px;-->
-<!--        border: none;-->
-<!--        border-radius: 5px;-->
-<!--        background-color: #008000; /* Red color */-->
-<!--        color: #fff; /* White text color */-->
-<!--        cursor: pointer;-->
-<!--    }-->
-
-<!--    button[type="submit"]:hover {-->
-<!--        background-color: #ff0000; /* Green color on hover */-->
-<!--    }-->
-
-<!--    .formula-container {-->
-<!--    width: 80%;-->
-<!--    margin: 0 auto;-->
-<!--    background-color: #404040;-->
-<!--    padding: 20px;-->
-<!--    border-radius: 5px;-->
-<!--    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);-->
-<!--    font-size: smaller; /* or specify a specific size like '10px' */-->
-<!--}-->
-
-<!--.formula-description {-->
-<!--    text-align: left; /* Align bullet points to the left */-->
-<!--    margin-bottom: 20px;-->
-<!--    font-size: smaller; /* or specify a specific size like '10px' */-->
-<!--}-->
-<!--    .logout-btn {-->
-<!--            font-size: 16px;-->
-<!--            padding: 10px 20px;-->
-<!--            border: none;-->
-<!--            border-radius: 5px;-->
-<!--            background-color: #008000; /* Red color */-->
-<!--            color: #fff; /* White text color */-->
-<!--            cursor: pointer;-->
-<!--        }-->
-<!--        .logout-btn:hover {-->
-<!--            background-color: #ff0000; /* Dark green color on hover */-->
-<!--        }-->
-<!--</style>-->
-<!--<body>-->
-
-<!--<p>SOUND WAVES</p>-->
-
-<!--</body>-->
-<!--<form action="/client" method="GET">-->
-<!--        <input type="submit" class="logout-btn" value="Home">-->
-<!--    </form>-->
-<!--</html>-->
 
 
 
@@ -155,6 +64,20 @@
         font-size: smaller;
     }
 
+    .abstract_p {
+        width: 810px;
+        text-align: left;
+
+    }
+    .abstract_cont {
+       display: flex;
+    flex-direction: column;  /* If you have multiple <p> elements in a column */
+    align-items: center;     /* Centers content horizontally */
+    justify-content: center; /* Centers content vertically */
+    height: 30vh;
+
+    }
+
     .logout-btn {
         font-size: 16px;
         padding: 10px 20px;
@@ -198,8 +121,31 @@
 </style>
 <body>
 
-<p>SOUND WAVES</p>
+<h1>SOUND WAVES</h1>
 
+
+
+<p>
+    Here we create pure sound waves out of frequencies, then use a Fourier Transform to derive the component frequencies
+    that make up the sound.
+</p>
+<br>
+{% if show_descr %}
+    <div class=abstract_cont>
+        <p class="abstract_p">The process can be seen through several intuitive lenses, but the most clear is as a large "inner product" or similary
+        calculation between the raw sound wave and a table of (since we limit ourselves to 100 Hz here) 100 pure frequencies.
+            We create the sound wave as an array of values, so each row in the frequency matrix is an array of a pure frequency.
+            By taking the inner product with each row (each frequency in sequence) and saving our outputs as a new array,
+            it will precisely indicate the "affinity" between each frequency and the raw sound.
+        </p>
+        <br>
+        <p class="abstract_p">It is a templatic test of similarity at its core, and it points strongly to the mechanisms we naturally benefit
+        from in our ears. Abiding by the same criteria and a similar, if analog and physical, algorithm, our ears have material
+        directly connected to neurons in the brain that are excited by specific distinct frequencies just like rows in our frequency
+        matrix. Our brain is receiving an array of excitations for each frequency that interacts with our ears at all times. Here it is mechanized.
+        </p>
+    </div>
+{% endif %}
 <div class="wave-form">
     <form id="waveForm" action="/runWaves" method="POST">
         <label for="numFreqs">Number of Frequencies:</label>
@@ -253,6 +199,15 @@ function updateFrequencySelects() {
 document.addEventListener('DOMContentLoaded', function() {
     updateFrequencySelects();
 });
+
+
+let show_descr = false;
+
+function toggleDescription() {
+    show_descr = !show_descr; // Toggle the boolean value
+    document.getElementById("description").style.display = show_descr ? "block" : "none";
+}
+
 </script>
 
 </body>

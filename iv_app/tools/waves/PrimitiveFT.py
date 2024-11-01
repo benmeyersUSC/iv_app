@@ -48,7 +48,7 @@ def runNewWave(numFreqs, freqs=None, ran=100, sampleRate=3000, duration=.549):
     # Plot for the synthetic wave and component sine waves
     ax1.plot(time_points * 1000, signal, label="Synthetic Wave", linewidth=2.7)
     for f in usedFreqs:
-        ax1.plot(time_points * 1000, f[1] * np.sin(2 * np.pi * f[0] * time_points), alpha=.36, label=f"{f[0]} Hz")
+        ax1.plot(time_points * 1000, f[1] * np.sin(2 * np.pi * f[0] * time_points), alpha=0.36, label=f"{f[0]} Hz")
     ax1.set_xlim(0, duration * 1000)
     ax1.set_ylim(min(signal), max(signal))
     ax1.set_xlabel('Time (ms)')
@@ -65,7 +65,7 @@ def runNewWave(numFreqs, freqs=None, ran=100, sampleRate=3000, duration=.549):
     # Plot for Fourier transform result
     ft = signal @ frequency_matrix.T
     ax2.plot(ft)
-    ax2.set_title(f"Frequencies (Hz): {[i for i in sigs]}")
+    ax2.set_title(f"Computed Frequencies (Hz): {[i for i in sigs]}")
     ax2.set_xlabel('Frequency (Hz)')
 
     # Add titles and save the plot
