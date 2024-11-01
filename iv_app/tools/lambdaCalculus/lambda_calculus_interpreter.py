@@ -677,7 +677,7 @@ def lambda_interpret_file_viz(txt=None, filename=None):
     print(f"PARSED: {parsed[0]}")
 
     # Visualize the parsed tree
-    save_tree_visualization_ascii(parsed[0], f'{filename}_parsed_tree.txt')
+    save_tree_visualization_ascii(parsed[0], f'{filename[:-7]}_parsed_tree.txt')
 
     compiled_tree = compile_tree(parsed[0])
     print(f"REWRITTEN: {compiled_tree[0]}")
@@ -741,7 +741,10 @@ def format_church_numeral_output(term: str):
     if needs_adjustment:
         count -= 1
 
-    return f"{term} :: [{count}]"
+    if count <= 9:
+        return f"{term} :: [{count}]\n"
+    return f"(Ls.(Lz.(s) ((s) ((s) ((s) ((s) ((s) ((s) ((s) ........ (z)))))))))) :: [{count}]\n"
+    # "(Ls.Lz.s(s.....(z)))"
 
 if __name__ == '__main__':
 

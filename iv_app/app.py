@@ -74,10 +74,7 @@ def home():
     :return: renders login.html if not logged in,
                 redirects to client otherwise.
     """
-    g = fcc.EarningStock('SPY')
-    g.graph_iv()
-    g.graphStPrices()
-    g.graph_ticker_options()
+
     return redirect(url_for("client"))
 
 
@@ -85,6 +82,10 @@ def home():
 # renders appropriate template (admin or user)
 @app.route("/finance")
 def finance():
+    g = fcc.EarningStock('SPY')
+    g.graph_iv()
+    g.graphStPrices()
+    g.graph_ticker_options()
     return render_template("finance.html")
 
 
