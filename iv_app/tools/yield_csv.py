@@ -88,7 +88,7 @@ class YieldCurve:
         plt.tight_layout()
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'yield_curve')
+        save_dir = os.path.join(os.getcwd(), 'static', 'dynamic', 'images', 'yield_curve')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
         file_path = os.path.join(save_dir, 'recent.png')
 
@@ -129,7 +129,7 @@ class YieldCurve:
         plt.tight_layout()
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'yield_curve')
+        save_dir = os.path.join(os.getcwd(), 'static', 'dynamic', 'images', 'yield_curve')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
         file_path = os.path.join(save_dir, 'recent.png')
 
@@ -175,7 +175,7 @@ class YieldCurve:
         plt.tight_layout()
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'yield_curve')
+        save_dir = os.path.join(os.getcwd(), 'static', 'dynamic', 'images', 'yield_curve')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
         file_path = os.path.join(save_dir, 'recent.png')
 

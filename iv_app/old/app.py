@@ -172,7 +172,7 @@ def top(criteria):
                 'PAYX', 'CAG', 'LW', 'TGT', 'ROST', 'CPB', 'KR', "AVGO", 'COST'
             ]
             Week(earnings_list)
-            image_dir = '../static/images/earnings'
+            image_dir = '../static/dynamic/images/earnings'
             image_files = [f for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f))]
             message = "IV of This Week's Top Earnings"
         elif criteria == 'oi':
@@ -180,7 +180,7 @@ def top(criteria):
                 'RDDT', 'SMCI', 'COIN', "SPY", 'QQQ'
             ]
             OI_Week(oi_list)
-            image_dir = '../static/images/oi'
+            image_dir = '../static/dynamic/images/oi'
             image_files = [f for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f))]
             message = "IV & Expected Move of Top Open Interest Underlyings"
         elif criteria == 'mag7':
@@ -188,7 +188,7 @@ def top(criteria):
                 'AAPL', 'MSFT', 'META', 'AMZN', 'NVDA', "GOOG", 'TSLA'
             ]
             Mag7_Week(mag)
-            image_dir = '../static/images/mag7'
+            image_dir = '../static/dynamic/images/mag7'
             image_files = [f for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f))]
             message = "IV & Expected Move of the Magnificent 7"
         elif criteria == 'indices':
@@ -196,7 +196,7 @@ def top(criteria):
                 'SPY', 'QQQ', 'IWM', 'DIA'
             ]
             Ind_Week(ind)
-            image_dir = '../static/images/indices'
+            image_dir = '../static/dynamic/images/indices'
             image_files = [f for f in os.listdir(image_dir) if os.path.isfile(os.path.join(image_dir, f))]
             message = "IV & Expected Move of the Top Market Indices"
 

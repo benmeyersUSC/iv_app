@@ -38,19 +38,6 @@
         max-width: 900px; /* Limit grid width */
     }
 
-    button[type="submit"] {
-        font-size: 16px;
-        padding: 20px;
-        border: none;
-        border-radius: 5px;
-        background-color: #008000; /* Red color */
-        color: #fff; /* White text color */
-        cursor: pointer;
-    }
-
-    button[type="submit"]:hover {
-        background-color: #ff0000; /* Green color on hover */
-    }
 
     .formula-container {
     width: 80%;
@@ -79,12 +66,31 @@
         .logout-btn:hover {
             background-color: #ff0000; /* Dark green color on hover */
         }
+
+        button[type="submit"] {
+        font-size: 16px;
+        padding: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #ff0000; /* Green color on hover */
+    }
+
 </style>
 <body>
 
 <p>NEURAL NETS</p>
 
 </body>
+<form action="/mnistDraw" method="GET">
+        <input type="submit" class="logout-btn" value="Draw">
+    </form>
+
 <form action="/client" method="GET">
         <input type="submit" class="logout-btn" value="Home">
     </form>

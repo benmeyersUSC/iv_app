@@ -56,7 +56,7 @@
         {% for image in image_files %}
             <div class="image">
                 <h2>{{  image.split('.')[0]  }}</h2>
-                <img src="{{ url_for('static', filename='images/' + criteria + '/' + image) }}" alt="{{ image }}">
+                <img src="{{ url_for('static', filename='dynamic/images/' + criteria + '/' + image) }}" alt="{{ image }}">
             </div>
         {% endfor %}
     </div>

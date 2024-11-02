@@ -19,7 +19,7 @@ class StockSet:
 
     def clean_directory(self):
         # save to static/images/criteria
-        save_dir = os.path.join(os.getcwd(), f'static/images/{self.category}')
+        save_dir = os.path.join(os.getcwd(), f'static/dynamic/images/{self.category}')
 
         if os.path.exists(save_dir) and os.path.isdir(save_dir):
             # Get the list of files in the directory
@@ -196,7 +196,7 @@ class GraphStock:
         plt.tight_layout() # clean space
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), f'static/images/{self.category}')
+        save_dir = os.path.join(os.getcwd(), f'dynamic/images/{self.category}')
 
         #save_dir = os.path.join(os.getcwd(), f'earnings_plots-{self.today}')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist

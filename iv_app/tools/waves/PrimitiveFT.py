@@ -73,7 +73,7 @@ def runNewWave(numFreqs, freqs=None, ran=100, sampleRate=3000, duration=.549):
     plt.tight_layout()
 
     # Save the figure
-    save_dir = os.path.join(os.getcwd(), 'static', 'images', 'fourier')
+    save_dir = os.path.join(os.getcwd(), 'static', 'dynamic', 'images', 'fourier')
     os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
     file_path = os.path.join(save_dir, 'fourier.png')
     plt.savefig(file_path)

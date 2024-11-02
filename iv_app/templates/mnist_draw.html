@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .logout-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #008000; /* Red color */
+            color: #fff; /* White text color */
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #ff0000; /* Dark green color on hover */
+        }
+
+        button[type="submit"] {
+        font-size: 16px;
+        padding: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000; /* Red color */
+        color: #fff; /* White text color */
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #ff0000; /* Green color on hover */
+    }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        #drawing-canvas {
+            border: 2px solid #333;
+            background: black;
+            cursor: crosshair;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #prediction {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Draw a digit (0-9)</h2>
+        <canvas id="drawing-canvas" width="280" height="280"></canvas>
+        <div class="button-container">
+            <button onclick="clearCanvas()">Clear</button>
+            <button onclick="predictDigit()">Predict</button>
+        </div>
+        <div id="prediction"></div>
+    </div>
+    <br><br><br><br><br>
+    <form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+    </form>
+
+    <script>
+        const canvas = document.getElementById('drawing-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        // Initialize canvas
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 20;
+        ctx.lineCap = 'round';
+
+        // Drawing event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('prediction').textContent = '';
+        }
+
+        function predictDigit() {
+            // Create a temporary canvas to resize the drawing to 28x28
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 28;
+            tempCanvas.height = 28;
+            const tempCtx = tempCanvas.getContext('2d');
+
+            // Draw the original canvas content onto the smaller canvas
+            tempCtx.drawImage(canvas, 0, 0, 280, 280, 0, 0, 28, 28);
+
+            // Get the pixel data
+            const imageData = tempCtx.getImageData(0, 0, 28, 28);
+            const pixels = imageData.data;
+
+            // Convert to grayscale array (0-1)
+            const grayscaleArray = [];
+            for (let i = 0; i < pixels.length; i += 4) {
+                // Convert RGB to grayscale and normalize to 0-1
+                grayscaleArray.push(pixels[i] / 255); // Using just the R channel since it's grayscale
+            }
+
+            // Send to Flask backend
+            fetch('/mnistPredict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image: grayscaleArray
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('prediction').textContent =
+                    `Prediction: ${data.prediction}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('prediction').textContent =
+                    'Error making prediction';
+            });
+        }
+    </script>
+</body>
+</html>

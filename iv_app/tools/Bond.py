@@ -217,7 +217,7 @@ class BondTrading:
 
     # no return, builds graph used in display_round()
     def graph_bond_price(self):
-        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bond_trading')
+        save_dir = os.path.join(os.getcwd(), 'static', 'dynamic', 'images', 'bond_trading')
         file_path = os.path.join(save_dir, 'recent_bond_graph.png')
         if os.path.exists(file_path):
             # print('file exists')
@@ -312,7 +312,7 @@ class BondTrading:
         plt.tight_layout()  # Add this line to adjust subplot parameters for better layout
 
         # Save plot to a directory
-        save_dir = os.path.join(os.getcwd(), 'static', 'images', 'bond_trading')
+        save_dir = os.path.join(os.getcwd(), 'static', 'dynamic', 'images', 'bond_trading')
         os.makedirs(save_dir, exist_ok=True)  # Create directory if it doesn't exist
         file_path = os.path.join(save_dir, 'recent_bond_graph.png')
 

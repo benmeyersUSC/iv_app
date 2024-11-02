@@ -1,5 +1,10 @@
-from flask import Flask, redirect, render_template, request, session, url_for
+import numpy as np
+from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 import os
+import random
+
+from matplotlib import pyplot as plt
+
 import iv_app.tools.ticker_functionality as fcc
 from datetime import datetime
 from iv_app.tools import black_scholes_sandbox as BS
@@ -9,6 +14,7 @@ from iv_app.tools import yield_csv as yld
 from iv_app.tools import Bond as bnd
 from iv_app.tools.lambdaCalculus import lambda_calculus_interpreter as LI
 import iv_app.tools.waves.PrimitiveFT as ft
+from iv_app.tools.NeuralNetworks.MNIST_NN import MNIST_NN_3layer as mnn
 import json
 
 
@@ -132,6 +138,53 @@ def runLambdaCalc():
 @app.route("/neural")
 def neural():
     return render_template("neural.html")
+
+@app.route("/mnistDraw")
+def mnistDraw():
+    return render_template("mnist_draw.html")
+
+
+# @app.route('/mnistPredict', methods=['POST'])
+# def mnistPredict():
+#     data = request.json['image']
+#     image = np.array(data, dtype=np.float32)
+#     image = image.reshape(1, 28, 28, 1)
+#     image = 1 - image
+#
+#     # Once you have your model loaded:
+#     # prediction = model.predict(image)
+#     # predicted_digit = np.argmax(prediction[0])
+#
+#     # For now, returning a dummy prediction
+#     # predicted_digit = random.random() * 100
+#     predicted_digit = len(image[0])
+#
+#     return jsonify({
+#         'prediction': int(predicted_digit)
+#     })
+@app.route('/mnistPredict', methods=['POST'])
+def mnistPredict():
+    data = request.json['image']
+    image = np.array(data, dtype=np.float32)
+    image = image.reshape(1, 784) * 255
+    image = np.array(image, dtype=np.int64)
+    # print(image)
+    # plt.imshow(image.reshape(28, 28), cmap='gray')
+    # plt.show()
+
+    nn = mnn.NeuralNetwork_MNIST(use_pretrained=True, json_file='tools/NeuralNetworks/MNIST_NN/three_layer_MNIST_W&B.json')
+    prediction = nn.predict(image)
+    # print("Prediction:", prediction)
+
+    return jsonify({
+        'prediction': int([prediction][0])
+    })
+
+
+
+
+
+
 
 # turing  endpoint
 # renders appropriate template (admin or user)

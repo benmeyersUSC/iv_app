@@ -117,9 +117,9 @@ button[type="submit"]:hover,
     <p>First is the past 2 months of trading in {{ticker}} with 45-day-forward-looking Bollinger-esque standard deviation ranges given by {{ticker}}'s options/Implied Volatility.</p>
     <p>Second is a 45-day prediction of where {{ticker}} could move in a Black-Scholes world...</p>
 
-    <img src="{{ url_for('static', filename='images/ticker_research/new_ticker.png') }}" alt="Example Image">
-    <img src="{{ url_for('static', filename='images/ticker_research/new_random_stock.png') }}" alt="Example Image">
-    <img src="{{ url_for('static', filename='images/ticker_research/ticker_options.png') }}" alt="Example Image">
+    <img src="{{ url_for('static', filename='dynamic/images/ticker_research/new_ticker.png') }}" alt="Example Image">
+    <img src="{{ url_for('static', filename='dynamic/images/ticker_research/new_random_stock.png') }}" alt="Example Image">
+    <img src="{{ url_for('static', filename='dynamic/images/ticker_research/ticker_options.png') }}" alt="Example Image">
 
 
     <p>Notice how the GBM prediction *mostly* stays within the standard deviation prescriptions... but not every time...the movement of this random stock prediction is precisely defined by those very lines.</p>
