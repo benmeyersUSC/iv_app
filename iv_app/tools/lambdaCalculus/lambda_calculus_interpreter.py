@@ -691,13 +691,6 @@ def lambda_interpret_file_viz(txt=None, filename=None):
     return EXPRS, evaluated
 
 def format_church_numeral_output(term: str):
-    # Debug helper to see what we're counting
-    def debug_print(term, cleaned, binding_vars):
-        print(f"\nDEBUG for term: {term}")
-        print(f"After cleaning: {cleaned}")
-        print(f"Binding vars: {binding_vars}")
-        print(f"Final chars: {cleaned}")
-
     # 1. Basic validation: two L's and two periods
     if term.count('L') != 2 or term.count('.') != 2:
         return f"{term} :: [Not integer]"
@@ -714,37 +707,19 @@ def format_church_numeral_output(term: str):
     if paren_count != 0:
         return f"{term} :: [Not integer]"
 
-    # 3. Strip everything except letters
-    cleaned = ''.join(c for c in term if c.isalpha())
-
-    # 4. Remove the L's
-    cleaned = cleaned.replace('L', '')
-
-    # 5. Find the two binding variables
+    # 3. Get binding variables
     parts = term.split('L')[1:]
     binding_vars = [p[0] for p in parts]
+    first_var = binding_vars[0]  # This is the one we want to count (usually 'f')
 
-    # DEBUG: Let's see what we have before removing binding vars
-    # debug_print(term, cleaned, binding_vars)
-
-    # 6. Special handling: if the second binding var is 'z',
-    # we need to account for an extra 's' that appears in the pattern
-    second_var = binding_vars[1]
-    needs_adjustment = second_var == 'z'
-
-    # Remove one occurrence of each binding variable
-    for var in binding_vars:
-        cleaned = cleaned.replace(var, '', 1)
-
-    # Count remaining chars (should be all 's')
-    count = len(cleaned)
-    if needs_adjustment:
-        count -= 1
+    # 4. Count occurrences of the first binding variable
+    # We subtract 1 because one occurrence is the binding itself
+    count = term.count(first_var) - 1
 
     if count <= 9:
-        return f"{term} :: [{count}]\n"
-    return f"(Ls.(Lz.(s) ((s) ((s) ((s) ((s) ((s) ((s) ((s) ........ (z)))))))))) :: [{count}]\n"
-    # "(Ls.Lz.s(s.....(z)))"
+        return f"{term} :: [{count}]"
+    return f"(Ls.(Lz.(s) ((s) ((s) ((s) ((s) ((s) ((s) ((s) ........ (z)))))))))) :: [{count}]"
+
 
 if __name__ == '__main__':
 
