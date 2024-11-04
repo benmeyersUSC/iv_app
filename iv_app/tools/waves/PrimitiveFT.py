@@ -52,6 +52,7 @@ def runNewWave(numFreqs, freqs=None, ran=100, sampleRate=3000, duration=.549):
     ax1.set_xlim(0, duration * 1000)
     ax1.set_ylim(min(signal), max(signal))
     ax1.set_xlabel('Time (ms)')
+    ax1.set_title('Pure Sound')
     # ax1.legend()
     num_lines = len(usedFreqs) + 1  # +1 for the main "Synthetic Wave" line
     max_rows = 3  # Limit to at most 3 rows
