@@ -1,0 +1,75 @@
+INIT - S0 - SENTINEL - R - INIT0;
+INIT0 - S0 - S0 - R - INIT1;
+INIT1 - S0 - S1 - R - INIT2;
+INIT2 - S0 - S0 - R - INIT3;
+INIT3 - S0 - S2 - R - INIT4;
+INIT4 - S0 - S0 - R - INIT5;
+INIT5 - S0 - S1 - R - FIND_RIGHT_0;
+
+FIND_RIGHT_0 - S0 - S0 - L - FIND_RIGHT_0;
+FIND_RIGHT_0 - S1 - S1 - L - FIND_LEFT_0;
+
+FIND_LEFT_0 - S0 - S0 - L - FIND_LEFT_0;
+FIND_LEFT_0 - S1 - S1 - R - MARK_1;
+FIND_LEFT_0 - S2 - S2 - L - FIND_LEFT_0;
+
+MARK_1 - S0 - S0 - R - MARK_1;
+MARK_1 - S1 - S1 - R - FIND_RIGHT_0_a;
+MARK_1 - S2 - S2 - R - MARK;
+
+MARK - S0 - V1 - R - MARK_1;
+
+FIND_RIGHT_0_a - S0 - S0 - L - FIND_RIGHT_0_a;
+FIND_RIGHT_0_a - S1 - S1 - L - FIND_LEFT_0_a;
+
+FIND_LEFT_0_a - S0 - S0 - L - FIND_LEFT_0_a;
+FIND_LEFT_0_a - S1 - S1 - R - FIND_X;
+FIND_LEFT_0_a - S2 - S2 - L - FIND_LEFT_0_a;
+FIND_LEFT_0_a - V1 - V1 - L - FIND_LEFT_0_a;
+
+FIND_X - S0 - S0 - R - IF_FIND_X;
+FIND_X - S1 - S1 - R - FIND_X;
+FIND_X - S2 - S2 - R - FIND_X;
+FIND_X - V1 - V2 - R - MOVE_X;
+FIND_X - V2 - V2 - R - FIND_X;
+
+IF_FIND_X - S0 - S0 - L - FIND_Y;
+IF_FIND_X - S1 - S1 - R - FIND_X;
+IF_FIND_X - S2 - S2 - R - FIND_X;
+
+FIND_Y - S0 - S0 - L - FIND_Y;
+FIND_Y - S1 - S1 - L - FIND_Y;
+FIND_Y - S2 - S2 - L - FIND_Y;
+FIND_Y - V2 - S0 - R - MOVE_X;
+FIND_Y - SENTINEL - SENTINEL - R - TO_END;
+
+TO_END - S0 - S0 - R - IF_TO_END;
+
+IF_TO_END - S0 - S1 - R - FIND_RIGHT_0;
+IF_TO_END - S1 - S1 - R - TO_END;
+IF_TO_END - S2 - S2 - R - TO_END;
+
+MOVE_X - S0 - S0 - R - MOVE_X;
+MOVE_X - S1 - S1 - R - MOVE_X_b;
+MOVE_X - S2 - S2 - R - MOVE_X;
+MOVE_X - V1 - V1 - R - MOVE_X;
+MOVE_X - V2 - V2 - R - MOVE_X;
+
+MOVE_X_b - S0 - S0 - R - WRITE_1;
+
+WRITE_1 - S0 - S2 - R - LEFT_FIND_X;
+WRITE_1 - S2 - S2 - R - WRITE_1_b;
+
+WRITE_1_b - S0 - S0 - R - WRITE_1_c;
+
+WRITE_1_c - S0 - S2 - R - LEFT_FIND_X;
+WRITE_1_c - S2 - S2 - R - WRITE_1_b;
+
+LEFT_FIND_X - S0 - S0 - L - LEFT_FIND_X;
+LEFT_FIND_X - S1 - S1 - L - LEFT_FIND_X;
+LEFT_FIND_X - S2 - S2 - L - LEFT_FIND_X;
+LEFT_FIND_X - V1 - V2 - R - MOVE_X;
+LEFT_FIND_X - V2 - V2 - L - LEFT_FIND_X;
+LEFT_FIND_X - SENTINEL - SENTINEL - R - FIND_X;
+
+
