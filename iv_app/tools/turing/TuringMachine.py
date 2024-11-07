@@ -105,9 +105,33 @@ class Tape:
                 else:
                     ret += "|"
             if i == self.head:
-                ret += f"<<<{self.values[i]}>>>|"
+                # ret += f"<<<{self.values[i]}>>>|"
+                # ret += f"\033[92m<<<{self.values[i]}>>>\033[0m|"
+                if __name__ == "__main__":
+                    ret += f"\033[30;42m<<<{self.values[i]}>>>\033[0m|"
+                else:
+                    ret += f'<span class="highlight-green"><<<{self.values[i]}>>></span>|'
             else:
                 ret += f"{self.values[i]}|"
+
+        if len(ret) > 294:
+            if __name__ == "__main__":
+                ret = (ret[:148] +
+               "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t * \n" +
+               "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t***\n" +
+               "\t\t\t\t\t\t\t\t\t******************************************************************\n" +
+                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t***\n" +
+               "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t * \n" +
+               ret[-161:].replace("\n", ""))
+            else:
+                ret = (ret[:148] +
+                     "\n\t\t\t\t\t                        **************                            \n" +
+                       "\t\t\t\t\t            ***************************************               \n" +
+                       "\t\t\t\t\t******************************************************************\n" +
+                       "\t\t\t\t\t            ***************************************               \n" +
+                       "\t\t\t\t\t                        **************                            \n" +
+                       ret[-180:].replace("\n", ""))
+
         return ret
 
     def __repr__(self):
@@ -324,12 +348,12 @@ class TuringMachine:
             print(output)
             return output
         # Add each unary number to the output string
-        output += "\nUnary Numbers on Tape:\n"
+        output += "\nUnary Numbers on Tape (in form |0| |number| |0|):\n"
         output += "-" * 40 + "\n"
         for i, num in enumerate(numbers, 1):
             # Count actual 1s and 2s (excluding head markers)
             value = sum(1 for s in num if s.strip('[]') in ['1', '2'])
-            output += f"{value}: {''.join(num)}\n"
+            output += f"{value}: {''.join(num) if len(num) < 24 else f"111... ({len(num)-6} x '1') ...111"}\n"
         output += "-" * 40 + "\n"
         output += f"Head Position: {self.tape.head}\n"
 
@@ -390,12 +414,12 @@ if __name__ == "__main__":
     # counting.showConfigurationsUsed()
     # counting.printUnary(tape=False)
 
-    doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=2727, printConfigs=True)
+    doubling = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=2727, printConfigs=True)
     # # RUN until tape limit
-    doubling.run()
+    # doubling.run()
 
     # # Run stepwise from 0
-    # doubling.runStepwise()
+    doubling.runStepwise()
 
     # # run to a certain step, then stepwise from there
     # doubling.runStepwiseFrom(start=13)
@@ -408,5 +432,6 @@ if __name__ == "__main__":
     # # Show configurations used or not
     # doubling.showConfigurationsUsed()
     doubling.printUnary(tape=False)
+
 
 
