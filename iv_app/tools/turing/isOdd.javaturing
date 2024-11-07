@@ -1,8 +1,8 @@
 
-
-
-
-q1-S0-S0-R-q2;
+q1-S0
+    -S0
+    -R
+    -q2;
 
 q2-S0
     -S1
@@ -18,4 +18,15 @@ q4-S0
     -S2
     -R
     -q1;
+
+
+#########
+
+This program will alternatively print 0, then 1, then 0, then 1....on the tape
+
+It is a very simple program that could be interpreted as:
+    - non-integer part of 1/3 in binary
+    - isOdd(x) where x goes from 0, 1, 2, 3, .... N
+    - 1 in unary many many many times, separated by 0
+    - art?
 

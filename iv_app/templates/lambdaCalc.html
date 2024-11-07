@@ -126,7 +126,15 @@
             <button type="button" class="operation-btn" onclick="addText('NOT')">Define NOT</button>
         </div>
         <input type="submit" class="logout-btn" value="Run!">
+
+
     </form>
+
+    <form action="/runLambda" method="GET">
+        <input type="submit" class="logout-btn" value="Reset Program">
+    </form>
+
+
 
     <div class="section-title">Program Output:</div>
     <div class="output-box" id="output">{{output_text}}</div>

@@ -2,9 +2,7 @@ import numpy as np
 from flask import Flask, redirect, render_template, request, session, url_for, jsonify
 import os
 import random
-
 from matplotlib import pyplot as plt
-
 import iv_app.tools.ticker_functionality as fcc
 from datetime import datetime
 from iv_app.tools import black_scholes_sandbox as BS
@@ -15,6 +13,7 @@ from iv_app.tools import Bond as bnd
 from iv_app.tools.lambdaCalculus import lambda_calculus_interpreter as LI
 import iv_app.tools.waves.PrimitiveFT as ft
 from iv_app.tools.NeuralNetworks.MNIST_NN import MNIST_NN_3layer as mnn
+import iv_app.tools.turing.TuringMachine as tm
 import json
 
 
@@ -144,24 +143,7 @@ def mnistDraw():
     return render_template("mnist_draw.html")
 
 
-# @app.route('/mnistPredict', methods=['POST'])
-# def mnistPredict():
-#     data = request.json['image']
-#     image = np.array(data, dtype=np.float32)
-#     image = image.reshape(1, 28, 28, 1)
-#     image = 1 - image
-#
-#     # Once you have your model loaded:
-#     # prediction = model.predict(image)
-#     # predicted_digit = np.argmax(prediction[0])
-#
-#     # For now, returning a dummy prediction
-#     # predicted_digit = random.random() * 100
-#     predicted_digit = len(image[0])
-#
-#     return jsonify({
-#         'prediction': int(predicted_digit)
-#     })
+
 @app.route('/mnistPredict', methods=['POST'])
 def mnistPredict():
     data = request.json['image']
@@ -190,7 +172,55 @@ def mnistPredict():
 # renders appropriate template (admin or user)
 @app.route("/turing")
 def turing():
-    return render_template("turing.html")
+    basic_prog = ("q1 - S0 - S2 - R - q1;\n\n\n#########\n\nThese are comments, keep them below the 9 hashmarks."
+                  "\nThis program is very simple, it will only move to the right and print 1s until the end...\n"
+                  "Click one of the above options for a present program which will do some cooler things!")
+
+    with open("./tools/turing/art.javaturing", 'r') as fn:
+        art = fn.read().strip()
+
+    with open("./tools/turing/isOdd.javaturing", 'r') as fn:
+        isOdd = fn.read().strip()
+
+    with open("./tools/turing/counting.javaturing", 'r') as fn:
+        counting = fn.read().strip()
+
+    with open("./tools/turing/doubling.javaturing", 'r') as fn:
+        doubling = fn.read().strip()
+    return render_template("turing.html", starter_code=basic_prog, basic_program=basic_prog,
+                           art=art, isOdd=isOdd, counting=counting, doubling=doubling)
+
+@app.route("/runTuring", methods=["GET", "POST"])
+def runTuring():
+    basic_prog = ("q1 - S0 - S2 - R - q1;\n\n\n#########\n\nThese are comments, keep them below the 9 hashmarks."
+                  "\nThis program is very simple, it will only move to the right and print 1s until the end...\n"
+                  "Click one of the above options for a present program which will do some cooler things!")
+
+    user_prog = request.form.get('inputText')
+
+    machine = tm.TuringMachine(tm.Tape(), description=user_prog, sizeLimit=2727)
+    machine.run()
+
+    unary = machine.printUnary(tape=False)
+
+    with open("./tools/turing/art.javaturing", 'r') as fn:
+        art = fn.read().strip()
+
+    with open("./tools/turing/isOdd.javaturing", 'r') as fn:
+        isOdd = fn.read().strip()
+
+    with open("./tools/turing/counting.javaturing", 'r') as fn:
+        counting = fn.read().strip()
+
+    with open("./tools/turing/doubling.javaturing", 'r') as fn:
+        doubling = fn.read().strip()
+
+    return render_template("turing.html", output_text=unary, file_content=str(machine.getTape()),
+                           starter_code=user_prog, basic_program=basic_prog,
+                           art=art, isOdd=isOdd, counting=counting, doubling=doubling)
+
+
+
 
 # sound waves endpoint
 # renders appropriate template (admin or user)

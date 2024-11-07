@@ -1,4 +1,4 @@
-SYMBOLS = {
+TM_SYMBOLS = {
         "S0": ' ',
         "S1": '0',
         "S2": '1',
@@ -16,15 +16,10 @@ SYMBOLS = {
         "V3": 'z',
         "ASTR": "*"
     }
-DIRECTIONS = {
-    "LEFT",
-    "RIGHT",
-    "STAY"
-}
-MAX_TAPE = 999
+TM_MAX_TAPE = 999
 
-SIGS = set()
-USED = set()
+TM_SIGS = set()
+TM_USED = set()
 
 
 class Configuration:
@@ -62,17 +57,17 @@ class Tape:
         self.tapeFill = tapeFill
         self.values = [None] * self.size
         for i in range(size):
-            self.values[i] = SYMBOLS[self.tapeFill]
+            self.values[i] = TM_SYMBOLS[self.tapeFill]
 
     def read(self):
         val = self.values[self.head]
-        for k, s in SYMBOLS.items():
+        for k, s in TM_SYMBOLS.items():
             if s == val:
                 return k
         return "S0"
 
     def write(self, s):
-        self.values[self.head] = SYMBOLS[s]
+        self.values[self.head] = TM_SYMBOLS[s]
 
     def right(self):
         if self.head + 1 == self.size:
@@ -83,7 +78,7 @@ class Tape:
                 if i < self.size - 10:
                     self.values[i] = old[i]
                 else:
-                    self.values[i] = SYMBOLS[self.tapeFill]
+                    self.values[i] = TM_SYMBOLS[self.tapeFill]
         self.head += 1
 
     def left(self):
@@ -93,7 +88,7 @@ class Tape:
             self.values = [None] * self.size
             for i in range(self.size):
                 if i < 10:
-                    self.values[i] = SYMBOLS[self.tapeFill]
+                    self.values[i] = TM_SYMBOLS[self.tapeFill]
                 else:
                     self.values[i] = old[i-10]
             self.head = 9
@@ -124,7 +119,7 @@ class Tape:
 
 class TuringMachine:
 
-    def __init__(self, tape, sizeLimit=MAX_TAPE, description=None, printConfigs=False):
+    def __init__(self, tape, sizeLimit=TM_MAX_TAPE, description=None, printConfigs=False):
         self.head = {}
         self.currentState = None
         self.tape = tape
@@ -135,8 +130,8 @@ class TuringMachine:
             if description[-11:] == ".javaturing":
                 with open(description, "r") as fn:
                     description = fn.read().strip()
-                    if "#########" in description:
-                        description = description.split("#########")[0]
+        if "#########" in description:
+            description = description.split("#########")[0]
 
         foundInit = False
 
@@ -175,7 +170,7 @@ class TuringMachine:
             for k, v in self.head.items():
                 print(f"\t{k}:")
                 for c, b in v.items():
-                    SIGS.add(f"{k}-{c}")
+                    TM_SIGS.add(f"{k}-{c}")
                     print(f"\t\t{c}: {b}")
 
     def addConfiguration(self, state, configuration):
@@ -284,7 +279,11 @@ class TuringMachine:
     def getTape(self):
         return self.tape
 
+
     def printUnary(self, tape=True):
+        # Initialize a string to accumulate output
+        output = ""
+
         # Convert tape values to symbols for easier reading
         symbols = []
         for i, val in enumerate(self.tape.values):
@@ -296,8 +295,11 @@ class TuringMachine:
         # Find unary numbers (patterns of 1s surrounded by 0s)
         tape_str = ''.join(symbols)
         numbers = []
+        numSet = set()
         current_number = []
         in_number = False
+
+
 
         for i, symbol in enumerate(symbols):
             actual_symbol = symbol.strip('[]')  # Remove head position markers if present
@@ -308,6 +310,7 @@ class TuringMachine:
             elif in_number and actual_symbol == '0':
                 if current_number:  # Only add if we found some 1s
                     numbers.append(current_number)
+                    numSet.add(len(current_number))
                     current_number = []
                 in_number = False
             elif actual_symbol == '2':  # Include 2s in output for visibility
@@ -316,25 +319,34 @@ class TuringMachine:
                 current_number.append(symbol)
                 in_number = True
 
-        # Print each unary number on its own line
-        print("\nUnary Numbers on Tape:")
-        print("-" * 40)
+        if len(numSet) <= 1:
+            output = f"There are no unary digits on this tape couched by 0s" if len(numSet) == 0 else f"\"1\" is repeated in unary redundantly ({len(numbers)} times)..."
+            print(output)
+            return output
+        # Add each unary number to the output string
+        output += "\nUnary Numbers on Tape:\n"
+        output += "-" * 40 + "\n"
         for i, num in enumerate(numbers, 1):
             # Count actual 1s and 2s (excluding head markers)
             value = sum(1 for s in num if s.strip('[]') in ['1', '2'])
-            print(f"{value}: {''.join(num)}")
-        print("-" * 40)
-        print(f"Head Position: {self.tape.head}")
+            output += f"{value}: {''.join(num)}\n"
+        output += "-" * 40 + "\n"
+        output += f"Head Position: {self.tape.head}\n"
 
         if tape:
-            # Also print the full tape for reference
-            print("\nFull Tape:")
-            print(self.tape)
+            # Also add the full tape to the output for reference
+            output += "\nFull Tape:\n"
+            output += str(self.tape) + "\n"
+
+        # Return the full formatted output string
+        print(output)
+        return output
+
 
     def showConfigurationsUsed(self):
-        print(len(SIGS))
-        print(len(USED))
-        diff = SIGS - USED
+        print(len(TM_SIGS))
+        print(len(TM_USED))
+        diff = TM_SIGS - TM_USED
         for x in diff:
             print(x)
         return diff
@@ -359,7 +371,7 @@ class TuringMachine:
         elif configuration.getMoveDirection() == "RIGHT":
             self.tape.right()
 
-        USED.add(f"{self.currentState}-{currentSymbol}")
+        TM_USED.add(f"{self.currentState}-{currentSymbol}")
         self.currentState = configuration.getNextState()
 
         return steps

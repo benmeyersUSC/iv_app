@@ -23,7 +23,6 @@ FIND_X - S0 - S0 - L - FIND_X;
 FIND_X - S1 - S1 - L - FIND_X_in;
 FIND_X - S2 - S2 - L - FIND_X;
 
-
 FIND_X_in - S0 - S0 - L - FIND_X_in;
 FIND_X_in - S1 - S1 - R - DONE_X;
 FIND_X_in - S2 - S2 - L - FIND_X_in;
@@ -45,7 +44,6 @@ WRITE_1_b - S0 - S0 - R - WRITE_1_c;
 
 WRITE_1_c - S0 - S2 - R - FIND_X;
 WRITE_1_c - S2 - S2 - R - WRITE_1_b;
-
 
 DONE_X - S0 - S0 - R - IF_DONE_X;
 DONE_X - S1 - S1 - R - DONE_X;
@@ -82,4 +80,13 @@ TO_END - S2 - S2 - R - TO_END;
 IF_TO_END - S0 - S1 - R - FIND_0;
 IF_TO_END - S1 - S1 - R - TO_END;
 IF_TO_END - S2 - S2 - R - TO_END;
+
+
+
+#########
+
+This program is even more complicated...
+It counts the POWERS OF 2 on the tape in UNARY
+
+on the tape we will see each unary power of 2 separated by "0" on either side
 

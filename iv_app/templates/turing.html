@@ -1,91 +1,231 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Turing Machine</title>
+    <title>Turing Machine Interpreter</title>
 </head>
 <style>
-    /* General styling */
+    .logout-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #008000;
+        color: #fff;
+        cursor: pointer;
+        margin: 10px;
+    }
+    .logout-btn:hover {
+        background-color: #ff0000;
+    }
+    .program-btn {
+        font-size: 14px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #404040;
+        color: #fff;
+        cursor: pointer;
+        margin: 5px;
+        transition: background-color 0.3s;
+    }
+    .program-btn:hover {
+        background-color: #606060;
+    }
+    .program-btn.active {
+        background-color: #606060;
+        border: 1px solid #808080;
+    }
     body {
         font-family: "Times New Roman", Times, serif;
         line-height: 1.6;
         margin: 0;
         padding: 20px;
-        text-align: center; /* Center align the content */
-        background-color: #000; /* Set background color to black */
-        color: #fff; /* Set text color to white */
+        text-align: center;
+        background-color: #000;
+        color: #fff;
     }
-
-  img.logo {
-    width: 400px; /* Set a fixed width */
-    height: 270px; /* Set a fixed height */
-}
-
     h1 {
         font-size: 24px;
     }
-
     p {
         font-size: 16px;
     }
-
-    /* Form styling */
-    .button-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Display buttons in rows of three */
-        grid-gap: 20px; /* Set spacing between buttons */
-        margin: 0 auto; /* Center align the grid */
-        max-width: 900px; /* Limit grid width */
-    }
-
-    button[type="submit"] {
-        font-size: 16px;
-        padding: 20px;
-        border: none;
+    .textarea-box {
+        width: 100%;
+        min-height: 100px;
+        margin-bottom: 20px;
+        padding: 10px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        background-color: #2c2c2c;
+        color: #fff;
+        border: 1px solid #404040;
         border-radius: 5px;
-        background-color: #008000; /* Red color */
-        color: #fff; /* White text color */
-        cursor: pointer;
+        font-size: 14px;
+        resize: vertical;
+        box-sizing: border-box;
     }
-
-    button[type="submit"]:hover {
-        background-color: #ff0000; /* Green color on hover */
+    .output-box {
+        width: 100%;
+        min-height: 50px;
+        margin: 20px 0;
+        padding: 10px;
+        background-color: #2c2c2c;
+        color: #fff;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        overflow-y: auto;
+        font-family: monospace;
+        text-align: left;
+        border: 1px solid #404040;
+        box-sizing: border-box;
     }
-
-    .formula-container {
-    width: 80%;
-    margin: 0 auto;
-    background-color: #404040;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: smaller; /* or specify a specific size like '10px' */
-}
-
-.formula-description {
-    text-align: left; /* Align bullet points to the left */
-    margin-bottom: 20px;
-    font-size: smaller; /* or specify a specific size like '10px' */
-}
-    .logout-btn {
-            font-size: 16px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #008000; /* Red color */
-            color: #fff; /* White text color */
-            cursor: pointer;
-        }
-        .logout-btn:hover {
-            background-color: #ff0000; /* Dark green color on hover */
-        }
+    .file-content-box {
+        width: 100%;
+        min-height: 50px;
+        margin: 20px 0;
+        padding: 10px;
+        background-color: #2c2c2c;
+        color: #fff;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        overflow-y: auto;
+        font-family: monospace;
+        text-align: left;
+        border: 1px solid #404040;
+        box-sizing: border-box;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+    }
+    .section-title {
+        text-align: left;
+        margin: 20px 0 10px 0;
+        color: #808080;
+        font-size: 14px;
+    }
+    .program-buttons {
+        margin: 10px 0;
+    }
 </style>
 <body>
 
-<p>TURING</p>
+<h1>TURING MACHINE, on a TURING MACHINE</h1>
 
-</body>
-<form action="/client" method="GET">
+<div class="container">
+    <div class="program-buttons">
+        <button type="button" class="program-btn" onclick="loadProgram('isOdd', this)">101010...</button>
+        <button type="button" class="program-btn" onclick="loadProgram('counting', this)">Counting in Unary</button>
+        <button type="button" class="program-btn" onclick="loadProgram('doubling', this)">Powers of 2 in Unary</button>
+    </div>
+
+    <form action="/runTuring" method="POST">
+        <div class="section-title">Input:</div>
+        <textarea id="inputText" name="inputText" class="textarea-box" spellcheck="false">{{starter_code|safe}}</textarea>
+        <input type="submit" class="logout-btn" value="Run!">
+    </form>
+
+    <button onclick="resetToLastProgram()" class="logout-btn">Clear Edits</button>
+    <button onclick="loadProgram('scaffold', this)" class="logout-btn">Reset Program to Scaffold</button>
+
+    <div class="section-title">Unary Numbers (if any):</div>
+    <div class="output-box" id="output">{{output_text|safe}}</div>
+
+    <div class="section-title">Raw Tape:</div>
+    <div class="file-content-box" id="fileContent">{{file_content|safe}}</div>
+
+    <form action="/client" method="GET">
         <input type="submit" class="logout-btn" value="Home">
     </form>
+</div>
+
+<script>
+    // Store the program texts (will be populated by Flask)
+    const programs = {
+        isOdd: String.raw`{{isOdd|safe}}`,
+        counting: String.raw`{{counting|safe}}`,
+        doubling: String.raw`{{doubling|safe}}`,
+        scaffold: String.raw`{{basic_program|safe}}`
+    };
+
+    // Keep track of the last selected program
+    let currentProgram = 'scaffold'; // Default to scaffold program
+
+    // Function to load a program into the textarea
+    function loadProgram(programName, buttonElement) {
+        if (!programs[programName]) {
+            console.error('Program not found:', programName);
+            return;
+        }
+
+        currentProgram = programName;
+        const textarea = document.getElementById('inputText');
+        textarea.value = programs[programName];
+
+        // Update active button state only for program selection buttons
+        if (buttonElement && buttonElement.classList.contains('program-btn')) {
+            document.querySelectorAll('.program-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            buttonElement.classList.add('active');
+        }
+
+        // Force a resize after content change
+        setTimeout(() => {
+            updateTextareaHeight(textarea);
+        }, 0);
+    }
+
+    // Function to reset to the last selected program
+    function resetToLastProgram() {
+        const textarea = document.getElementById('inputText');
+        textarea.value = programs[currentProgram];
+        updateTextareaHeight(textarea);
+    }
+
+    // Function to update textarea height
+    function updateTextareaHeight(textarea) {
+        // Reset height to allow proper scrollHeight calculation
+        textarea.style.height = 'auto';
+        // Set new height based on scrollHeight
+        textarea.style.height = Math.max(100, textarea.scrollHeight) + 'px';
+    }
+
+    // Function to adjust height of a div based on its content
+    function adjustDivHeight(div) {
+        if (!div) return;
+        div.style.height = 'auto';
+        div.style.height = Math.max(50, div.scrollHeight) + 'px';
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('inputText');
+        const output = document.getElementById('output');
+        const fileContent = document.getElementById('fileContent');
+
+        // Set up textarea event listeners
+        textarea.addEventListener('input', () => updateTextareaHeight(textarea));
+        textarea.addEventListener('change', () => updateTextareaHeight(textarea));
+
+        // Initial size adjustments
+        updateTextareaHeight(textarea);
+        adjustDivHeight(output);
+        adjustDivHeight(fileContent);
+
+        // Set initial program button state
+        if (programs.scaffold === textarea.value) {
+            currentProgram = 'scaffold';
+        } else if (programs.isOdd === textarea.value) {
+            currentProgram = 'isOdd';
+            document.querySelector('button[onclick*="isOdd"]').classList.add('active');
+        }
+    });
+</script>
+
+</body>
 </html>
