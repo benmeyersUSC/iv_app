@@ -378,7 +378,7 @@ if __name__ == "__main__":
     # counting.showConfigurationsUsed()
     # counting.printUnary(tape=False)
 
-    doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=2075, printConfigs=True)
+    doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=2727, printConfigs=True)
     # # RUN until tape limit
     doubling.run()
 
