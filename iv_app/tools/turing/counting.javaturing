@@ -4,73 +4,43 @@ INIT1 - S0 - S1 - R - INIT2;
 INIT2 - S0 - S0 - R - INIT3;
 INIT3 - S0 - S2 - R - INIT4;
 INIT4 - S0 - S0 - R - INIT5;
-INIT5 - S0 - S1 - R - FIND_RIGHT_0;
+INIT5 - S0 - S1 - R - FIND_0;
 
-FIND_RIGHT_0 - S0 - S0 - L - FIND_RIGHT_0;
-FIND_RIGHT_0 - S1 - S1 - L - FIND_LEFT_0;
+FIND_0 - S0 - S0 - L - FIND_0;
+FIND_0 - S1 - S1 - L - FIND_0_in;
 
-FIND_LEFT_0 - S0 - S0 - L - FIND_LEFT_0;
-FIND_LEFT_0 - S1 - S1 - R - MARK_1;
-FIND_LEFT_0 - S2 - S2 - L - FIND_LEFT_0;
+FIND_0_in - S0 - S0 - L - FIND_0_in;
+FIND_0_in - S1 - S1 - R - MARK_1;
+FIND_0_in - S2 - S2 - L - FIND_0_in;
 
 MARK_1 - S0 - S0 - R - MARK_1;
-MARK_1 - S1 - S1 - R - FIND_RIGHT_0_a;
+MARK_1 - S1 - S1 - R - FIND_X;
 MARK_1 - S2 - S2 - R - MARK;
 
 MARK - S0 - V1 - R - MARK_1;
 
-FIND_RIGHT_0_a - S0 - S0 - L - FIND_RIGHT_0_a;
-FIND_RIGHT_0_a - S1 - S1 - L - FIND_LEFT_0_a;
+FIND_X - S0 - S0 - L - FIND_X;
+FIND_X - S1 - S1 - L - FIND_X_in;
+FIND_X - S2 - S2 - L - FIND_X;
 
-FIND_LEFT_0_a - S0 - S0 - L - FIND_LEFT_0_a;
-FIND_LEFT_0_a - S1 - S1 - R - FIND_X;
-FIND_LEFT_0_a - S2 - S2 - L - FIND_LEFT_0_a;
-FIND_LEFT_0_a - V1 - V1 - L - FIND_LEFT_0_a;
+FIND_X_in - S0 - S0 - L - FIND_X_in;
+FIND_X_in - S1 - S1 - R - DONE;
+FIND_X_in - S2 - S2 - L - FIND_X_in;
+FIND_X_in - V1 - S0 - R - MOVE_X;
 
-FIND_X - S0 - S0 - R - IF_FIND_X;
-FIND_X - V1 - S0 - R - MOVE_X;
-
-IF_FIND_X - S0 - S2 - R - CAP_0;
-IF_FIND_X - S1 - S1 - R - FIND_X;
-IF_FIND_X - S2 - S2 - R - FIND_X;
-
-CAP_0 - S0 - S0 - R - CAP_0_a;
-
-CAP_0_a - S0 - S1 - R - FIND_RIGHT_0;
-
-MOVE_X - S0 - S0 - R - MOVE_X;
-MOVE_X - S1 - S1 - R - MOVE_X_b;
+MOVE_X - S0 - S0 - R - IF_MOVE_X;
+MOVE_X - S1 - S1 - R - MOVE_X;
 MOVE_X - S2 - S2 - R - MOVE_X;
-MOVE_X - V1 - V1 - R - MOVE_X;
 
-MOVE_X_b - S0 - S0 - R - WRITE_1;
+IF_MOVE_X - S0 - S2 - R - FIND_X;
+IF_MOVE_X - S1 - S1 - R - MOVE_X;
+IF_MOVE_X - S2 - S2 - R - MOVE_X;
 
-WRITE_1 - S0 - S2 - R - LEFT_FIND_X;
-WRITE_1 - S2 - S2 - R - WRITE_1_b;
+DONE - S0 - S0 - R - IF_DONE;
 
-WRITE_1_b - S0 - S0 - R - WRITE_1_c;
+IF_DONE - S0 - S2 - R - END;
+IF_DONE - S1 - S1 - R - DONE;
+IF_DONE - S2 - S2 - R - DONE;
 
-WRITE_1_c - S0 - S2 - R - LEFT_FIND_X;
-WRITE_1_c - S2 - S2 - R - WRITE_1_b;
-
-LEFT_FIND_X - S0 - S0 - L - LEFT_FIND_X;
-LEFT_FIND_X - S1 - S1 - L - LEFT_FIND_X;
-LEFT_FIND_X - S2 - S2 - L - LEFT_FIND_X;
-LEFT_FIND_X - V1 - S0 - R - MOVE_X;
-LEFT_FIND_X - SENTINEL - SENTINEL - R - FIND_X;
-
-
-#########
-
-
-
-unused and removed
-
-FIND_X-S1
-FIND_RIGHT_0_a-S2
-FIND_RIGHT_0_a-V1
-FIND_X-S2
-MOVE_X_b-S2
-IF_FIND_X-V1
-FIND_RIGHT_0-V1
-FIND_RIGHT_0-S2
+END - S0 - S0 - R - END_2;
+END_2 - S0 - S1 - R - FIND_0;

@@ -345,7 +345,7 @@ class TuringMachine:
             configuration = self.head[self.currentState][currentSymbol]
         except Exception as e:
             print(self.getTape())
-            raise Exception(f"{e}....No signature found: {self.currentState}-{currentSymbol}")
+            raise Exception(f"{e}....No signature found: {self.currentState}-{currentSymbol}\nSteps: {steps}")
 
         if configuration is None:
             print(f"No configuration defined for state: {self.currentState} and symbol: {currentSymbol}")
@@ -380,13 +380,13 @@ if __name__ == "__main__":
 
     doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=2075, printConfigs=True)
     # # RUN until tape limit
-    # doubling.run()
+    doubling.run()
 
     # # Run stepwise from 0
-    doubling.runStepwise()
+    # doubling.runStepwise()
 
     # # run to a certain step, then stepwise from there
-    # doubling.runStepwiseFrom(start=400)
+    # doubling.runStepwiseFrom(start=13)
 
     # # equal to this, but first is preferred
     # doubling.runTo(stop=400)
