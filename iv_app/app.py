@@ -199,7 +199,7 @@ def runTuring():
     user_prog = request.form.get('inputText')
 
     machine = tm.TuringMachine(tm.Tape(), description=user_prog, sizeLimit=2727)
-    machine.run()
+    theRun = machine.run(saveFirst=101)
 
     unary = machine.printUnary(tape=False)
 
@@ -215,7 +215,7 @@ def runTuring():
     with open("./tools/turing/doubling.javaturing", 'r') as fn:
         doubling = fn.read().strip()
 
-    return render_template("turing.html", output_text=unary, file_content=str(machine.getTape()),
+    return render_template("turing.html", output_text=unary, file_content=theRun,
                            starter_code=user_prog, basic_program=basic_prog,
                            art=art, isOdd=isOdd, counting=counting, doubling=doubling)
 

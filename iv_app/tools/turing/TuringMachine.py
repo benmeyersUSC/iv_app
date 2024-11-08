@@ -21,6 +21,9 @@ TM_MAX_TAPE = 999
 TM_SIGS = set()
 TM_USED = set()
 
+def specPrint(x):
+    if __name__ == "__main__":
+        print(x)
 
 class Configuration:
     def __init__(self, readSymbol, writeSymbol, moveDirection, nextState):
@@ -116,12 +119,11 @@ class Tape:
 
         if len(ret) > 294:
             if __name__ == "__main__":
-                ret = (ret[:148] +
-               "\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t * \n" +
+                ret = (ret[:148] +                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t***\n" +
+
                "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t***\n" +
                "\t\t\t\t\t\t\t\t\t******************************************************************\n" +
                 "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t***\n" +
-               "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t * \n" +
                ret[-161:].replace("\n", ""))
             else:
                 ret = (ret[:148] +
@@ -143,12 +145,12 @@ class Tape:
 
 class TuringMachine:
 
-    def __init__(self, tape, sizeLimit=TM_MAX_TAPE, description=None, printConfigs=False):
+    def __init__(self, tape: Tape, sizeLimit=TM_MAX_TAPE, description=None, specPrintConfigs=False):
         self.head = {}
         self.currentState = None
         self.tape = tape
         self.sizeLimit = sizeLimit
-        self.printConfigs = printConfigs
+        self.specPrintConfigs = specPrintConfigs
 
         if description != None:
             if description[-11:] == ".javaturing":
@@ -189,13 +191,13 @@ class TuringMachine:
             except Exception as e:
                 raise Exception(f"Invalid symbol in configuration: {line}\n{e}")
 
-        if self.printConfigs:
-            print(f"Machine Program:")
+        if self.specPrintConfigs:
+            specPrint(f"Machine Program:")
             for k, v in self.head.items():
-                print(f"\t{k}:")
+                specPrint(f"\t{k}:")
                 for c, b in v.items():
                     TM_SIGS.add(f"{k}-{c}")
-                    print(f"\t\t{c}: {b}")
+                    specPrint(f"\t\t{c}: {b}")
 
     def addConfiguration(self, state, configuration):
         if state not in self.head:
@@ -205,66 +207,81 @@ class TuringMachine:
                 f"Duplicate configuration for state {state} and read symbol {configuration.getReadSymbol()}")
         self.head[state][configuration.getReadSymbol()] = configuration
 
-    def run(self, show=True, start=0):
+    def run(self, show=True, start=0, saveFirst=27):
         """
         Primary method to run machine until limit, has all checking measures
-        :param show: boolean to print tape at end or not
+        :param show: boolean to specPrint tape at end or not
         :return: None
         """
+        first_steps = []
+
         steps = start
+
+        first_steps.append(f"\nStep {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} / \"{TM_SYMBOLS[self.tape.read()]}\") {self.getTape()}")
+        # first_steps.append(str(self.getTape()))
 
         while self.currentState != "HALT":
             if self.tape.size >= self.sizeLimit:
                 if show:
-                    print(self.getTape())
-                print(f"Halting: tape size limit {self.sizeLimit} reached")
-                print(f"Steps taken: {steps}")
-                return
+                    specPrint(self.getTape())
+                specPrint(f"Halting: tape size limit {self.sizeLimit} reached")
+                specPrint(f"Steps taken: {steps}")
+                return "\n\n".join(first_steps)
 
             steps = self.makeStep(steps)
 
+            if steps < saveFirst:
+                first_steps.append(f"\nStep {steps+1}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} / \"{TM_SYMBOLS[self.tape.read()]}\") {self.getTape()}")
+            elif steps == saveFirst:
+                first_steps.append("\n...........")
             steps += 1
 
         if show:
-            print(self.getTape())
-        print(f"Machine halted normally after {steps} steps")
+            specPrint(self.getTape())
+        specPrint(f"Machine halted normally after {steps} steps")
 
-    def runStepwise(self, _steps=0):
+        return "\n\n".join(first_steps)
+
+    def runStepwise(self, _steps=0, every=1):
         """
         For debugging and visualization, step through program stepwise
         :return:
         """
         steps = _steps
 
+        specPrint(f"Step {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}")
+        specPrint(self.getTape())
+
         while self.currentState != "HALT":
             if self.tape.size >= self.sizeLimit:
-                print(self.getTape())
-                print(f"Halting: tape size limit {self.sizeLimit} reached")
-                print(f"Steps taken: {steps}")
+                specPrint(self.getTape())
+                specPrint(f"Halting: tape size limit {self.sizeLimit} reached")
+                specPrint(f"Steps taken: {steps}")
                 return
 
             steps = self.makeStep(steps)
+            if steps % every == 0:
+                userIn = input()
+                if "run" in userIn.lower():
+                    runTo = input("to step (integer or \"end\") >> ")
+                    if "end" in runTo.lower():
+                        return self.run(show=True, start=steps)
+                    else:
+                        try:
+                            self.runTo(stop=int(runTo.strip()))
+                            return self.runStepwiseFrom(start=int(runTo.strip()), every=every)
+                        except Exception as e:
+                            specPrint(f"Need to enter integer or \"end\", running to end")
+                            return self.run(start=steps)
 
-            userIn = input()
-            if "run" in userIn.lower():
-                runTo = input("to step (integer or \"end\") >> ")
-                if "end" in runTo.lower():
-                    return self.run(show=True, start=steps)
-                else:
-                    try:
-                        self.runTo(stop=int(runTo.strip()))
-                        return self.runStepwiseFrom(start=int(runTo.strip()))
-                    except Exception as e:
-                        print(f"Need to enter integer or \"end\", running to end")
-                        return self.run(start=steps)
 
+                specPrint(f"Step {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}")
+                specPrint(self.getTape())
 
-            print(f"Step {steps}:\tON STATE: {self.currentState}")
-            print(self.getTape())
             steps += 1
 
-        print(self.getTape())
-        print(f"Machine halted normally after {steps} steps")
+        specPrint(self.getTape())
+        specPrint(f"Machine halted normally after {steps} steps")
 
     def runTo(self, stop=None, show=True):
         if stop is None:
@@ -274,15 +291,15 @@ class TuringMachine:
         while self.currentState != "HALT":
             if self.tape.size >= self.sizeLimit:
                 if show:
-                    print(self.getTape())
-                print(f"Halting: tape size limit {self.sizeLimit} reached")
-                print(f"Steps taken: {steps}")
+                    specPrint(self.getTape())
+                specPrint(f"Halting: tape size limit {self.sizeLimit} reached")
+                specPrint(f"Steps taken: {steps}")
                 return
             elif steps >= stop:
                 if show:
-                    print(self.getTape())
-                print(f"Halting: step limit {stop} reached")
-                print(f"Steps taken: {steps}")
+                    specPrint(self.getTape())
+                specPrint(f"Halting: step limit {stop} reached")
+                specPrint(f"Steps taken: {steps}")
                 return
 
             steps = self.makeStep(steps)
@@ -290,15 +307,15 @@ class TuringMachine:
             steps += 1
 
         if show:
-            print(self.getTape())
-        print(f"Machine halted normally after {steps} steps")
+            specPrint(self.getTape())
+        specPrint(f"Machine halted normally after {steps} steps")
 
-    def runStepwiseFrom(self, start=0):
+    def runStepwiseFrom(self, start=0, every=1):
         if start == 0:
             return self.runStepwise()
 
         self.runTo(start)
-        self.runStepwise(_steps=start+1)
+        self.runStepwise(_steps=start+1, every=every)
 
     def getTape(self):
         return self.tape
@@ -345,7 +362,7 @@ class TuringMachine:
 
         if len(numSet) <= 1:
             output = f"There are no unary digits on this tape couched by 0s" if len(numSet) == 0 else f"\"1\" is repeated in unary redundantly ({len(numbers)} times)..."
-            print(output)
+            specPrint(output)
             return output
         # Add each unary number to the output string
         output += "\nUnary Numbers on Tape (in form |0| |number| |0|):\n"
@@ -363,16 +380,16 @@ class TuringMachine:
             output += str(self.tape) + "\n"
 
         # Return the full formatted output string
-        print(output)
+        specPrint(output)
         return output
 
 
     def showConfigurationsUsed(self):
-        print(len(TM_SIGS))
-        print(len(TM_USED))
+        specPrint(len(TM_SIGS))
+        specPrint(len(TM_USED))
         diff = TM_SIGS - TM_USED
         for x in diff:
-            print(x)
+            specPrint(x)
         return diff
 
     def makeStep(self, steps):
@@ -380,12 +397,12 @@ class TuringMachine:
         try:
             configuration = self.head[self.currentState][currentSymbol]
         except Exception as e:
-            print(self.getTape())
+            specPrint(self.getTape())
             raise Exception(f"{e}....No signature found: {self.currentState}-{currentSymbol}\nSteps: {steps}")
 
         if configuration is None:
-            print(f"No configuration defined for state: {self.currentState} and symbol: {currentSymbol}")
-            print(f"Steps taken: {steps}")
+            specPrint(f"No configuration defined for state: {self.currentState} and symbol: {currentSymbol}")
+            specPrint(f"Steps taken: {steps}")
             return steps
 
         self.tape.write(configuration.getWriteSymbol())
@@ -409,17 +426,17 @@ if __name__ == "__main__":
     # art = TuringMachine(Tape(tapeFill="ASTR"), description="art.javaturing")
     # art.run()
     #
-    # counting = TuringMachine(Tape(tapeFill="S0"), description="counting.javaturing", sizeLimit=10305, printConfigs=True)
+    # counting = TuringMachine(Tape(tapeFill="S0"), description="counting.javaturing", sizeLimit=10305, specPrintConfigs=True)
     # counting.run(show=False)
     # counting.showConfigurationsUsed()
     # counting.printUnary(tape=False)
 
-    doubling = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=2727, printConfigs=True)
-    # # RUN until tape limit
-    # doubling.run()
+    counting = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=549, specPrintConfigs=False)
+    specPrint(counting.run(saveFirst=101))
 
-    # # Run stepwise from 0
-    doubling.runStepwise()
+    # doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=549, specPrintConfigs=False)
+    # specPrint(doubling.run(saveFirst=69))
+    # doubling.runStepwise()
 
     # # run to a certain step, then stepwise from there
     # doubling.runStepwiseFrom(start=13)
@@ -431,7 +448,7 @@ if __name__ == "__main__":
 
     # # Show configurations used or not
     # doubling.showConfigurationsUsed()
-    doubling.printUnary(tape=False)
+    # machine.printUnary(tape=False)
 
 
 
