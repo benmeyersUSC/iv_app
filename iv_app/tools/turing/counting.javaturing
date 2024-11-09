@@ -46,11 +46,9 @@ END - S0 - S0 - R - END_2;
 END_2 - S0 - S1 - R - FIND_0;
 
 
-
-
-
-
 #########
+
+COUNTING_TURING_PROGRAM
 
 This program is slightly more complicated...
 It counts on the tape in UNARY (essentially just a 1 or a tick for each number)

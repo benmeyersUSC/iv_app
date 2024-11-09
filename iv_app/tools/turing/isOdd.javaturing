@@ -11,6 +11,8 @@ q4-S0-S2-R-q1;
 
 #########
 
+IS_ODD_TURING_PROGRAM
+
 This program will alternatively print 0, then 1, then 0, then 1....on the tape
 
 It is a very simple program that could be interpreted as:

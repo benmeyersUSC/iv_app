@@ -14,6 +14,12 @@ TM_SYMBOLS = {
         "V1": 'x',
         "V2": 'y',
         "V3": 'z',
+        "V4": 'r',
+        "V5": 'u',
+        "V6": 'v',
+        "V7": 's',
+        "V8": 't',
+        "V9": 'w',
         "ASTR": "*"
     }
 TM_MAX_TAPE = 999
@@ -113,7 +119,8 @@ class Tape:
                 if __name__ == "__main__":
                     ret += f"\033[30;42m<<<{self.values[i]}>>>\033[0m|"
                 else:
-                    ret += f'<span class="highlight-green"><<<{self.values[i]}>>></span>|'
+                    # ret += f'<span class="highlight-green"><<<{self.values[i]}>>></span>|'
+                    ret += f'<span class="highlight-green"><<<</span>' + self.values[i] + f'<span class="highlight-green">>>></span>|'
             else:
                 ret += f"{self.values[i]}|"
 
@@ -145,12 +152,12 @@ class Tape:
 
 class TuringMachine:
 
-    def __init__(self, tape: Tape, sizeLimit=TM_MAX_TAPE, description=None, specPrintConfigs=False):
+    def __init__(self, tape: Tape, sizeLimit=TM_MAX_TAPE, description=None, printConfigs=False):
         self.head = {}
         self.currentState = None
         self.tape = tape
         self.sizeLimit = sizeLimit
-        self.specPrintConfigs = specPrintConfigs
+        self.printConfigs = printConfigs
 
         if description != None:
             if description[-11:] == ".javaturing":
@@ -191,7 +198,7 @@ class TuringMachine:
             except Exception as e:
                 raise Exception(f"Invalid symbol in configuration: {line}\n{e}")
 
-        if self.specPrintConfigs:
+        if self.printConfigs:
             specPrint(f"Machine Program:")
             for k, v in self.head.items():
                 specPrint(f"\t{k}:")
@@ -217,7 +224,7 @@ class TuringMachine:
 
         steps = start
 
-        first_steps.append(f"\nStep {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} / \"{TM_SYMBOLS[self.tape.read()]}\") {self.getTape()}")
+        first_steps.append(f"\nStep {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} = \"{TM_SYMBOLS[self.tape.read()]}\") {self.getTape()}")
         # first_steps.append(str(self.getTape()))
 
         while self.currentState != "HALT":
@@ -231,7 +238,7 @@ class TuringMachine:
             steps = self.makeStep(steps)
 
             if steps < saveFirst:
-                first_steps.append(f"\nStep {steps+1}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} / \"{TM_SYMBOLS[self.tape.read()]}\") {self.getTape()}")
+                first_steps.append(f"\nStep {steps+1}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} = \"{TM_SYMBOLS[self.tape.read()]}\") {self.getTape()}")
             elif steps == saveFirst:
                 first_steps.append("\n...........")
             steps += 1
@@ -249,7 +256,7 @@ class TuringMachine:
         """
         steps = _steps
 
-        specPrint(f"Step {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}")
+        specPrint(f"\nStep {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} = \"{TM_SYMBOLS[self.tape.read()]}\")")
         specPrint(self.getTape())
 
         while self.currentState != "HALT":
@@ -275,7 +282,7 @@ class TuringMachine:
                             return self.run(start=steps)
 
 
-                specPrint(f"Step {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}")
+                specPrint(f"\nStep {steps}:\tHEAD: {self.getTape().head}: ON STATE: {self.currentState}({self.tape.read()} = \"{TM_SYMBOLS[self.tape.read()]}\")")
                 specPrint(self.getTape())
 
             steps += 1
@@ -387,9 +394,10 @@ class TuringMachine:
     def showConfigurationsUsed(self):
         specPrint(len(TM_SIGS))
         specPrint(len(TM_USED))
-        diff = TM_SIGS - TM_USED
+        diff = list(TM_SIGS - TM_USED)
+        diff.sort()
         for x in diff:
-            specPrint(x)
+            specPrint(x.replace("-", " - "))
         return diff
 
     def makeStep(self, steps):
@@ -418,7 +426,6 @@ class TuringMachine:
         return steps
 
 
-
 if __name__ == "__main__":
     # isOdd = TuringMachine(Tape(), description="isOdd.javaturing")
     # isOdd.run()
@@ -426,15 +433,21 @@ if __name__ == "__main__":
     # art = TuringMachine(Tape(tapeFill="ASTR"), description="art.javaturing")
     # art.run()
     #
-    # counting = TuringMachine(Tape(tapeFill="S0"), description="counting.javaturing", sizeLimit=10305, specPrintConfigs=True)
+    # counting = TuringMachine(Tape(tapeFill="S0"), description="counting.javaturing", sizeLimit=10305, printConfigs=True)
     # counting.run(show=False)
     # counting.showConfigurationsUsed()
     # counting.printUnary(tape=False)
 
-    counting = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=549, specPrintConfigs=False)
-    specPrint(counting.run(saveFirst=101))
+    # counting = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=549, printConfigs=False)
+    # print(counting.run(saveFirst=101))
+    
+    sqrt2 = TuringMachine(Tape(), description="sqrt2.javaturing", sizeLimit=200, printConfigs=True)
+    # sqrt2.runStepwiseFrom(start=2900)
+    sqrt2.run()
+    # sqrt2.showConfigurationsUsed()
 
-    # doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=549, specPrintConfigs=False)
+
+    # doubling = TuringMachine(Tape(), description="doubling.javaturing", sizeLimit=549, printConfigs=False)
     # specPrint(doubling.run(saveFirst=69))
     # doubling.runStepwise()
 

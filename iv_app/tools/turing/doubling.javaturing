@@ -85,6 +85,8 @@ IF_TO_END - S2 - S2 - R - TO_END;
 
 #########
 
+DOUBLING_TURING_PROGRAM
+
 This program is even more complicated...
 It counts the POWERS OF 2 on the tape in UNARY
 

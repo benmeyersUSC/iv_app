@@ -155,11 +155,14 @@ def mnistPredict():
     # plt.show()
 
     nn = mnn.NeuralNetwork_MNIST(use_pretrained=True, json_file='tools/NeuralNetworks/MNIST_NN/three_layer_MNIST_W&B.json')
-    prediction = nn.predict(image)
+    pred = nn.predict(image)
+    prediction = pred[0]
+    dist = pred[1]
     # print("Prediction:", prediction)
 
     return jsonify({
-        'prediction': int([prediction][0])
+        'prediction': int([prediction][0]),
+        'distr': float([dist][0])
     })
 
 
@@ -172,12 +175,15 @@ def mnistPredict():
 # renders appropriate template (admin or user)
 @app.route("/turing")
 def turing():
-    basic_prog = ("q1 - S0 - S2 - R - q1;\n\n\n#########\n\nThese are comments, keep them below the 9 hashmarks."
+    basic_prog = ("q1 - S0 - S2 - R - q1;\n\n\n#########\nSCAFF_TURING_PROGRAM\n\nThese are comments, keep them below the 9 hashmarks."
                   "\nThis program is very simple, it will only move to the right and print 1s until the end...\n"
                   "Click one of the above options for a present program which will do some cooler things!")
 
     with open("./tools/turing/art.javaturing", 'r') as fn:
         art = fn.read().strip()
+
+    with open("./tools/turing/sqrt2.javaturing", 'r') as fn:
+        sqrt2 = fn.read().strip()
 
     with open("./tools/turing/isOdd.javaturing", 'r') as fn:
         isOdd = fn.read().strip()
@@ -188,7 +194,7 @@ def turing():
     with open("./tools/turing/doubling.javaturing", 'r') as fn:
         doubling = fn.read().strip()
     return render_template("turing.html", starter_code=basic_prog, basic_program=basic_prog,
-                           art=art, isOdd=isOdd, counting=counting, doubling=doubling)
+                           art=art, isOdd=isOdd, counting=counting, doubling=doubling, sqrt2=sqrt2, show_uns=False)
 
 @app.route("/runTuring", methods=["GET", "POST"])
 def runTuring():
@@ -198,13 +204,19 @@ def runTuring():
 
     user_prog = request.form.get('inputText')
 
-    machine = tm.TuringMachine(tm.Tape(), description=user_prog, sizeLimit=2727)
+    show_uns = not ("ART_TURING_PROGRAM" in user_prog or "SCAFF_TURING_PROGRAM" in user_prog)
+
+    sl = 2727 if "SQRT_2_TURING_PROGRAM" not in user_prog else 216
+    machine = tm.TuringMachine(tm.Tape(), description=user_prog, sizeLimit=sl)
     theRun = machine.run(saveFirst=101)
 
-    unary = machine.printUnary(tape=False)
+    unary = machine.printUnary(tape=False) if "DOUBLING_TURING_PROGRAM" in user_prog or "COUNTING_TURING_PROGRAM" in user_prog else machine.getTape()
 
     with open("./tools/turing/art.javaturing", 'r') as fn:
         art = fn.read().strip()
+
+    with open("./tools/turing/sqrt2.javaturing", 'r') as fn:
+        sqrt2 = fn.read().strip()
 
     with open("./tools/turing/isOdd.javaturing", 'r') as fn:
         isOdd = fn.read().strip()
@@ -215,9 +227,12 @@ def runTuring():
     with open("./tools/turing/doubling.javaturing", 'r') as fn:
         doubling = fn.read().strip()
 
+
+
     return render_template("turing.html", output_text=unary, file_content=theRun,
                            starter_code=user_prog, basic_program=basic_prog,
-                           art=art, isOdd=isOdd, counting=counting, doubling=doubling)
+                           art=art, isOdd=isOdd, counting=counting, doubling=doubling, sqrt2=sqrt2,
+                           show_uns=show_uns)
 
 
 

@@ -362,6 +362,7 @@
         <button type="button" class="program-btn" onclick="loadProgram('isOdd', this)">101010...</button>
         <button type="button" class="program-btn" onclick="loadProgram('counting', this)">Counting in Unary</button>
         <button type="button" class="program-btn" onclick="loadProgram('doubling', this)">Powers of 2 in Unary</button>
+        <button type="button" class="program-btn" onclick="loadProgram('sqrt2', this)">Sqaure Root of 2 in binary</button>
     </div>
 
     <form action="/runTuring" method="POST">
@@ -373,8 +374,10 @@
     <button onclick="resetToLastProgram()" class="logout-btn">Clear Edits</button>
     <button onclick="loadProgram('scaffold', this)" class="logout-btn">Reset Program to Scaffold</button>
 
-    <div class="section-title">Unary Numbers (if any):</div>
+    {% if show_uns %}
+    <div class="section-title">Computed Numbers/Sequences:</div>
     <div class="output-box" id="output">{{output_text|safe}}</div>
+    {% endif %}
 
     <div class="section-title">Raw Tape (first 101 steps):</div>
     <div class="file-content-box" id="fileContent">{{file_content|safe}}</div>
@@ -390,7 +393,8 @@
         isOdd: String.raw`{{isOdd|safe}}`,
         counting: String.raw`{{counting|safe}}`,
         doubling: String.raw`{{doubling|safe}}`,
-        scaffold: String.raw`{{basic_program|safe}}`
+        scaffold: String.raw`{{basic_program|safe}}`,
+        sqrt2: String.raw`{{sqrt2|safe}}`
     };
 
     // Keep track of the last selected program

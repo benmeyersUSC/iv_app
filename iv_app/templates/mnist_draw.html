@@ -62,6 +62,11 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        #distr {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -73,6 +78,7 @@
             <button onclick="predictDigit()">Predict</button>
         </div>
         <div id="prediction"></div>
+        <div id="distr"></div>
     </div>
     <br><br><br><br><br>
     <form action="/client" method="GET">
@@ -123,6 +129,7 @@
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             document.getElementById('prediction').textContent = '';
+            document.getElementById('distr').textContent = '';
         }
 
         function predictDigit() {
@@ -160,6 +167,8 @@
             .then(data => {
                 document.getElementById('prediction').textContent =
                     `Prediction: ${data.prediction}`;
+                document.getElementById('distr').textContent =
+                    `Confidence: ${data.distr} %`;
             })
             .catch(error => {
                 console.error('Error:', error);

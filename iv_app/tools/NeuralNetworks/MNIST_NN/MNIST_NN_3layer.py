@@ -279,7 +279,7 @@ class NeuralNetwork_MNIST:
 
         Z3 = np.dot(A2, self.W3) + self.b3
         A3 = softmax(Z3)
-        return np.argmax(A3, axis=1)
+        return [np.argmax(A3, axis=1), 100*round(max(max(A3)), 4)]
 
 
 if __name__ == "__main__":
@@ -300,3 +300,35 @@ if __name__ == "__main__":
     nn = NeuralNetwork_MNIST()
     # nn.gradient_descent(2973, alpha=.01)
     # nn.save_weights()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # NEED to show distribution to user, not just max pick
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
