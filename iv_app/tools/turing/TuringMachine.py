@@ -441,9 +441,9 @@ if __name__ == "__main__":
     # counting = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=549, printConfigs=False)
     # print(counting.run(saveFirst=101))
     
-    sqrt2 = TuringMachine(Tape(), description="sqrt2.javaturing", sizeLimit=200, printConfigs=True)
-    # sqrt2.runStepwiseFrom(start=2900)
-    sqrt2.run()
+    sqrt2 = TuringMachine(Tape(), description="counting.javaturing", sizeLimit=3000, printConfigs=True)
+    sqrt2.runStepwise()
+    # sqrt2.run()
     # sqrt2.showConfigurationsUsed()
 
 

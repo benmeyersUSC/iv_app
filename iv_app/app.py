@@ -737,6 +737,10 @@ def bond_trading_restart():
     return redirect(url_for('bond_trading_first', rerenderings=old_params))
 
 
+@app.route("/cantorsquare", methods=["POST", "GET"])
+def cantor_square():
+    return render_template("cantor_square.html")
+
 
 def ticker_check(ticker):
     return ticker in tickers_set

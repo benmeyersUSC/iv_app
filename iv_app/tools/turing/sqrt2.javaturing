@@ -265,3 +265,9 @@ It is computing (indefinitely) the binary expansion of the Square Root of 2.
 The way it works boils down to iteratively and recursively checking whether the next decimal should be
 a '0' or a '1' by first assuming it's a '1', then squaring the current number, then if that product
 is greater than '2', then we know the next digit should be a '0' and not a '1'.
+
+The beauty is that it is in no way memorizing or hard-coding this answer. The process encoded into the configurations
+iteratively produces digit after digit of the correct binary expansion on the Square Root of 2.
+
+Take '01' in binary and add to it a decimal (ironic) point and the sequence that follows and square it.
+The answer will be very near to '10', the binary representation of '2'.

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cantor Mapping Visualization</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .square-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: blue;
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+        }
+
+        .trail-point {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: blue;
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+        }
+
+        .line-container {
+            position: relative;
+            width: 400px;
+            height: 30px;
+            border: 1px solid #ccc;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .line-point {
+            position: absolute;
+            width: 8px;
+            height: 100%;
+            background: blue;
+            transform: translateX(-50%);
+        }
+
+        .coordinates {
+            font-family: monospace;
+            margin-top: 10px;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cantor's Square-to-Line Mapping</h2>
+        <div class="square-container" id="square">
+            <svg id="trail-svg"></svg>
+            <div class="point" id="current-point"></div>
+        </div>
+        <div class="line-container" id="line">
+            <div class="line-point" id="line-point"></div>
+        </div>
+        <div class="coordinates" id="coords"></div>
+    </div>
+
+    <script>
+        const square = document.getElementById('square');
+        const line = document.getElementById('line');
+        const currentPoint = document.getElementById('current-point');
+        const linePoint = document.getElementById('line-point');
+        const coords = document.getElementById('coords');
+        const trailSvg = document.getElementById('trail-svg');
+
+        let trail = [];
+        const MAX_TRAIL_LENGTH = 50;
+
+        function deinterleave(decimal) {
+            const digits = decimal.toFixed(8).split('').slice(2);
+            const x = parseFloat('0.' + digits.filter((_, i) => i % 2 === 0).join(''));
+            const y = parseFloat('0.' + digits.filter((_, i) => i % 2 === 1).join(''));
+            return { x, y };
+        }
+
+        function updateTrail(point) {
+            trail.push(point);
+            if (trail.length > MAX_TRAIL_LENGTH) {
+                trail = trail.slice(-MAX_TRAIL_LENGTH);
+            }
+            updateTrailDisplay();
+        }
+
+        function updateTrailDisplay() {
+            // Create path string for connected lines
+            let pathString = '';
+            trail.forEach((point, index) => {
+                const x = point.x * 400;
+                const y = 400 - point.y * 400;
+                pathString += `${index === 0 ? 'M' : 'L'} ${x} ${y} `;
+            });
+
+            // Clear and redraw SVG path
+            trailSvg.innerHTML = `
+                <path d="${pathString}"
+                      stroke="rgba(0, 0, 255, 0.3)"
+                      stroke-width="2"
+                      fill="none" />
+            `;
+
+            // Add trail points
+            trail.forEach((point, index) => {
+                const opacity = (index + 1) / trail.length;
+                const dot = document.createElement('div');
+                dot.className = 'trail-point';
+                dot.style.left = `${point.x * 100}%`;
+                dot.style.bottom = `${point.y * 100}%`;
+                dot.style.opacity = opacity;
+            });
+        }
+
+        function handleLineInteraction(e) {
+            const rect = line.getBoundingClientRect();
+            const position = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+
+            const point = deinterleave(position);
+
+            // Update current point
+            currentPoint.style.left = `${point.x * 100}%`;
+            currentPoint.style.bottom = `${point.y * 100}%`;
+
+            // Update line position
+            linePoint.style.left = `${position * 100}%`;
+
+            // Update coordinates display
+            coords.textContent = `Line: ${position.toFixed(8)}\nSquare: (${point.x.toFixed(8)}, ${point.y.toFixed(8)})`;
+
+            updateTrail(point);
+        }
+
+        line.addEventListener('mousedown', handleLineInteraction);
+        line.addEventListener('mousemove', (e) => {
+            if (e.buttons === 1) handleLineInteraction(e);
+        });
+    </script>
+</body>
+</html>
