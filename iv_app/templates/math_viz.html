@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Home</title>
+<title>Math Visualizations</title>
 
     <style>
     /* General styling */
@@ -52,6 +52,20 @@
         background-color: #ff0000; /* Green color on hover */
     }
 
+    .logout-btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #008000; /* Red color */
+            color: #fff; /* White text color */
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background-color: #ff0000; /* Dark green color on hover */
+
+
+
     .formula-container {
     width: 80%;
     margin: 0 auto;
@@ -66,68 +80,44 @@
     text-align: left; /* Align bullet points to the left */
     margin-bottom: 20px;
     font-size: smaller; /* or specify a specific size like '10px' */
-}
+}}
 </style>
+
+
 
 
 </head>
 <body>
-    <h1>Ben Meyers Coding Projects</h1>
     <p></p>
 
-
-<!--<p>Main Pages:</p>-->
     <div class="button-grid">
 
-        <form action="/finance" method="GET">
-            <p><strong>Finance Tools</strong></p>
-        <p>Explore Option Pricing, Bond Trading, and Stock Research</p>
+        <form action="/cantorsquare" method="GET">
+            <p><strong>Map Square to Line</strong></p>
+        <p></p>
             <input type="hidden" name="bsm">
-            <button type="submit">Finance</button>
+            <button type="submit">Cantor Square Map</button>
         </form>
 
-        <form action="/whatIsLambda" method="GET">
-            <p><strong>Lambda Calculus</strong></p>
-        <p>Write and run code in the un-typed Lambda Calculus programming language</p>
-            <input type="hidden" name="lambda">
-            <button type="submit">Lambda Calculus</button>
-        </form>
-
-        <form action="/neural" method="GET">
-            <p><strong>Neural Networks</strong></p>
-        <p>Explore Neural Networks that classify raw data</p>
-            <input type="hidden" name="neural">
-            <button type="submit">Neural Networks</button>
-        </form>
-
-        <form action="/turing" method="GET">
-            <p><strong>Neural Networks</strong></p>
-        <p>Explore Turing Machines, on a Turing Machine</p>
-            <input type="hidden" name="neural">
-            <button type="submit">Turing Machines</button>
-        </form>
-
-        <form action="/waves" method="GET">
-            <p><strong>Sound Wave Tools</strong></p>
-        <p>Explore Modulation of sound waves and Fourier Transforms to extract frequencies from sounds</p>
-            <input type="hidden" name="waves">
-            <button type="submit">Sound Waves</button>
-        </form>
-
-        <form action="/mathviz" method="GET">
-            <p><strong>Math Visualizations</strong></p>
-        <p>Visualize some awesome math</p>
-            <input type="hidden" name="math">
-            <button type="submit">Math Viz</button>
+      <form action="/cantorsphere" method="GET">
+            <p><strong>Map Sphere to Circle to Line</strong></p>
+        <p></p>
+            <input type="hidden" name="bsm">
+            <button type="submit">Cantor Sphere Map</button>
         </form>
 
 
-    </div>
-    <br><br>
+
+        </div>
+
 
 
     <p> </p>
     <br>
+
+<form action="/client" method="GET">
+        <input type="submit" class="logout-btn" value="Home">
+    </form>
 
 </body>
 </html>

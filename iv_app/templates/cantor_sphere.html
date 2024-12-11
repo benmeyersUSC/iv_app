@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sphere Mappings Visualization</title>
+    <style>
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .viz-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        #sphere-container {
+            width: 400px;
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+
+        .circle-container {
+            width: 400px;
+            height: 400px;
+        }
+
+        #circle-canvas {
+            border: 1px solid #ccc;
+        }
+
+        .line-container {
+            position: relative;
+            width: 800px;
+            height: 30px;
+            border: 1px solid #ccc;
+            margin: 20px auto;
+            cursor: pointer;
+        }
+
+        .line-point {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: #ff0000;
+            transform: translateX(-50%);
+        }
+
+        .depth-legend {
+            width: 200px;
+            height: 20px;
+            margin: 10px auto;
+            background: linear-gradient(to right, #ff0000, #ffff00);
+            border: 1px solid #ccc;
+        }
+
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            margin: 5px auto;
+            font-size: 12px;
+        }
+
+        .coordinates {
+            font-family: monospace;
+            margin-top: 10px;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sphere Mappings</h2>
+        <div class="viz-row">
+            <div id="sphere-container"></div>
+            <div class="circle-container">
+                <canvas id="circle-canvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="depth-legend"></div>
+        <div class="legend-labels">
+            <span>Front (z=1)</span>
+            <span>Back (z=-1)</span>
+        </div>
+        <div class="line-container" id="line">
+            <div class="line-point" id="line-point"></div>
+        </div>
+        <div class="coordinates" id="coords"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(400, 400);
+        document.getElementById('sphere-container').appendChild(renderer.domElement);
+
+        const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+        const sphereMaterial = new THREE.MeshPhongMaterial({
+            color: 0x3366cc,    // Keep the blue color
+            transparent: true,
+            opacity: 0.4,       // Increased from 0.15 to 0.4
+            // side: THREE.DoubleSide  // Add this to see both sides
+        });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        scene.add(sphere);
+
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(2, 2, 2);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x404040));
+
+        camera.position.z = 2.5;
+
+        // Trail setup
+        const trail = [];
+        const MAX_TRAIL_LENGTH = 50;
+        const trailGeometry = new THREE.BufferGeometry();
+        const trailMaterial = new THREE.LineBasicMaterial({
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.7
+        });
+        const trailLine = new THREE.Line(trailGeometry, trailMaterial);
+        scene.add(trailLine);
+
+        const pointGeometry = new THREE.SphereGeometry(0.05, 16, 16);
+        const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const point = new THREE.Mesh(pointGeometry, pointMaterial);
+        scene.add(point);
+
+        const circleCanvas = document.getElementById('circle-canvas');
+        const ctx = circleCanvas.getContext('2d');
+        const line = document.getElementById('line');
+        const linePoint = document.getElementById('line-point');
+        const coords = document.getElementById('coords');
+
+        let currentX = 0;
+        let currentY = 0;
+        let currentZ = 0;
+
+        function normalizeToSphere(x, y, z) {
+            const r = Math.sqrt(x*x + y*y + z*z);
+            if (r > 1) {
+                return {
+                    x: x / r,
+                    y: y / r,
+                    z: z / r
+                };
+            }
+            return { x, y, z };
+        }
+
+        function getDepthColor(z) {
+            const t = (z + 1) / 2;
+            const r = 255;
+            const g = Math.floor(255 * (1 - t));
+            const b = 0;
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function updateTrail() {
+            trail.push(new THREE.Vector3(currentX/190, currentY/190, currentZ));
+            if (trail.length > MAX_TRAIL_LENGTH) {
+                trail.shift();
+            }
+
+            const positions = new Float32Array(trail.length * 3);
+            const colors = new Float32Array(trail.length * 3);
+
+            trail.forEach((point, i) => {
+                // Ensure point is within sphere
+                const normalized = normalizeToSphere(point.x, point.y, point.z);
+                positions[i * 3] = normalized.x;
+                positions[i * 3 + 1] = normalized.y;
+                positions[i * 3 + 2] = normalized.z;
+
+                const color = new THREE.Color(getDepthColor(normalized.z));
+                colors[i * 3] = color.r;
+                colors[i * 3 + 1] = color.g;
+                colors[i * 3 + 2] = color.b;
+            });
+
+            trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            trailGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            trailGeometry.computeBoundingSphere();
+        }
+
+        function drawCircle() {
+            ctx.clearRect(0, 0, 400, 400);
+
+            ctx.beginPath();
+            ctx.arc(200, 200, 190, 0, Math.PI * 2);
+            ctx.strokeStyle = '#3366cc';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw trail in circle
+            if (trail.length > 1) {
+                ctx.beginPath();
+                trail.forEach((t, i) => {
+                    const x = t.x * 190 + 200;
+                    const y = t.y * 190 + 200;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+                ctx.strokeStyle = 'rgba(0, 0, 255, 0.3)';
+                ctx.stroke();
+            }
+
+            ctx.beginPath();
+            ctx.arc(currentX + 200, currentY + 200, 5, 0, Math.PI * 2);
+            ctx.fillStyle = getDepthColor(currentZ);
+            ctx.fill();
+        }
+
+        function interleaveCoordinates(x, y, z) {
+            const nx = (x + 1) / 2;
+            const ny = (y + 1) / 2;
+            const nz = (z + 1) / 2;
+
+            const xStr = nx.toFixed(8).split('.')[1] || '0';
+            const yStr = ny.toFixed(8).split('.')[1] || '0';
+            const zStr = nz.toFixed(8).split('.')[1] || '0';
+
+            let result = '0.';
+            for (let i = 0; i < 8; i++) {
+                if (i < xStr.length) result += xStr[i];
+                if (i < yStr.length) result += yStr[i];
+                if (i < zStr.length) result += zStr[i];
+            }
+
+            return parseFloat(result);
+        }
+
+        function deinterleaveCoordinates(decimal) {
+            const digits = decimal.toFixed(24).split('.')[1] || '0';
+            let x = '0.', y = '0.', z = '0.';
+
+            for (let i = 0; i < Math.min(24, digits.length); i += 3) {
+                x += digits[i] || '0';
+                y += digits[i+1] || '0';
+                z += digits[i+2] || '0';
+            }
+
+            const coords = {
+                x: parseFloat(x) * 2 - 1,
+                y: parseFloat(y) * 2 - 1,
+                z: parseFloat(z) * 2 - 1
+            };
+
+            // Normalize to ensure point is within/on sphere
+            return normalizeToSphere(coords.x, coords.y, coords.z);
+        }
+
+        function updateFromCircle(x, y) {
+            currentX = x;
+            currentY = y;
+
+            const r = Math.sqrt(x*x + y*y) / 190;
+            if (r <= 1) {
+                currentZ = Math.sqrt(1 - r*r) * 2 - 1;
+                updateVisualizations();
+            }
+        }
+
+        function updateFromLine(position) {
+            const coords = deinterleaveCoordinates(position);
+            // Scale to match circle coordinates
+            currentX = coords.x * 190;
+            currentY = coords.y * 190;
+            currentZ = coords.z;
+            updateVisualizations();
+        }
+
+        function updateVisualizations() {
+            // Ensure point stays within sphere
+            const normalized = normalizeToSphere(currentX/190, currentY/190, currentZ);
+            point.position.set(normalized.x, normalized.y, normalized.z);
+
+            const color = new THREE.Color(getDepthColor(normalized.z));
+            point.material.color = color;
+
+            updateTrail();
+
+            const linePos = interleaveCoordinates(normalized.x, normalized.y, normalized.z);
+            linePoint.style.left = `${linePos * 100}%`;
+
+            coords.textContent =
+                `Circle: (x=${normalized.x.toFixed(3)}, y=${normalized.y.toFixed(3)})\n` +
+                `Sphere: (x=${normalized.x.toFixed(3)}, y=${normalized.y.toFixed(3)}, z=${normalized.z.toFixed(3)})\n` +
+                `Line: ${linePos.toFixed(8)}`;
+
+            drawCircle();
+        }
+
+        function handleCircleClick(e) {
+            const rect = circleCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left - 200;
+            const y = e.clientY - rect.top - 200;
+
+            if (x*x + y*y <= 190*190) {
+                updateFromCircle(x, y);
+            }
+        }
+
+        function handleLineClick(e) {
+            const rect = line.getBoundingClientRect();
+            const position = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            updateFromLine(position);
+        }
+
+        circleCanvas.addEventListener('mousedown', handleCircleClick);
+        circleCanvas.addEventListener('mousemove', (e) => {
+            if (e.buttons === 1) handleCircleClick(e);
+        });
+
+        line.addEventListener('mousedown', handleLineClick);
+        line.addEventListener('mousemove', (e) => {
+            if (e.buttons === 1) handleLineClick(e);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            sphere.rotation.y += 0.005;
+            renderer.render(scene, camera);
+        }
+
+        drawCircle();
+        updateFromCircle(0, 0);
+        animate();
+    </script>
+</body>
+</html>

@@ -741,6 +741,13 @@ def bond_trading_restart():
 def cantor_square():
     return render_template("cantor_square.html")
 
+@app.route("/cantorsphere", methods=["POST", "GET"])
+def cantor_sphere():
+    return render_template("cantor_sphere.html")
+
+@app.route("/mathviz", methods=["POST", "GET"])
+def math_viz():
+    return render_template("math_viz.html")
 
 def ticker_check(ticker):
     return ticker in tickers_set
