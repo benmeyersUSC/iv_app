@@ -20,8 +20,8 @@
 
         .point {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 4px;
+            height: 4px;
             background: blue;
             border-radius: 50%;
             transform: translate(-50%, 50%);
@@ -29,8 +29,8 @@
 
         .trail-point {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 2px;
+            height: 2px;
             background: blue;
             border-radius: 50%;
             transform: translate(-50%, 50%);
@@ -47,7 +47,7 @@
 
         .line-point {
             position: absolute;
-            width: 8px;
+            width: 4px;
             height: 100%;
             background: blue;
             transform: translateX(-50%);
@@ -56,6 +56,7 @@
         .coordinates {
             font-family: monospace;
             margin-top: 10px;
+            white-space: pre;
         }
 
         svg {
@@ -90,10 +91,13 @@
         const trailSvg = document.getElementById('trail-svg');
 
         let trail = [];
-        const MAX_TRAIL_LENGTH = 50;
+        const MAX_TRAIL_LENGTH = 270;
+        const PRECISION = 12;
+        let lastPosition = null;
+        const GRANULARITY = 0.0001; // How fine the steps between mouse positions should be
 
         function deinterleave(decimal) {
-            const digits = decimal.toFixed(8).split('').slice(2);
+            const digits = decimal.toFixed(PRECISION).split('').slice(2);
             const x = parseFloat('0.' + digits.filter((_, i) => i % 2 === 0).join(''));
             const y = parseFloat('0.' + digits.filter((_, i) => i % 2 === 1).join(''));
             return { x, y };
@@ -108,7 +112,6 @@
         }
 
         function updateTrailDisplay() {
-            // Create path string for connected lines
             let pathString = '';
             trail.forEach((point, index) => {
                 const x = point.x * 400;
@@ -116,48 +119,58 @@
                 pathString += `${index === 0 ? 'M' : 'L'} ${x} ${y} `;
             });
 
-            // Clear and redraw SVG path
             trailSvg.innerHTML = `
                 <path d="${pathString}"
-                      stroke="rgba(0, 0, 255, 0.3)"
-                      stroke-width="2"
+                      stroke="rgba(0, 0, 255, 0.2)"
+                      stroke-width="1"
                       fill="none" />
             `;
-
-            // Add trail points
-            trail.forEach((point, index) => {
-                const opacity = (index + 1) / trail.length;
-                const dot = document.createElement('div');
-                dot.className = 'trail-point';
-                dot.style.left = `${point.x * 100}%`;
-                dot.style.bottom = `${point.y * 100}%`;
-                dot.style.opacity = opacity;
-            });
         }
 
-        function handleLineInteraction(e) {
-            const rect = line.getBoundingClientRect();
-            const position = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-
+        function updatePosition(position) {
             const point = deinterleave(position);
 
-            // Update current point
             currentPoint.style.left = `${point.x * 100}%`;
             currentPoint.style.bottom = `${point.y * 100}%`;
-
-            // Update line position
             linePoint.style.left = `${position * 100}%`;
 
-            // Update coordinates display
-            coords.textContent = `Line: ${position.toFixed(8)}\nSquare: (${point.x.toFixed(8)}, ${point.y.toFixed(8)})`;
+            coords.textContent = `Line: ${position.toFixed(PRECISION)}\n` +
+                               `Square: (${point.x.toFixed(PRECISION)}, ${point.y.toFixed(PRECISION)})`;
 
             updateTrail(point);
         }
 
-        line.addEventListener('mousedown', handleLineInteraction);
-        line.addEventListener('mousemove', (e) => {
-            if (e.buttons === 1) handleLineInteraction(e);
-        });
+        function handleMouseMove(e) {
+            if (e.buttons !== 1) {
+                lastPosition = null;
+                return;
+            }
+
+            const rect = line.getBoundingClientRect();
+            const currentPosition = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+
+            if (lastPosition !== null) {
+                // Interpolate between last position and current position
+                const diff = currentPosition - lastPosition;
+                const steps = Math.abs(Math.round(diff / GRANULARITY));
+
+                if (steps > 0) {
+                    for (let i = 1; i <= steps; i++) {
+                        const interpolatedPosition = lastPosition + (diff * (i / steps));
+                        updatePosition(interpolatedPosition);
+                    }
+                }
+            }
+
+            updatePosition(currentPosition);
+            lastPosition = currentPosition;
+        }
+
+        // Handle both click and drag
+        line.addEventListener('mousemove', handleMouseMove);
+        line.addEventListener('mousedown', handleMouseMove);
+        line.addEventListener('mouseup', () => { lastPosition = null; });
+        line.addEventListener('mouseleave', () => { lastPosition = null; });
     </script>
 </body>
 </html>
