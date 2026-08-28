@@ -100,11 +100,24 @@
         document.getElementById('sphere-container').appendChild(renderer.domElement);
 
         const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+        // const sphereMaterial = new THREE.MeshPhongMaterial({
+        //     color: 0x3366cc,    // Keep the blue color
+        //     transparent: true,
+        //     opacity: 0.4,       // Increased from 0.15 to 0.4
+        // });
         const sphereMaterial = new THREE.MeshPhongMaterial({
-            color: 0x3366cc,    // Keep the blue color
+            color: 0x66b3ff,    // Bright blue
+            // color: 0x99ccff,    // Sky blue
+            // // or
+            // color: 0x66b3ff,    // Bright medium blue
+            // // or
+            // color: 0x4d94ff,    // Strong bright blue
+            // // or
+            // color: 0x0099ff,    // Vivid blue
             transparent: true,
-            opacity: 0.4,       // Increased from 0.15 to 0.4
-            // side: THREE.DoubleSide  // Add this to see both sides
+            opacity: 0.27,
+            emissive: 0x3366cc, // Add some self-illumination
+            shininess: 50       // Make it more reflective
         });
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         scene.add(sphere);
@@ -336,3 +349,5 @@
     </script>
 </body>
 </html>
+
+
